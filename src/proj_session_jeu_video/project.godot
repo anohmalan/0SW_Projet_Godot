@@ -62,3 +62,11 @@ pause={
 , Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":6,"pressure":0.0,"pressed":false,"script":null)
 ]
 }
+
+[layer_names]
+
+2d_physics/layer_1="monde"
+2d_physics/layer_2="joueur"
+2d_physics/layer_3="ennemis"
+2d_physics/layer_4="tir_joueur"
+2d_physics/layer_5="tir_ennemis"
