@@ -1,6 +1,10 @@
 [gd_scene format=3 uid="uid://c0lhhg26hw1wi"]
 
-[ext_resource type="Script" uid="uid://cghmbdyecp84s" path="res://test_sprite_loader.gd" id="1_055al"]
+[ext_resource type="Script" uid="uid://cghmbdyecp84s" path="res://scripts/test_sprite_loader.gd" id="1_055al"]
+[ext_resource type="Script" uid="uid://dms12actygg0" path="res://scripts/visuel_soldat.gd" id="2_eknog"]
 
 [node name="test_sprite_loader" type="Node2D" unique_id=511216970]
 script = ExtResource("1_055al")
+
+[node name="Visuel" type="Node2D" parent="." unique_id=597460759]
+script = ExtResource("2_eknog")

@@ -1,11 +1,11 @@
-[gd_scene format=3 uid="uid://c6b1miudy520n"]
+[gd_scene format=3 uid="uid://buoswoxe8mro2"]
 
-[ext_resource type="Script" path="res://scripts/menu_principal.gd" id="1_i85hu"]
-[ext_resource type="PackedScene" uid="uid://1hne4t7ibiq7" path="res://scenes/arriere_plan_menu.tscn" id="2_mk4g1"]
-[ext_resource type="Texture2D" path="res://assets/menu/menu_buttons/jouer_button.png" id="3_iep14"]
-[ext_resource type="Texture2D" path="res://assets/menu/menu_buttons/reglages_button.png" id="4_qcl6i"]
-[ext_resource type="Texture2D" path="res://assets/menu/menu_buttons/quit_button.png" id="5_nxt0m"]
-[ext_resource type="Texture2D" path="res://assets/menu/menu_buttons/custom_player_button.png" id="6_2xgxd"]
+[ext_resource type="Script" uid="uid://dlde0w04y6sb0" path="res://scripts/menu_principal.gd" id="1_i85hu"]
+[ext_resource type="PackedScene" uid="uid://biopt84v10yqs" path="res://scenes/arriere_plan_menu.tscn" id="2_mk4g1"]
+[ext_resource type="Texture2D" uid="uid://djuv3otftsiyx" path="res://assets/menu/menu_buttons/jouer_button.png" id="3_iep14"]
+[ext_resource type="Texture2D" uid="uid://dy286apdbcu8t" path="res://assets/menu/menu_buttons/reglages_button.png" id="4_qcl6i"]
+[ext_resource type="Texture2D" uid="uid://bpkyaxlkdma5m" path="res://assets/menu/menu_buttons/quit_button.png" id="5_nxt0m"]
+[ext_resource type="Texture2D" uid="uid://c14aih5mqi02d" path="res://assets/menu/menu_buttons/custom_player_button.png" id="6_2xgxd"]
 
 [node name="Menu Principal" type="Node2D" unique_id=1220415264]
 script = ExtResource("1_i85hu")
