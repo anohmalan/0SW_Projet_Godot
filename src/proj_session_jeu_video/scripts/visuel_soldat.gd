@@ -5,6 +5,12 @@ signal animation_terminee(nom: String)
 
 const CHEMIN_SCML := "res://assets/sprites/sprites_joueur/Spriter.scml"
 
+const ORDRE_CATEGORIES := ["Head", "Balaclava", "Mask", "Googles",
+		"Head Gear", "Shirt", "Jacket", "Pants", "Gun"]
+
+var _selection := {}        # catégorie -> nom de carte (ex. « Pants - Brown »)
+var _cartes_actives: Array = []
+var _cache := {}            # (dossier, fichier) d'origine -> résultat
 var vitesse := 1.0
 var nom_animation := ""
 
@@ -163,7 +169,11 @@ func _poser(n: Node2D, v: Dictionary) -> void:
 
 
 func _mettre_image(s: Sprite2D, v: Dictionary) -> void:
-	var info: Dictionary = _loader.dossiers[int(v["folder"])]["fichiers"][int(v["file"])]
+	var res := _resoudre(int(v["folder"]), int(v["file"]))
+	s.visible = not res.is_empty()
+	if res.is_empty():
+		return
+	var info: Dictionary = _loader.dossiers[res[0]]["fichiers"][res[1]]
 	if s.get_meta("chemin", "") != info["chemin"]:
 		s.texture = load(info["chemin"])
 		s.set_meta("chemin", info["chemin"])
@@ -173,3 +183,59 @@ func _mettre_image(s: Sprite2D, v: Dictionary) -> void:
 	if v.has("pivot_y"):
 		pivot.y = float(v["pivot_y"])
 	s.offset = Vector2(-info["largeur"] * pivot.x, -info["hauteur"] * (1.0 - pivot.y))
+
+# nom_carte vide = apparence d'origine pour cette catégorie.
+func definir_carte(categorie: String, nom_carte: String = "") -> void:
+	if nom_carte == "":
+		_selection.erase(categorie)
+	elif _donnees.cartes.has(nom_carte):
+		_selection[categorie] = nom_carte
+	else:
+		push_error("Carte inconnue : " + nom_carte)
+		return
+	_recalculer_cartes()
+
+
+# Applique toute une apparence d'un coup (utile pour la sauvegarde).
+func appliquer_apparence(selection: Dictionary) -> void:
+	_selection = selection.duplicate()
+	_recalculer_cartes()
+
+
+# Liste les cartes d'une catégorie, pour construire le menu plus tard.
+func variantes(categorie: String) -> Array:
+	var res := []
+	for nom in _donnees.cartes:
+		if nom.begins_with(categorie + " - "):
+			res.append(nom)
+	return res
+
+
+func _recalculer_cartes() -> void:
+	_cartes_actives.clear()
+	for cat in ORDRE_CATEGORIES:
+		if _selection.has(cat):
+			_cartes_actives.append(_selection[cat])
+	_cache.clear()
+	if not _anim.is_empty():
+		_appliquer(_temps)
+
+
+# Retourne [dossier, fichier] à afficher, ou [] si la pièce est cachée.
+func _resoudre(dossier: int, fichier: int) -> Array:
+	var cle := dossier * 1000 + fichier
+	if _cache.has(cle):
+		return _cache[cle]
+	var d := dossier
+	var f := fichier
+	for nom in _cartes_actives:
+		for regle in _donnees.cartes[nom]:
+			if regle["dossier"] == d and regle["fichier"] == f:
+				if regle["cible_dossier"] == -1:
+					_cache[cle] = []
+					return []
+				d = regle["cible_dossier"]
+				f = regle["cible_fichier"]
+				break   # une règle par carte
+	_cache[cle] = [d, f]
+	return [d, f]
