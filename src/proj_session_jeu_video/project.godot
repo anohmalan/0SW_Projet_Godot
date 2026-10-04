@@ -11,5 +11,6 @@ config_version=5
 [application]
 
 config/name="proj_session_jeu_video"
+run/main_scene="res://scenes/test_sprite_loader.tscn"
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/icon.svg"
