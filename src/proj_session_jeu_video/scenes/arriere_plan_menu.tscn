@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://biopt84v10yqs"]
+
+[ext_resource type="Texture2D" uid="uid://bj5mv0fjfi3fg" path="res://assets/menu/Arrière_plan_menu.png" id="1_jvvkr"]
+
+[node name="arriere_plan_menu" type="Node2D" unique_id=28243250]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2054443959]
+position = Vector2(577, 325.25003)
+scale = Vector2(0.6901914, 0.69659936)
+texture = ExtResource("1_jvvkr")
