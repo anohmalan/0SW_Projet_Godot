@@ -1,3 +1,25 @@
 [gd_scene format=3 uid="uid://b8bfrc2yg18uv"]
 
+[ext_resource type="Script" uid="uid://ysxegebmd8tn" path="res://scripts/joueur.gd" id="1_uj1k6"]
+[ext_resource type="Script" path="res://scripts/visuel_soldat.gd" id="2_2y66e"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xjhyt"]
+radius = 14.0
+height = 116.0
+
 [node name="Joueur" type="CharacterBody2D" unique_id=92563011]
+collision_layer = 2
+script = ExtResource("1_uj1k6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1876512604]
+position = Vector2(0, -58)
+shape = SubResource("CapsuleShape2D_xjhyt")
+
+[node name="Visuel" type="Node2D" parent="." unique_id=2019020059]
+script = ExtResource("2_2y66e")
+
+[node name="PointDeTir" type="Marker2D" parent="." unique_id=2040183841]
+position = Vector2(45, 32)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1545197382]
+position = Vector2(0, -60)
