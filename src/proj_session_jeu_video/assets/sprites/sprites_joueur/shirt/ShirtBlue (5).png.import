@@ -2,20 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-<<<<<<< HEAD
-uid="uid://dwttxfnyh3cci"
-=======
-uid="uid://b3kwfbv7hpujy"
->>>>>>> joueur_sprites
-path="res://.godot/imported/icon.svg-56083ea2a1f1a4f1e49773bdc6d7826c.ctex"
+uid="uid://ci7djtapp2uyh"
+path="res://.godot/imported/ShirtBlue (5).png-aca457a7c087a80bf57f8b8dee26c1f5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icon.svg"
-dest_files=["res://.godot/imported/icon.svg-56083ea2a1f1a4f1e49773bdc6d7826c.ctex"]
+source_file="res://assets/sprites/sprites_joueur/shirt/ShirtBlue (5).png"
+dest_files=["res://.godot/imported/ShirtBlue (5).png-aca457a7c087a80bf57f8b8dee26c1f5.ctex"]
 
 [params]
 
@@ -42,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false
