@@ -20,4 +20,8 @@ func _on_quitter_pressed() -> void:
 
 
 func _on_réglages_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/replages.tscn")
+	get_tree().change_scene_to_file("res://scenes/reglages.tscn")
+
+
+func _on_custom_player_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/custom_player.tscn")

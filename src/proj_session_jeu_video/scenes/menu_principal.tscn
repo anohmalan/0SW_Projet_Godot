@@ -2,6 +2,10 @@
 
 [ext_resource type="Script" uid="uid://dlde0w04y6sb0" path="res://scripts/menu_principal.gd" id="1_i85hu"]
 [ext_resource type="PackedScene" uid="uid://biopt84v10yqs" path="res://scenes/arriere_plan_menu.tscn" id="2_mk4g1"]
+[ext_resource type="Texture2D" uid="uid://djuv3otftsiyx" path="res://assets/menu/menu_buttons/jouer_button.png" id="3_iep14"]
+[ext_resource type="Texture2D" uid="uid://dy286apdbcu8t" path="res://assets/menu/menu_buttons/reglages_button.png" id="4_qcl6i"]
+[ext_resource type="Texture2D" uid="uid://bpkyaxlkdma5m" path="res://assets/menu/menu_buttons/quit_button.png" id="5_nxt0m"]
+[ext_resource type="Texture2D" uid="uid://c14aih5mqi02d" path="res://assets/menu/menu_buttons/custom_player_button.png" id="6_2xgxd"]
 
 [node name="Menu Principal" type="Node2D" unique_id=1220415264]
 script = ExtResource("1_i85hu")
@@ -22,30 +26,47 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Jouer" type="Button" parent="arriere_plan_menu/Interface/Button_gestionnaire" unique_id=1267015222]
+[node name="Jouer" type="TextureButton" parent="arriere_plan_menu/Interface/Button_gestionnaire" unique_id=141530318]
 layout_mode = 0
-offset_left = 923.0
-offset_top = 504.0
-offset_right = 1122.0
-offset_bottom = 583.0
-text = "Jouer"
+offset_left = 412.0
+offset_top = 492.0
+offset_right = 729.0
+offset_bottom = 598.0
+texture_normal = ExtResource("3_iep14")
+ignore_texture_size = true
+stretch_mode = 0
 
-[node name="Réglages" type="Button" parent="arriere_plan_menu/Interface/Button_gestionnaire" unique_id=467309798]
+[node name="Réglages" type="TextureButton" parent="arriere_plan_menu/Interface/Button_gestionnaire" unique_id=1163842691]
 layout_mode = 0
-offset_left = 914.0
-offset_top = 41.0
-offset_right = 1117.0
-offset_bottom = 105.0
-text = "Réglages"
+offset_left = 924.0
+offset_top = 31.0
+offset_right = 1121.0
+offset_bottom = 80.0
+texture_normal = ExtResource("4_qcl6i")
+ignore_texture_size = true
+stretch_mode = 0
 
-[node name="Quitter" type="Button" parent="arriere_plan_menu/Interface/Button_gestionnaire" unique_id=353956944]
+[node name="Quitter" type="TextureButton" parent="arriere_plan_menu/Interface/Button_gestionnaire" unique_id=2087103007]
 layout_mode = 0
-offset_left = 58.0
-offset_top = 508.0
-offset_right = 256.0
-offset_bottom = 585.0
-text = "Quitter"
+offset_left = 760.0
+offset_top = 498.0
+offset_right = 1044.0
+offset_bottom = 575.0
+texture_normal = ExtResource("5_nxt0m")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="CustomPlayer" type="TextureButton" parent="arriere_plan_menu/Interface/Button_gestionnaire" unique_id=1577363832]
+layout_mode = 0
+offset_left = 105.0
+offset_top = 495.0
+offset_right = 391.0
+offset_bottom = 578.0
+texture_normal = ExtResource("6_2xgxd")
+ignore_texture_size = true
+stretch_mode = 0
 
 [connection signal="pressed" from="arriere_plan_menu/Interface/Button_gestionnaire/Jouer" to="." method="_on_jouer_pressed"]
 [connection signal="pressed" from="arriere_plan_menu/Interface/Button_gestionnaire/Réglages" to="." method="_on_réglages_pressed"]
 [connection signal="pressed" from="arriere_plan_menu/Interface/Button_gestionnaire/Quitter" to="." method="_on_quitter_pressed"]
+[connection signal="pressed" from="arriere_plan_menu/Interface/Button_gestionnaire/CustomPlayer" to="." method="_on_custom_player_pressed"]
