@@ -30,7 +30,7 @@ func _ready() -> void:
 	jouer("Idle")
 
 
-func jouer(nom: String, relancer := false) -> void:
+func jouer(nom: String, relancer := false, depart := 0.0) -> void:
 	if nom == nom_animation and not relancer:
 		return
 	if not _donnees.animations.has(nom):
@@ -38,9 +38,9 @@ func jouer(nom: String, relancer := false) -> void:
 		return
 	nom_animation = nom
 	_anim = _donnees.animations[nom]
-	_temps = 0.0
+	_temps = depart
 	_fini = false
-	_appliquer(0.0)
+	_appliquer(depart)
 
 
 func _process(delta: float) -> void:
@@ -239,3 +239,11 @@ func _resoudre(dossier: int, fichier: int) -> Array:
 				break   # une règle par carte
 	_cache[cle] = [d, f]
 	return [d, f]
+
+# Change d'animation sans repartir de zéro (variantes de même durée).
+func changer_variante(nom: String) -> void:
+	if nom == nom_animation or not _donnees.animations.has(nom):
+		return
+	nom_animation = nom
+	_anim = _donnees.animations[nom]
+	_appliquer(_temps)
