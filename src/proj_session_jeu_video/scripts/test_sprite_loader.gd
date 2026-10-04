@@ -1,12 +1,25 @@
 extends Node2D
 
-func _ready() -> void:
-	var chemin := "res://assets/sprites/sprites_joueur/Spriter.scml"
-	var loader := SpriterLoader.new()
-	loader.charger_images(chemin)
+const ANIMS := ["Idle", "Idle_Aim", "Walk", "Run", "Run_Aim",
+		"Jump", "Jump_Aim", "Shoot", "Hurt", "Dead"]
+var _i := 0
 
-	var joueur := Node2D.new()
-	joueur.name = "Joueur"
-	add_child(joueur)
-	JoueurBuilder.construire(loader, chemin, joueur)
-	joueur.position = Vector2(576, 360)   # milieu de la fenêtre 1152 x 648
+@onready var visuel: VisuelSoldat = $Visuel
+
+func _ready() -> void:
+	visuel.position = Vector2(576, 360)
+	visuel.animation_terminee.connect(func(nom): print("Terminée : ", nom))
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo:
+		match event.keycode:
+			KEY_RIGHT:
+				_i = (_i + 1) % ANIMS.size()
+				visuel.jouer(ANIMS[_i])
+				print(ANIMS[_i])
+			KEY_LEFT:
+				_i = (_i - 1 + ANIMS.size()) % ANIMS.size()
+				visuel.jouer(ANIMS[_i])
+				print(ANIMS[_i])
+			KEY_R:
+				visuel.jouer(ANIMS[_i], true)
