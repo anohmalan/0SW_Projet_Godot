@@ -1,22 +1,25 @@
-extends Node
+extends Node2D
+
+const ANIMS := ["Idle", "Idle_Aim", "Walk", "Run", "Run_Aim",
+		"Jump", "Jump_Aim", "Shoot", "Hurt", "Dead"]
+var _i := 0
+
+@onready var visuel: VisuelSoldat = $Visuel
 
 func _ready() -> void:
-	var loader := SpriterLoader.new()
-	if not loader.charger_images("res://assets/sprites/sprites_joueur/Spriter.scml"):
-		return
+	visuel.position = Vector2(576, 360)
+	visuel.animation_terminee.connect(func(nom): print("Terminée : ", nom))
 
-	var total := 0
-	var manquants := 0
-	for id_d in loader.dossiers:
-		if id_d > 9:
-			continue   # dossiers 10 à 13 : effets, importés plus tard
-		var d: Dictionary = loader.dossiers[id_d]
-		total += d["fichiers"].size()
-		print(id_d, " ", d["nom"], " : ", d["fichiers"].size(), " fichiers")
-		for id_f in d["fichiers"]:
-			if not ResourceLoader.exists(d["fichiers"][id_f]["chemin"]):
-				manquants += 1
-				print("  MANQUANT : ", d["fichiers"][id_f]["chemin"])
-
-	print("Total (dossiers 0 à 9) : ", total, " fichiers, manquants : ", manquants)
-	print(loader.dossiers[0]["fichiers"][0])
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo:
+		match event.keycode:
+			KEY_RIGHT:
+				_i = (_i + 1) % ANIMS.size()
+				visuel.jouer(ANIMS[_i])
+				print(ANIMS[_i])
+			KEY_LEFT:
+				_i = (_i - 1 + ANIMS.size()) % ANIMS.size()
+				visuel.jouer(ANIMS[_i])
+				print(ANIMS[_i])
+			KEY_R:
+				visuel.jouer(ANIMS[_i], true)
