@@ -21,12 +21,12 @@ static func catalogue() -> Array[Arme]:
 		"dispersion": 2.0, "munitions_max": -1, "bouche_y": 0.288,
 		"couleur": Color(1.0, 0.85, 0.2)}))
 	liste.append(_nouvelle({
-		"nom": "Fusil à pompe", "carte": "Gun - Shotgun 1", "cadence": 0.7, "degats": 6,
+		"nom": "Fusil à pompe", "carte": "Gun - Shotgun 1", "cadence": 0.6, "degats": 6,
 		"portee": 280.0, "vitesse_balle": 800.0, "projectiles": 6,
 		"dispersion": 14.0, "munitions_max": 24, "bouche_y": 0.241,
 		"couleur": Color(1.0, 0.55, 0.2)}))
 	liste.append(_nouvelle({
-		"nom": "Fusil de précision", "carte": "Gun - Sniper", "cadence": 1.1, "degats": 45,
+		"nom": "Fusil de précision", "carte": "Gun - Sniper", "cadence": 0.9, "degats": 45,
 		"portee": 1100.0, "vitesse_balle": 1600.0, "projectiles": 1,
 		"dispersion": 0.0, "munitions_max": 12, "bouche_y": 0.484,
 		"couleur": Color(0.6, 0.9, 1.0)}))
