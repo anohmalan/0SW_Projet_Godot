@@ -18,8 +18,5 @@ shape = SubResource("CapsuleShape2D_xjhyt")
 [node name="Visuel" type="Node2D" parent="." unique_id=2019020059]
 script = ExtResource("2_2y66e")
 
-[node name="PointDeTir" type="Marker2D" parent="." unique_id=2040183841]
-position = Vector2(45, 32)
-
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1545197382]
 position = Vector2(0, -60)
