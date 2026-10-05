@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://ueiq1aen1knu" path="res://scripts/niveau_test.gd" id="1_ktk5d"]
 [ext_resource type="PackedScene" uid="uid://b8bfrc2yg18uv" path="res://scenes/joueur.tscn" id="2_ruoco"]
+[ext_resource type="Script" uid="uid://cmmo2ppgt5b04" path="res://scripts/pool_balles.gd" id="3_tiqbr"]
+[ext_resource type="PackedScene" uid="uid://dhl8ra2bf3oj6" path="res://scenes/balle.tscn" id="4_vm6xk"]
+[ext_resource type="PackedScene" uid="uid://ck16d44vuxrdq" path="res://scenes/cible.tscn" id="5_2g5rl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fpr03"]
 size = Vector2(2400, 40)
@@ -50,3 +53,16 @@ offset_bottom = 16.0
 
 [node name="Joueur" parent="." unique_id=92563011 instance=ExtResource("2_ruoco")]
 position = Vector2(200, 600)
+
+[node name="PoolBalles" type="Node" parent="." unique_id=599583899]
+script = ExtResource("3_tiqbr")
+scene_balle = ExtResource("4_vm6xk")
+
+[node name="cible" parent="." unique_id=1586831360 instance=ExtResource("5_2g5rl")]
+position = Vector2(450, 600)
+
+[node name="cible2" parent="." unique_id=1745436038 instance=ExtResource("5_2g5rl")]
+position = Vector2(850, 600)
+
+[node name="cible3" parent="." unique_id=880389752 instance=ExtResource("5_2g5rl")]
+position = Vector2(1500, 600)
