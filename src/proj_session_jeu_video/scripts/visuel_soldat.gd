@@ -8,6 +8,8 @@ const CHEMIN_SCML := "res://assets/sprites/sprites_joueur/Spriter.scml"
 const ORDRE_CATEGORIES := ["Head", "Balaclava", "Mask", "Googles",
 		"Head Gear", "Shirt", "Jacket", "Pants", "Gun"]
 
+const ID_ARME := 35   # id de la timeline de l'arme dans le .scml
+
 var _selection := {}        # catégorie -> nom de carte (ex. « Pants - Brown »)
 var _cartes_actives: Array = []
 var _cache := {}            # (dossier, fichier) d'origine -> résultat
@@ -247,3 +249,9 @@ func changer_variante(nom: String) -> void:
 	nom_animation = nom
 	_anim = _donnees.animations[nom]
 	_appliquer(_temps)
+
+# Position du bout du canon (bouche_y : 0 = haut de l'image, 1 = bas).
+func position_bouche(bouche_y: float) -> Vector2:
+	var arme: Sprite2D = _pieces[ID_ARME]
+	var taille := arme.texture.get_size()
+	return arme.to_global(arme.offset + Vector2(taille.x, taille.y * bouche_y))
