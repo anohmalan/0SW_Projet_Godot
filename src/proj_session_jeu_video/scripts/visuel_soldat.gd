@@ -254,4 +254,4 @@ func changer_variante(nom: String) -> void:
 func position_bouche(bouche_y: float) -> Vector2:
 	var arme: Sprite2D = _pieces[ID_ARME]
 	var taille := arme.texture.get_size()
-	return arme.to_global(arme.offset + Vector2(taille.x, taille.y * bouche_y))
+	return arme.to_global(arme.offset + Vector2(taille.x, taille.y * bouche_y)) 
