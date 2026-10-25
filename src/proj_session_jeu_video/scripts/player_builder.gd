@@ -1,4 +1,4 @@
-class_name JoueurBuilder
+class_name PlayerBuilder
 extends RefCounted
 
 # Construit le soldat dans sa pose de départ (clé 0 de l'animation « Idle »).

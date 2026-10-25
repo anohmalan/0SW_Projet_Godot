@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://b8bfrc2yg18uv"]
 
-[ext_resource type="Script" uid="uid://ysxegebmd8tn" path="res://scripts/joueur.gd" id="1_uj1k6"]
+[ext_resource type="Script" uid="uid://ysxegebmd8tn" path="res://scripts/player.gd" id="1_uj1k6"]
 [ext_resource type="Script" path="res://scripts/visuel_soldat.gd" id="2_2y66e"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xjhyt"]
 radius = 14.0
 height = 116.0
 
-[node name="Joueur" type="CharacterBody2D" unique_id=92563011]
+[node name="Player" type="CharacterBody2D" unique_id=92563011]
 collision_layer = 2
 script = ExtResource("1_uj1k6")
 
