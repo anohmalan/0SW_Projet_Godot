@@ -62,7 +62,7 @@ Récompense secondaire : si le joueur récupère le drapeau en dessous d'un **te
 3. Il atteint le drapeau de niveau : **victoire** (avec badge étoile si le temps cible est respecté).
 4. Si ses points de vie tombent à zéro : **défaite**.
 
-## 5. Contrôles *(à adapter)*
+## 5. Contrôles *(pas fini)*
 
 | Touche | Action |
 |---|---|
