@@ -15,11 +15,11 @@ position = Vector2(-1, -2)
 
 [node name="Interface" type="Control" parent="arriere_plan_menu" unique_id=1203804539]
 layout_mode = 3
-anchors_preset = 0
-offset_left = 1.0
-offset_top = 2.0
-offset_right = 41.0
-offset_bottom = 42.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Button_gestionnaire" type="Control" parent="arriere_plan_menu/Interface" unique_id=722072740]
 anchors_preset = 0

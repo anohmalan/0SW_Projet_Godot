@@ -8,7 +8,7 @@ const CATEGORIES := ["Head", "Balaclava", "Mask", "Googles", "Head Gear",
 var _indices := {}   # catégorie -> index (-1 = origine)
 var _i := 0
 
-@onready var visuel: VisuelSoldat = $Visuel
+@onready var visuel: VisuelPlayer = $Visuel
 
 func _ready() -> void:
 	visuel.position = Vector2(576, 360)

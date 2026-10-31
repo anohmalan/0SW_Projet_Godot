@@ -1,7 +1,17 @@
 [gd_scene format=3 uid="uid://b8bfrc2yg18uv"]
 
-[ext_resource type="Script" uid="uid://ysxegebmd8tn" path="res://scripts/player.gd" id="1_uj1k6"]
-[ext_resource type="Script" path="res://scripts/visuel_soldat.gd" id="2_2y66e"]
+[ext_resource type="Script" uid="uid://dgllpqnpmne3g" path="res://scripts/player/player.gd" id="1_uj1k6"]
+[ext_resource type="Script" uid="uid://8ik1p088erdl" path="res://scripts/player/visuel_player.gd" id="2_2y66e"]
+[ext_resource type="Script" uid="uid://cihajnu6725ck" path="res://scripts/player/state_machine.gd" id="3_machine"]
+[ext_resource type="Script" uid="uid://dgp53j2yxmoc7" path="res://scripts/player/States/player_idle.gd" id="4_idle"]
+[ext_resource type="Script" uid="uid://bad603gsqjh3a" path="res://scripts/player/States/player_run.gd" id="5_run"]
+[ext_resource type="Script" uid="uid://i1cewc7haduv" path="res://scripts/player/States/player_jump.gd" id="6_jump"]
+[ext_resource type="Script" uid="uid://b1jnualvqwbm4" path="res://scripts/player/States/player_fall.gd" id="7_fall"]
+[ext_resource type="Script" uid="uid://yt0bkmlbvlyn" path="res://scripts/player/States/player_fire.gd" id="8_fire"]
+[ext_resource type="Script" uid="uid://ch3lw25eofjc8" path="res://scripts/player/States/player_hurt.gd" id="9_hurt"]
+[ext_resource type="Script" uid="uid://ckhtrmccg5wo1" path="res://scripts/player/States/player_dead.gd" id="10_dead"]
+[ext_resource type="Script" uid="uid://btr55misobym1" path="res://scripts/player/arsenal_player.gd" id="11_arsenal"]
+[ext_resource type="Script" uid="uid://cthltb3whxbyk" path="res://scripts/player/vie_player.gd" id="12_vie"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xjhyt"]
 radius = 14.0
@@ -20,3 +30,41 @@ script = ExtResource("2_2y66e")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1545197382]
 position = Vector2(0, -60)
+
+[node name="StateMachine" type="Node" parent="." unique_id=1363263861 node_paths=PackedStringArray("initial_state")]
+script = ExtResource("3_machine")
+initial_state = NodePath("PlayerIdle")
+
+[node name="PlayerIdle" type="Node" parent="StateMachine" unique_id=689842912 node_paths=PackedStringArray("player")]
+script = ExtResource("4_idle")
+player = NodePath("../..")
+
+[node name="PlayerRun" type="Node" parent="StateMachine" unique_id=1763804162 node_paths=PackedStringArray("player")]
+script = ExtResource("5_run")
+player = NodePath("../..")
+
+[node name="PlayerJump" type="Node" parent="StateMachine" unique_id=1921369125 node_paths=PackedStringArray("player")]
+script = ExtResource("6_jump")
+player = NodePath("../..")
+
+[node name="PlayerFall" type="Node" parent="StateMachine" unique_id=1603712395 node_paths=PackedStringArray("player")]
+script = ExtResource("7_fall")
+player = NodePath("../..")
+
+[node name="PlayerFire" type="Node" parent="StateMachine" unique_id=650034456 node_paths=PackedStringArray("player")]
+script = ExtResource("8_fire")
+player = NodePath("../..")
+
+[node name="PlayerHurt" type="Node" parent="StateMachine" unique_id=1430268556 node_paths=PackedStringArray("player")]
+script = ExtResource("9_hurt")
+player = NodePath("../..")
+
+[node name="PlayerDead" type="Node" parent="StateMachine" unique_id=1606240981 node_paths=PackedStringArray("player")]
+script = ExtResource("10_dead")
+player = NodePath("../..")
+
+[node name="Arsenal" type="Node" parent="." unique_id=1576552380]
+script = ExtResource("11_arsenal")
+
+[node name="Vie" type="Node" parent="." unique_id=2090986627]
+script = ExtResource("12_vie")

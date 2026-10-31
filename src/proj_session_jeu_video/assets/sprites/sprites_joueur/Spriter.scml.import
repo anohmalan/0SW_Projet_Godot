@@ -1,0 +1,23 @@
+[remap]
+
+importer="importer.scml"
+type="PackedScene"
+uid="uid://iwgxfmmt06d3"
+path="res://.godot/imported/Spriter.scml-efafca857d62a358e560b050c6827c81.scn"
+
+[deps]
+
+source_file="res://assets/sprites/sprites_joueur/Spriter.scml"
+dest_files=["res://.godot/imported/Spriter.scml-efafca857d62a358e560b050c6827c81.scn"]
+
+[params]
+
+playback_speed=1.0
+z_as_relative=true
+loop_animations=1
+loop_wrap_interpolation=true
+optimize_for_blends=true
+create_events_as_signals=true
+rest_pose_animation="Idle"
+character_map_file=""
+reparenting_solution="instance per parent"

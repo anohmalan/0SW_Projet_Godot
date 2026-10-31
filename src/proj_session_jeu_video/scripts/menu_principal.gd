@@ -25,3 +25,5 @@ func _on_réglages_pressed() -> void:
 
 func _on_custom_player_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/custom_player.tscn")
+
+
