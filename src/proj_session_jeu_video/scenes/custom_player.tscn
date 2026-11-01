@@ -4,6 +4,18 @@
 [ext_resource type="PackedScene" uid="uid://biopt84v10yqs" path="res://scenes/arriere_plan_menu.tscn" id="2_fuvl6"]
 [ext_resource type="PackedScene" uid="uid://dojrirqfsng1t" path="res://scenes/apercu_player.tscn" id="2_qj230"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4vyda"]
+bg_color = Color(0, 0, 0, 0.3)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_xjhyt"]
+color = Color(0, 0.68235296, 0.5686275, 1)
+grow_end = -128.0
+thickness = 2
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fuvl6"]
 bg_color = Color(0.09019608, 0.24705882, 0.22745098, 1)
 border_width_left = 2
@@ -26,7 +38,6 @@ grow_vertical = 2
 script = ExtResource("1_qm7v8")
 
 [node name="Fond" type="ColorRect" parent="." unique_id=38125541]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -37,6 +48,7 @@ mouse_filter = 2
 color = Color(0.09019608, 0.24705882, 0.22745098, 1)
 
 [node name="arriere_plan_menu" parent="." unique_id=28243250 instance=ExtResource("2_fuvl6")]
+visible = false
 
 [node name="Marge" type="MarginContainer" parent="." unique_id=939627318]
 layout_mode = 1
@@ -55,8 +67,14 @@ layout_mode = 2
 
 [node name="Titre" type="Label" parent="Marge/Colonne" unique_id=1925784832]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.94509804, 0.9607843, 0.8745098, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.4)
+theme_override_colors/font_outline_color = Color(0.0627451, 0.1764706, 0.16078432, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 28
-text = "Customise ton soldat"
+text = "CUSTOMISE TON SOLDAT"
 
 [node name="Contenu" type="HBoxContainer" parent="Marge/Colonne" unique_id=896565569]
 layout_mode = 2
@@ -66,6 +84,7 @@ theme_override_constants/separation = 20
 [node name="DefilementCategories" type="ScrollContainer" parent="Marge/Colonne/Contenu" unique_id=1146207736]
 custom_minimum_size = Vector2(210, 0)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4vyda")
 follow_focus = true
 horizontal_scroll_mode = 0
 
@@ -73,27 +92,9 @@ horizontal_scroll_mode = 0
 unique_name_in_owner = true
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 6
+size_flags_vertical = 4
 theme_override_constants/separation = 8
-
-[node name="Apercu" type="SubViewportContainer" parent="Marge/Colonne/Contenu" unique_id=1403881833]
-custom_minimum_size = Vector2(470, 400)
-layout_mode = 2
-mouse_filter = 2
-stretch = true
-
-[node name="Vue" type="SubViewport" parent="Marge/Colonne/Contenu/Apercu" unique_id=1126192200]
-transparent_bg = true
-handle_input_locally = false
-gui_disable_input = true
-size = Vector2i(470, 495)
-size_2d_override = Vector2i(320, 400)
-render_target_update_mode = 4
-
-[node name="VisuelCustom" parent="Marge/Colonne/Contenu/Apercu/Vue" unique_id=1248584445 instance=ExtResource("2_qj230")]
-unique_name_in_owner = true
-position = Vector2(280, 289)
-scale = Vector2(0.7, 0.7)
 
 [node name="Choix" type="VBoxContainer" parent="Marge/Colonne/Contenu" unique_id=185174016]
 layout_mode = 2
@@ -102,6 +103,15 @@ size_flags_horizontal = 3
 [node name="CategorieActuelleCustom" type="Label" parent="Marge/Colonne/Contenu/Choix" unique_id=599397671]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_colors/font_color = Color(0.94509804, 0.9607843, 0.8745098, 1)
+theme_override_colors/font_outline_color = Color(0.0627451, 0.1764706, 0.16078432, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 36
+
+[node name="HSeparator" type="HSeparator" parent="Marge/Colonne/Contenu/Choix" unique_id=1572372869]
+layout_mode = 2
+theme_override_constants/separation = 8
+theme_override_styles/separator = SubResource("StyleBoxLine_xjhyt")
 
 [node name="Defilement" type="ScrollContainer" parent="Marge/Colonne/Contenu/Choix" unique_id=172501152]
 layout_mode = 2
@@ -113,11 +123,26 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/h_separation = 12
 theme_override_constants/v_separation = 12
-columns = 2
+columns = 4
 
-[node name="StatutCustom" type="Label" parent="Marge/Colonne" unique_id=1584090466]
-unique_name_in_owner = true
+[node name="Apercu" type="SubViewportContainer" parent="Marge/Colonne/Contenu" unique_id=1403881833]
+custom_minimum_size = Vector2(320, 400)
 layout_mode = 2
+mouse_filter = 2
+stretch = true
+
+[node name="Vue" type="SubViewport" parent="Marge/Colonne/Contenu/Apercu" unique_id=1126192200]
+transparent_bg = true
+handle_input_locally = false
+gui_disable_input = true
+size = Vector2i(320, 522)
+size_2d_override = Vector2i(323, 400)
+render_target_update_mode = 4
+
+[node name="VisuelCustom" parent="Marge/Colonne/Contenu/Apercu/Vue" unique_id=1248584445 instance=ExtResource("2_qj230")]
+unique_name_in_owner = true
+position = Vector2(156.00003, 271.00003)
+scale = Vector2(0.7, 0.7)
 
 [node name="Actions" type="HBoxContainer" parent="Marge/Colonne" unique_id=373792935]
 layout_mode = 2

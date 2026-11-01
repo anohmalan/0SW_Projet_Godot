@@ -171,16 +171,16 @@ func _ajouter_categorie(categorie: String) -> void:
 	bouton.pressed.connect(_afficher_categorie.bind(categorie))
 
 	bouton.add_theme_stylebox_override(
-		"normal", _style_categorie(Color("#28534D"), Color("#416D65"))
+		"normal", _style_categorie(Color.TRANSPARENT, Color.TRANSPARENT)
 	)
 	bouton.add_theme_stylebox_override(
 		"hover", _style_categorie(Color("#32665C"), Color("#77A89A"))
 	)
 	bouton.add_theme_stylebox_override(
-		"pressed", _style_categorie(Color("#009D83"), Color("#B5EC64"))
+		"pressed", _style_categorie(Color("#009D83"), Color("#416D65"))
 	)
 	bouton.add_theme_stylebox_override(
-		"hover_pressed", _style_categorie(Color("#00AE91"), Color("#B5EC64"))
+		"hover_pressed", _style_categorie(Color("#00AE91"), Color("#416D65"))
 	)
 	bouton.add_theme_stylebox_override(
 		"focus", _style_categorie(Color.TRANSPARENT, Color("#FFFFFF"))
@@ -203,7 +203,7 @@ func _style_categorie(fond: Color, bordure: Color) -> StyleBoxFlat:
 func _ajouter_choix(carte: String, texte: String, groupe: ButtonGroup) -> void:
 	var bouton := Button.new()
 	bouton.focus_mode = Control.FOCUS_ALL
-	bouton.custom_minimum_size = Vector2(160, 160)
+	bouton.custom_minimum_size = Vector2(95, 95)
 	bouton.toggle_mode = true
 	bouton.button_group = groupe
 	bouton.button_pressed = _selection.get(_categorie, "") == carte
@@ -211,7 +211,7 @@ func _ajouter_choix(carte: String, texte: String, groupe: ButtonGroup) -> void:
 	bouton.pressed.connect(_choisir.bind(_categorie, carte))
 
 	bouton.add_theme_stylebox_override(
-		"normal", _style_carte(Color("#28534D"), Color("#416D65"))
+		"normal", _style_carte(Color("#28534d71"), Color("#416d6561"))
 	)
 	bouton.add_theme_stylebox_override(
 		"hover", _style_carte(Color("#32665C"), Color("#77A89A"))
@@ -241,7 +241,7 @@ func _ajouter_choix(carte: String, texte: String, groupe: ButtonGroup) -> void:
 
 	var miniature := TextureRect.new()
 	miniature.texture = _custom_apercu.miniature_variante(_categorie, carte)
-	miniature.custom_minimum_size = Vector2(0, 100)
+	miniature.custom_minimum_size = Vector2(0, 60)
 	miniature.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	miniature.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	miniature.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -250,6 +250,7 @@ func _ajouter_choix(carte: String, texte: String, groupe: ButtonGroup) -> void:
 
 	var etiquette := Label.new()
 	etiquette.text = texte
+	etiquette.add_theme_font_size_override("font_size", 10)
 	etiquette.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	etiquette.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	etiquette.mouse_filter = Control.MOUSE_FILTER_IGNORE

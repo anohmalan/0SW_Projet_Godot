@@ -5,6 +5,16 @@
 [node name="arriere_plan_menu" type="Node2D" unique_id=28243250]
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2054443959]
+visible = false
 position = Vector2(577, 325.25003)
 scale = Vector2(0.6901914, 0.69659936)
 texture = ExtResource("1_jvvkr")
+
+[node name="Fond" type="ColorRect" parent="." unique_id=1498231526]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.09019608, 0.24705882, 0.22745098, 1)
