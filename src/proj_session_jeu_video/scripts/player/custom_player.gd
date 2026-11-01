@@ -16,7 +16,6 @@ const CATEGORIES := {
 @onready var _categories: VBoxContainer = %CategoriesCustom
 @onready var _titre_categorie: Label = %CategorieActuelleCustom
 @onready var _grille: GridContainer = %GrilleCustom
-@onready var _statut: Label = %StatutCustom
 @onready var _retour: Button = %RetourCustom
 @onready var _enregistrer: Button = %EnregistrerCustom
 @onready var _enregistrer_et_quitter: Button = %EnregistrerEtQuitter
@@ -32,8 +31,6 @@ var _focus_avant_confirmation: Control
 func _ready() -> void:
 	_selection = ApparencePlayer.selection.duplicate(true)
 	_custom_apercu.appliquer_apparence(_selection)
-	_statut.text = ApparencePlayer.erreur_chargement
-	_statut.text = ApparencePlayer.erreur_chargement
 	_enregistrer_et_quitter.pressed.connect(_sauvegarder_et_quitter)
 	_quitter_sans_sauver.pressed.connect(_retour_menu)
 
@@ -56,6 +53,8 @@ func _ready() -> void:
 		_quitter_sans_sauver, _enregistrer_et_quitter
 	)
 
+	_actualiser_bouton_enregistrer()
+
 func _input(event: InputEvent) -> void:
 	if _transfert_confirmation:
 		return
@@ -65,7 +64,7 @@ func _input(event: InputEvent) -> void:
 		if event.is_action_pressed("retour") and not event.is_echo():
 			_fermer_confirmation()
 		return
-		
+
 	if event.is_action("confirmer"):
 		get_viewport().set_input_as_handled()
 
@@ -134,15 +133,12 @@ func _choisir(categorie: String, carte: String) -> void:
 		_selection[categorie] = carte
 
 	_custom_apercu.appliquer_apparence(_selection)
-	_statut.text = "Modifications non enregistrées."
+	
+	_actualiser_bouton_enregistrer()
 
 func _on_enregistrer_custom_pressed() -> void:
 	var erreur := ApparencePlayer.enregistrer(_selection)
-	if erreur != OK:
-		_statut.text = "Échec de la sauvegarde : " + error_string(erreur)
-		return
-
-	_statut.text = "Apparence enregistrée."
+	_actualiser_bouton_enregistrer()
 
 
 func _on_retour_custom_pressed() -> void:
@@ -295,10 +291,6 @@ func _styliser_action(bouton: Button, principale: bool) -> void:
 
 func _sauvegarder_et_quitter() -> void:
 	var erreur := ApparencePlayer.enregistrer(_selection)
-	if erreur != OK:
-		_fermer_confirmation()
-		_statut.text = "Échec de la sauvegarde : " + error_string(erreur)
-		return
 
 	_retour_menu()
 
@@ -308,8 +300,6 @@ func _retour_menu() -> void:
 	)
 	if erreur != OK:
 		_fermer_confirmation()
-		_statut.text = "Impossible de revenir au menu : " + error_string(erreur)
-		push_error(_statut.text)
 
 
 func _fermer_confirmation() -> void:
@@ -331,3 +321,11 @@ func _limiter_focus_dialogue(bouton: Button, autre: Button) -> void:
 	bouton.focus_neighbor_right = chemin
 	bouton.focus_next = chemin
 	bouton.focus_previous = chemin
+
+func _actualiser_bouton_enregistrer() -> void:
+	var modifie := _selection != ApparencePlayer.selection
+
+	if not modifie and _enregistrer.has_focus():
+		_retour.grab_focus()
+
+	_enregistrer.visible = modifie
