@@ -19,17 +19,23 @@ const CATEGORIES := {
 @onready var _statut: Label = %StatutCustom
 @onready var _retour: Button = %RetourCustom
 @onready var _enregistrer: Button = %EnregistrerCustom
+@onready var _enregistrer_et_quitter: Button = %EnregistrerEtQuitter
+@onready var _quitter_sans_sauver: Button = %QuitterSansSauver
+@onready var _confirmation_retour: ColorRect = %ConfirmationRetour
 
 var _selection: Dictionary = {}
 var _categorie := "Head"
 var _groupe_categories := ButtonGroup.new()
 var _transfert_confirmation := false
+var _focus_avant_confirmation: Control
 
 func _ready() -> void:
 	_selection = ApparencePlayer.selection.duplicate(true)
 	_custom_apercu.appliquer_apparence(_selection)
 	_statut.text = ApparencePlayer.erreur_chargement
 	_statut.text = ApparencePlayer.erreur_chargement
+	_enregistrer_et_quitter.pressed.connect(_sauvegarder_et_quitter)
+	_quitter_sans_sauver.pressed.connect(_retour_menu)
 
 	for categorie: String in CATEGORIES:
 		_ajouter_categorie(categorie)
@@ -38,12 +44,28 @@ func _ready() -> void:
 
 	_styliser_action(_retour, false)
 	_styliser_action(_enregistrer, true)
+	_styliser_action(_enregistrer_et_quitter, true)
+	_styliser_action(_quitter_sans_sauver, false)
+
 	_donner_focus_initial.call_deferred()
+
+	_limiter_focus_dialogue(
+		_enregistrer_et_quitter, _quitter_sans_sauver
+	)
+	_limiter_focus_dialogue(
+		_quitter_sans_sauver, _enregistrer_et_quitter
+	)
 
 func _input(event: InputEvent) -> void:
 	if _transfert_confirmation:
 		return
 
+	if _confirmation_retour.visible and event.is_action("retour"):
+		get_viewport().set_input_as_handled()
+		if event.is_action_pressed("retour") and not event.is_echo():
+			_fermer_confirmation()
+		return
+		
 	if event.is_action("confirmer"):
 		get_viewport().set_input_as_handled()
 
@@ -124,10 +146,16 @@ func _on_enregistrer_custom_pressed() -> void:
 
 
 func _on_retour_custom_pressed() -> void:
-	var erreur := get_tree().change_scene_to_file("res://scenes/menu_principal.tscn")
-	if erreur != OK:
-		_statut.text = "Impossible de revenir au menu : " + error_string(erreur)
-		push_error(_statut.text)
+	if _confirmation_retour.visible:
+		return
+
+	if _selection == ApparencePlayer.selection:
+		_retour_menu()
+		return
+
+	_focus_avant_confirmation = get_viewport().gui_get_focus_owner()
+	_confirmation_retour.show()
+	_enregistrer_et_quitter.grab_focus()	
 
 func _ajouter_categorie(categorie: String) -> void:
 	var bouton := Button.new()
@@ -264,3 +292,42 @@ func _styliser_action(bouton: Button, principale: bool) -> void:
 	bouton.add_theme_stylebox_override(
 		"focus", _style_categorie(Color.TRANSPARENT, Color.WHITE)
 	)
+
+func _sauvegarder_et_quitter() -> void:
+	var erreur := ApparencePlayer.enregistrer(_selection)
+	if erreur != OK:
+		_fermer_confirmation()
+		_statut.text = "Échec de la sauvegarde : " + error_string(erreur)
+		return
+
+	_retour_menu()
+
+func _retour_menu() -> void:
+	var erreur := get_tree().change_scene_to_file(
+		"res://scenes/menu_principal.tscn"
+	)
+	if erreur != OK:
+		_fermer_confirmation()
+		_statut.text = "Impossible de revenir au menu : " + error_string(erreur)
+		push_error(_statut.text)
+
+
+func _fermer_confirmation() -> void:
+	_confirmation_retour.hide()
+
+	if is_instance_valid(_focus_avant_confirmation):
+		if _focus_avant_confirmation.is_visible_in_tree():
+			_focus_avant_confirmation.grab_focus()
+			return
+
+	_retour.grab_focus()
+
+
+func _limiter_focus_dialogue(bouton: Button, autre: Button) -> void:
+	var chemin := bouton.get_path_to(autre)
+	bouton.focus_neighbor_top = chemin
+	bouton.focus_neighbor_bottom = chemin
+	bouton.focus_neighbor_left = chemin
+	bouton.focus_neighbor_right = chemin
+	bouton.focus_next = chemin
+	bouton.focus_previous = chemin
