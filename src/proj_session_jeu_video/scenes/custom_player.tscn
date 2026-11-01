@@ -1,3 +1,100 @@
 [gd_scene format=3 uid="uid://de56ua32xx6br"]
 
-[node name="Node2D" type="Node2D" unique_id=1505157792]
+[ext_resource type="Script" uid="uid://860wfpqjar06" path="res://scripts/player/custom_player.gd" id="1_qm7v8"]
+[ext_resource type="PackedScene" uid="uid://dojrirqfsng1t" path="res://scenes/apercu_player.tscn" id="2_qj230"]
+
+[node name="CustomPlayer" type="Control" unique_id=806975062]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qm7v8")
+
+[node name="Fond" type="ColorRect" parent="." unique_id=38125541]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.09019608, 0.24705882, 0.22745098, 1)
+
+[node name="Marge" type="MarginContainer" parent="." unique_id=939627318]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Colonne" type="VBoxContainer" parent="Marge" unique_id=2026826105]
+layout_mode = 2
+
+[node name="Titre" type="Label" parent="Marge/Colonne" unique_id=1925784832]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Customise ton soldat"
+
+[node name="Contenu" type="HBoxContainer" parent="Marge/Colonne" unique_id=896565569]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="Categories" type="VBoxContainer" parent="Marge/Colonne/Contenu" unique_id=2089991197]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+
+[node name="Apercu" type="SubViewportContainer" parent="Marge/Colonne/Contenu" unique_id=1403881833]
+custom_minimum_size = Vector2(320, 400)
+layout_mode = 2
+mouse_filter = 2
+stretch = true
+
+[node name="Vue" type="SubViewport" parent="Marge/Colonne/Contenu/Apercu" unique_id=1126192200]
+transparent_bg = true
+gui_disable_input = true
+size = Vector2i(320, 495)
+size_2d_override = Vector2i(320, 400)
+render_target_update_mode = 4
+
+[node name="Visuel" parent="Marge/Colonne/Contenu/Apercu/Vue" unique_id=1248584445 instance=ExtResource("2_qj230")]
+position = Vector2(160, 270)
+scale = Vector2(0.5, 0.5)
+
+[node name="Choix" type="VBoxContainer" parent="Marge/Colonne/Contenu" unique_id=185174016]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CategorieActuelle" type="Label" parent="Marge/Colonne/Contenu/Choix" unique_id=599397671]
+layout_mode = 2
+
+[node name="Defilement" type="ScrollContainer" parent="Marge/Colonne/Contenu/Choix" unique_id=172501152]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Grille" type="GridContainer" parent="Marge/Colonne/Contenu/Choix/Defilement" unique_id=1524215222]
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 2
+
+[node name="Statut" type="Label" parent="Marge/Colonne" unique_id=1584090466]
+layout_mode = 2
+
+[node name="Actions" type="HBoxContainer" parent="Marge/Colonne" unique_id=373792935]
+layout_mode = 2
+
+[node name="Retour" type="Button" parent="Marge/Colonne/Actions" unique_id=577548315]
+layout_mode = 2
+text = "Retour"
+
+[node name="Enregistrer" type="Button" parent="Marge/Colonne/Actions" unique_id=1131563292]
+layout_mode = 2
+text = "Enregistrer"

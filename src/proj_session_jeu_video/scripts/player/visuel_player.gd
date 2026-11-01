@@ -66,22 +66,35 @@ func changer_variante(nom: String) -> void:
 func position_bouche(bouche_y: float = 0.3) -> Vector2:
 	# Le changement d'arme peut précéder sa customisation différée dans ce tick.
 	_appliquer_customisation_importee()
-	return _imported_adapter.position_bouche(bouche_y)
+	var position: Vector2 = _imported_adapter.position_bouche(bouche_y)
+	return position
 
 
 func definir_carte(categorie: String, nom_carte: String = "") -> void:
 	if not _customization.definir_carte(categorie, nom_carte):
 		return
-	_programmer_customisation_importee()
+	_appliquer_customisation()
 
 
 func appliquer_apparence(selection: Dictionary) -> void:
 	_customization.appliquer_apparence(selection)
-	_programmer_customisation_importee()
+	_appliquer_customisation()
 
 
 func variantes(categorie: String) -> Array:
 	return _customization.variantes(categorie)
+
+
+func _appliquer_customisation() -> void:
+	_programmer_customisation_importee()
+
+
+func _resolver_customisation() -> Callable:
+	return Callable(self, "_resoudre_customisation")
+
+
+func _resoudre_customisation(dossier: int, fichier: int) -> Array:
+	return _customization.resoudre(dossier, fichier)
 
 
 func _programmer_customisation_importee() -> void:
@@ -93,7 +106,7 @@ func _programmer_customisation_importee() -> void:
 
 func _appliquer_customisation_importee() -> void:
 	_customisation_differee_en_cours = false
-	_imported_adapter.appliquer_customisation_importee(_customization.resoudre)
+	_imported_adapter.appliquer_customisation_importee(_resolver_customisation())
 
 
 func _sur_animation_finie_importee(nom: String) -> void:
