@@ -54,6 +54,7 @@ theme_override_constants/separation = 20
 [node name="DefilementCategories" type="ScrollContainer" parent="Marge/Colonne/Contenu" unique_id=1146207736]
 custom_minimum_size = Vector2(210, 0)
 layout_mode = 2
+follow_focus = true
 horizontal_scroll_mode = 0
 
 [node name="CategoriesCustom" type="VBoxContainer" parent="Marge/Colonne/Contenu/DefilementCategories" unique_id=2089991197]
@@ -93,6 +94,7 @@ layout_mode = 2
 [node name="Defilement" type="ScrollContainer" parent="Marge/Colonne/Contenu/Choix" unique_id=172501152]
 layout_mode = 2
 size_flags_vertical = 3
+follow_focus = true
 
 [node name="GrilleCustom" type="GridContainer" parent="Marge/Colonne/Contenu/Choix/Defilement" unique_id=1524215222]
 unique_name_in_owner = true
