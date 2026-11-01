@@ -1,7 +1,7 @@
 extends Node
 
 const CHEMIN := "user://apparence_player.cfg"
-const CATEGORIES := ["Head", "Balaclava", "Mask", "Googles", "Head Gear", "Shirt", "Jacket", "Pants"]
+const CATEGORIES := ["Head", "Balaclava", "Mask", "Googles", "Head Gear", "Shirt", "Jacket", "Pants"] 
 
 var selection: Dictionary = {}
 var erreur_chargement := ""
