@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://dojrirqfsng1t"]
+
+[ext_resource type="Script" uid="uid://8ik1p088erdl" path="res://scripts/player/visuel_player.gd" id="1_b8kb6"]
+[ext_resource type="PackedScene" uid="uid://nnisu6315o2u" path="res://scenes/spriter_player_only.tscn" id="2_uki56"]
+
+[node name="Visuel" type="Node2D" unique_id=1248584445 node_paths=PackedStringArray("entite_joueur", "animation_player", "sprite_arme", "point_bouche")]
+script = ExtResource("1_b8kb6")
+entite_joueur = NodePath("Spriter/Skeleton")
+animation_player = NodePath("Spriter/Skeleton/AnimationPlayer")
+sprite_arme = NodePath("Spriter/Skeleton/bone_000/bone_001/bone_003/bone_004/bone_005/bone_018/AK47")
+point_bouche = NodePath("Spriter/Skeleton/bone_000/bone_001/bone_003/bone_004/bone_005/bone_018/AK47/Muzzle")
+
+[node name="Spriter" parent="." unique_id=1667269197 instance=ExtResource("2_uki56")]

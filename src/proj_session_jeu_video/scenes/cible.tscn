@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://ck16d44vuxrdq"]
+
+[ext_resource type="Script" uid="uid://ber3c0dc068c2" path="res://scripts/cible.gd" id="1_vltkr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fpr03"]
+size = Vector2(40, 80)
+
+[node name="cible" type="StaticBody2D" unique_id=1586831360]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_vltkr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1966447389]
+position = Vector2(0, -40)
+shape = SubResource("RectangleShape2D_fpr03")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=793067198]
+offset_left = -20.0
+offset_top = -80.0
+offset_right = 20.0
+color = Color(1, 0, 0, 1)
