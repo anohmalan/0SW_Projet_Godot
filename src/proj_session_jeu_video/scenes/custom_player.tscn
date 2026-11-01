@@ -1,3 +1,217 @@
 [gd_scene format=3 uid="uid://de56ua32xx6br"]
 
-[node name="Node2D" type="Node2D" unique_id=1505157792]
+[ext_resource type="Script" uid="uid://860wfpqjar06" path="res://scripts/player/custom_player.gd" id="1_qm7v8"]
+[ext_resource type="PackedScene" uid="uid://biopt84v10yqs" path="res://scenes/arriere_plan_menu.tscn" id="2_fuvl6"]
+[ext_resource type="PackedScene" uid="uid://dojrirqfsng1t" path="res://scenes/apercu_player.tscn" id="2_qj230"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4vyda"]
+bg_color = Color(0, 0, 0, 0.3)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_xjhyt"]
+color = Color(0, 0.68235296, 0.5686275, 1)
+grow_end = -128.0
+thickness = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fuvl6"]
+bg_color = Color(0.09019608, 0.24705882, 0.22745098, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.46666667, 0.65882355, 0.6039216, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="CustomPlayer" type="Control" unique_id=806975062]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qm7v8")
+
+[node name="Fond" type="ColorRect" parent="." unique_id=38125541]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.09019608, 0.24705882, 0.22745098, 1)
+
+[node name="arriere_plan_menu" parent="." unique_id=28243250 instance=ExtResource("2_fuvl6")]
+visible = false
+
+[node name="Marge" type="MarginContainer" parent="." unique_id=939627318]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Colonne" type="VBoxContainer" parent="Marge" unique_id=2026826105]
+layout_mode = 2
+
+[node name="Titre" type="Label" parent="Marge/Colonne" unique_id=1925784832]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94509804, 0.9607843, 0.8745098, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.4)
+theme_override_colors/font_outline_color = Color(0.0627451, 0.1764706, 0.16078432, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "CUSTOMISE TON SOLDAT"
+
+[node name="Contenu" type="HBoxContainer" parent="Marge/Colonne" unique_id=896565569]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="DefilementCategories" type="ScrollContainer" parent="Marge/Colonne/Contenu" unique_id=1146207736]
+custom_minimum_size = Vector2(210, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4vyda")
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="CategoriesCustom" type="VBoxContainer" parent="Marge/Colonne/Contenu/DefilementCategories" unique_id=2089991197]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme_override_constants/separation = 8
+
+[node name="Choix" type="VBoxContainer" parent="Marge/Colonne/Contenu" unique_id=185174016]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CategorieActuelleCustom" type="Label" parent="Marge/Colonne/Contenu/Choix" unique_id=599397671]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94509804, 0.9607843, 0.8745098, 1)
+theme_override_colors/font_outline_color = Color(0.0627451, 0.1764706, 0.16078432, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 36
+
+[node name="HSeparator" type="HSeparator" parent="Marge/Colonne/Contenu/Choix" unique_id=1572372869]
+layout_mode = 2
+theme_override_constants/separation = 8
+theme_override_styles/separator = SubResource("StyleBoxLine_xjhyt")
+
+[node name="Defilement" type="ScrollContainer" parent="Marge/Colonne/Contenu/Choix" unique_id=172501152]
+layout_mode = 2
+size_flags_vertical = 3
+follow_focus = true
+
+[node name="GrilleCustom" type="GridContainer" parent="Marge/Colonne/Contenu/Choix/Defilement" unique_id=1524215222]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 4
+
+[node name="Apercu" type="SubViewportContainer" parent="Marge/Colonne/Contenu" unique_id=1403881833]
+custom_minimum_size = Vector2(320, 400)
+layout_mode = 2
+mouse_filter = 2
+stretch = true
+
+[node name="Vue" type="SubViewport" parent="Marge/Colonne/Contenu/Apercu" unique_id=1126192200]
+transparent_bg = true
+handle_input_locally = false
+gui_disable_input = true
+size = Vector2i(320, 522)
+size_2d_override = Vector2i(323, 400)
+render_target_update_mode = 4
+
+[node name="VisuelCustom" parent="Marge/Colonne/Contenu/Apercu/Vue" unique_id=1248584445 instance=ExtResource("2_qj230")]
+unique_name_in_owner = true
+position = Vector2(156.00003, 271.00003)
+scale = Vector2(0.7, 0.7)
+
+[node name="Actions" type="HBoxContainer" parent="Marge/Colonne" unique_id=373792935]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="RetourCustom" type="Button" parent="Marge/Colonne/Actions" unique_id=577548315]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Retour"
+
+[node name="EnregistrerCustom" type="Button" parent="Marge/Colonne/Actions" unique_id=1131563292]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Enregistrer"
+
+[node name="ConfirmationRetour" type="ColorRect" parent="." unique_id=902604728]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.70000005)
+
+[node name="Centre" type="CenterContainer" parent="ConfirmationRetour" unique_id=1847521082]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panneau" type="PanelContainer" parent="ConfirmationRetour/Centre" unique_id=608766412]
+custom_minimum_size = Vector2(440, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fuvl6")
+
+[node name="MargeDialogue" type="MarginContainer" parent="ConfirmationRetour/Centre/Panneau" unique_id=1241735470]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ColonneDialogue" type="VBoxContainer" parent="ConfirmationRetour/Centre/Panneau/MargeDialogue" unique_id=1510668555]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Message" type="Label" parent="ConfirmationRetour/Centre/Panneau/MargeDialogue/ColonneDialogue" unique_id=969893510]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "Enregistrer les modifications avant de quitter ?"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="EnregistrerEtQuitter" type="Button" parent="ConfirmationRetour/Centre/Panneau/MargeDialogue/ColonneDialogue" unique_id=389691456]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Enregistrer"
+
+[node name="QuitterSansSauver" type="Button" parent="ConfirmationRetour/Centre/Panneau/MargeDialogue/ColonneDialogue" unique_id=1674739709]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Ne pas enregistrer"
+
+[connection signal="pressed" from="Marge/Colonne/Actions/RetourCustom" to="." method="_on_retour_custom_pressed"]
+[connection signal="pressed" from="Marge/Colonne/Actions/EnregistrerCustom" to="." method="_on_enregistrer_custom_pressed"]

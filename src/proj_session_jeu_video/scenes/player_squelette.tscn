@@ -1,0 +1,137 @@
+[gd_scene format=3 uid="uid://dfof4r4t5slie"]
+
+[ext_resource type="PackedScene" uid="uid://iwgxfmmt06d3" path="res://assets/sprites/sprites_joueur/Spriter.scml" id="1_6p5qb"]
+
+[node name="PlayerSquelette" unique_id=1731785453 instance=ExtResource("1_6p5qb")]
+
+[node name="bone_002" parent="Skeleton/bone_000/bone_001" parent_id_path=PackedInt32Array(326459249) index="0" unique_id=845527245]
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="bone_019" parent="Skeleton/bone_000/bone_001/bone_002" index="0" unique_id=979797796]
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="bone_020" parent="Skeleton/bone_000/bone_001/bone_002" index="1" unique_id=801571665]
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="bone_021" parent="Skeleton/bone_000/bone_001/bone_002" index="2" unique_id=1123435501]
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="bone_022" parent="Skeleton/bone_000/bone_001/bone_002" index="3" unique_id=1890367973]
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="bone_023" parent="Skeleton/bone_000/bone_001/bone_002" index="4" unique_id=1329551776]
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="bone_004" parent="Skeleton/bone_000/bone_001/bone_003" parent_id_path=PackedInt32Array(481213753) index="0" unique_id=717255464]
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="bone_005" parent="Skeleton/bone_000/bone_001/bone_003/bone_004" index="0" unique_id=1420527457]
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="bone_018" parent="Skeleton/bone_000/bone_001/bone_003/bone_004/bone_005" index="0" unique_id=465702136]
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="bone_007" parent="Skeleton/bone_000/bone_001/bone_006" parent_id_path=PackedInt32Array(612031845) index="0" unique_id=1604803707]
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="bone_009" parent="Skeleton/bone_000" parent_id_path=PackedInt32Array(1420153229) index="1" unique_id=35848140]
+rotation = -0.29208484
+scale = Vector2(1, -1)
+
+[node name="bone_012" parent="Skeleton/bone_000" parent_id_path=PackedInt32Array(1420153229) index="2" unique_id=1293970276]
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="bone_025" parent="Skeleton/bone_024" parent_id_path=PackedInt32Array(1867256854) index="0" unique_id=1322810611]
+rotation = 0.04805799
+
+[node name="bone_026" parent="Skeleton/bone_024/bone_025" index="0" unique_id=585389499]
+rotation = -0.071631625
+
+[node name="bone_042" parent="Skeleton/bone_024/bone_025/bone_026" index="0" unique_id=124963597]
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="bone_027" parent="Skeleton/bone_024/bone_025" index="1" unique_id=493248414]
+rotation = 2.2185571
+
+[node name="bone_028" parent="Skeleton/bone_024/bone_025/bone_027" index="0" unique_id=1487010756]
+rotation = -2.2240953
+
+[node name="bone_029" parent="Skeleton/bone_024/bone_025/bone_027/bone_028" index="0" unique_id=1867741341]
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="LeftHand (5)" parent="Skeleton/bone_024/bone_025/bone_027/bone_028/bone_029" index="0" unique_id=2124978683]
+z_index = 0
+
+[node name="RightHand (3)_000" parent="Skeleton/bone_024/bone_025/bone_027/bone_028" index="1" unique_id=1793022511]
+z_index = 3
+
+[node name="RightHand (1)_000" parent="Skeleton/bone_024/bone_025/bone_027" index="1" unique_id=1602035473]
+z_index = 4
+
+[node name="bone_030" parent="Skeleton/bone_024/bone_025" index="2" unique_id=2046592654]
+rotation = -0.7560853
+
+[node name="bone_031" parent="Skeleton/bone_024/bone_025/bone_030" index="0" unique_id=996645270]
+position = Vector2(49.573296, -1.559197)
+rotation = 0.62532127
+
+[node name="bone_032" parent="Skeleton/bone_024/bone_025/bone_030/bone_031" index="0" unique_id=1740604487]
+rotation = 0.15376437
+
+[node name="LeftHand (5)_000" parent="Skeleton/bone_024/bone_025/bone_030/bone_031/bone_032" index="0" unique_id=223714726]
+z_index = 6
+
+[node name="bone_039" parent="Skeleton/bone_024/bone_025" index="3" unique_id=1980569165]
+rotation = -0.0029748122
+
+[node name="Black (2)" parent="Skeleton/bone_024/bone_025/bone_039" index="0" unique_id=406030346]
+z_index = 12
+
+[node name="bone_040" parent="Skeleton/bone_024/bone_025" index="4" unique_id=2077221550]
+rotation = -0.0029748122
+
+[node name="SlevelessWhite (2)" parent="Skeleton/bone_024/bone_025/bone_040" index="0" unique_id=741479259]
+z_index = 10
+
+[node name="Kevlar3 (2)" parent="Skeleton/bone_024/bone_025/bone_041" parent_id_path=PackedInt32Array(219246010) index="0" unique_id=2130555661]
+z_index = 13
+
+[node name="Body (2)" parent="Skeleton/bone_024/bone_025" index="6" unique_id=1062640468]
+z_index = 5
+
+[node name="bone_033" parent="Skeleton/bone_024" parent_id_path=PackedInt32Array(1867256854) index="1" unique_id=153550823]
+position = Vector2(222.38448, 25.64144)
+rotation = 1.3222458
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="bone_034" parent="Skeleton/bone_024/bone_033" index="0" unique_id=351787517]
+position = Vector2(39.812866, -1.336456)
+rotation = 1.8619808
+
+[node name="bone_035" parent="Skeleton/bone_024/bone_033/bone_034" index="0" unique_id=944593582]
+rotation = -0.08225894
+
+[node name="Black (3)_000" parent="Skeleton/bone_024/bone_033" index="1" unique_id=1796074028]
+z_index = 9
+
+[node name="bone_036" parent="Skeleton/bone_024" parent_id_path=PackedInt32Array(1867256854) index="2" unique_id=805869492]
+position = Vector2(208.54395, -22.787455)
+rotation = 3.0803416
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="bone_037" parent="Skeleton/bone_024/bone_036" index="0" unique_id=1491237589]
+position = Vector2(57.260265, -2.169956)
+rotation = 0.02783851
+
+[node name="bone_038" parent="Skeleton/bone_024/bone_036/bone_037" index="0" unique_id=1438532588]
+position = Vector2(53.747616, -0.28742)
+rotation = 0.10676456
+
+[node name="Black (10)" parent="Skeleton/bone_024/bone_036/bone_037/bone_038" index="0" unique_id=544290860]
+z_index = 14
+
+[node name="Black (6)_000" parent="Skeleton/bone_024/bone_036/bone_037" index="1" unique_id=1449062191]
+z_index = 15
+
+[node name="Black (4)_000" parent="Skeleton/bone_024/bone_036" index="1" unique_id=1380978512]
+z_index = 11

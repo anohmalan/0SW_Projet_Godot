@@ -11,22 +11,27 @@
 script = ExtResource("1_i85hu")
 
 [node name="arriere_plan_menu" parent="." unique_id=28243250 instance=ExtResource("2_mk4g1")]
+visible = false
 position = Vector2(-1, -2)
 
-[node name="Interface" type="Control" parent="arriere_plan_menu" unique_id=1203804539]
+[node name="Interface" type="Control" parent="." unique_id=1203804539]
 layout_mode = 3
-anchors_preset = 0
-offset_left = 1.0
-offset_top = 2.0
-offset_right = 41.0
-offset_bottom = 42.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = -2.0
+offset_right = -1.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Button_gestionnaire" type="Control" parent="arriere_plan_menu/Interface" unique_id=722072740]
+[node name="Button_gestionnaire" type="Control" parent="Interface" unique_id=722072740]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Jouer" type="TextureButton" parent="arriere_plan_menu/Interface/Button_gestionnaire" unique_id=141530318]
+[node name="Jouer" type="TextureButton" parent="Interface/Button_gestionnaire" unique_id=141530318]
 layout_mode = 0
 offset_left = 412.0
 offset_top = 492.0
@@ -36,7 +41,7 @@ texture_normal = ExtResource("3_iep14")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Réglages" type="TextureButton" parent="arriere_plan_menu/Interface/Button_gestionnaire" unique_id=1163842691]
+[node name="Réglages" type="TextureButton" parent="Interface/Button_gestionnaire" unique_id=1163842691]
 layout_mode = 0
 offset_left = 924.0
 offset_top = 31.0
@@ -46,7 +51,7 @@ texture_normal = ExtResource("4_qcl6i")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Quitter" type="TextureButton" parent="arriere_plan_menu/Interface/Button_gestionnaire" unique_id=2087103007]
+[node name="Quitter" type="TextureButton" parent="Interface/Button_gestionnaire" unique_id=2087103007]
 layout_mode = 0
 offset_left = 760.0
 offset_top = 498.0
@@ -56,7 +61,7 @@ texture_normal = ExtResource("5_nxt0m")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="CustomPlayer" type="TextureButton" parent="arriere_plan_menu/Interface/Button_gestionnaire" unique_id=1577363832]
+[node name="CustomPlayer" type="TextureButton" parent="Interface/Button_gestionnaire" unique_id=1577363832]
 layout_mode = 0
 offset_left = 105.0
 offset_top = 495.0
@@ -66,7 +71,7 @@ texture_normal = ExtResource("6_2xgxd")
 ignore_texture_size = true
 stretch_mode = 0
 
-[connection signal="pressed" from="arriere_plan_menu/Interface/Button_gestionnaire/Jouer" to="." method="_on_jouer_pressed"]
-[connection signal="pressed" from="arriere_plan_menu/Interface/Button_gestionnaire/Réglages" to="." method="_on_réglages_pressed"]
-[connection signal="pressed" from="arriere_plan_menu/Interface/Button_gestionnaire/Quitter" to="." method="_on_quitter_pressed"]
-[connection signal="pressed" from="arriere_plan_menu/Interface/Button_gestionnaire/CustomPlayer" to="." method="_on_custom_player_pressed"]
+[connection signal="pressed" from="Interface/Button_gestionnaire/Jouer" to="." method="_on_jouer_pressed"]
+[connection signal="pressed" from="Interface/Button_gestionnaire/Réglages" to="." method="_on_réglages_pressed"]
+[connection signal="pressed" from="Interface/Button_gestionnaire/Quitter" to="." method="_on_quitter_pressed"]
+[connection signal="pressed" from="Interface/Button_gestionnaire/CustomPlayer" to="." method="_on_custom_player_pressed"]

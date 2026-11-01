@@ -3,6 +3,9 @@ extends RefCounted
 
 const IGNOREES := ["Climb"]   # squelette différent, inutile pour ce jeu
 
+var cartes: Dictionary = {}          # nom -> Array de règles
+var _carte_courante: Array = []
+
 # animations[nom] = { nom, longueur, boucle, mainline: [...], timelines: {...} }
 var animations: Dictionary = {}
 
@@ -79,6 +82,18 @@ func charger(chemin: String, nom_entite: String = "Char") -> bool:
 					tl = {"nom": a["name"], "cles": []}
 					anim["timelines"][int(a["id"])] = tl
 					cle_tl = {}
+			"character_map":
+				if dans_entite:
+					_carte_courante = []
+					cartes[a["name"]] = _carte_courante
+			"map":
+				if dans_entite:
+					_carte_courante.append({
+						"dossier": int(a["folder"]),
+						"fichier": int(a["file"]),
+						"cible_dossier": int(a.get("target_folder", -1)),
+						"cible_fichier": int(a.get("target_file", -1))
+					})
 			"bone", "object":
 				if not anim.is_empty() and not dans_mainline and not cle_tl.is_empty():
 					cle_tl["attrs"] = a

@@ -1,0 +1,23 @@
+[remap]
+
+importer="importer.scml"
+type="PackedScene"
+uid="uid://bodec2sii4650"
+path="res://.godot/imported/Spriter.scml-ab466cacc9f59593482bee49bdb89b32.scn"
+
+[deps]
+
+source_file="res://godot_scml_importer-5834cefb71c74e4ff722cabee69761a5beba0922/addons/godot_scml_importer/Spriter.scml"
+dest_files=["res://.godot/imported/Spriter.scml-ab466cacc9f59593482bee49bdb89b32.scn"]
+
+[params]
+
+playback_speed=1.0
+z_as_relative=true
+loop_animations=1
+loop_wrap_interpolation=true
+optimize_for_blends=true
+create_events_as_signals=true
+rest_pose_animation=""
+character_map_file=""
+reparenting_solution="instance per parent"
