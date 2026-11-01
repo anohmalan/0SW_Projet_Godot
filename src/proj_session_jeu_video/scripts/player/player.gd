@@ -38,10 +38,13 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += gravite * delta
 	state_machine.physics_update(delta)
+	var doit_tirer := false
 	if not (state_machine.current_state is PlayerHurt or state_machine.current_state is PlayerDead):
-		arsenal.gerer_commandes()
+		doit_tirer = arsenal.gerer_commandes()
 	move_and_slide()
 	state_machine.update(delta)
+	if doit_tirer:
+		arsenal.tirer()
 
 
 func rafraichir() -> void:

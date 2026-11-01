@@ -61,5 +61,5 @@ func _sur_contact(corps: Node2D) -> void:
 
 
 func _draw() -> void:
-	draw_line(Vector2(-14, 0), Vector2(2, 0), _couleur, 3.0)
-	draw_circle(Vector2(2, 0), 2.5, Color.WHITE)
+	draw_line(Vector2(0, 0), Vector2(16, 0), _couleur, 3.0)
+	draw_circle(Vector2(16, 0), 2.5, Color.WHITE)

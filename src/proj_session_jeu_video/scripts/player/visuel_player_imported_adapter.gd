@@ -2,73 +2,43 @@ class_name VisuelPlayerImportedAdapter
 extends RefCounted
 
 signal animation_terminee(nom: String)
+
 var last_error := ""
 
-var _hote: Node2D
 var _prefixe_lib_anim := ""
 var _loader: SpriterLoader
-var _scene_importee: Node = null
 var _entite_importee_joueur: Node2D = null
 var _animation_player: AnimationPlayer = null
-var _sprites_armes := {}
-var _sprites_importes: Array = []
+var _point_bouche_noeud: Marker2D = null
+var _sprite_arme: Sprite2D = null
+var _bouche_y := 0.3
+var _sprites_importes: Array[Sprite2D] = []
 var _infos_par_chemin := {}
 var _textures_cache := {}
 
-
 func initialiser(
-		hote: Node2D,
-		chemin_scml: String,
-		nom_entite_joueur: String,
 		prefixe_lib_anim: String,
-		loader: SpriterLoader) -> bool:
-	_hote = hote
+		loader: SpriterLoader,
+		entite_joueur: Node2D,
+		animation_player: AnimationPlayer,
+		sprite_arme: Sprite2D,
+		point_bouche: Marker2D) -> bool:
+	last_error = ""
+	if entite_joueur == null or animation_player == null or sprite_arme == null or point_bouche == null:
+		return _echouer("Configure les références entite_joueur, animation_player, sprite_arme et point_bouche sur Visuel.")
+	if point_bouche.get_parent() != sprite_arme:
+		return _echouer("Le Marker2D point_bouche doit être enfant du sprite_arme dans la scène.")
 	_prefixe_lib_anim = prefixe_lib_anim
 	_loader = loader
-	last_error = ""
+	_entite_importee_joueur = entite_joueur
+	_animation_player = animation_player
+	_sprite_arme = sprite_arme
+	_point_bouche_noeud = point_bouche
 	_indexer_infos_fichiers()
-
-	var scene := load(chemin_scml) as PackedScene
-	if scene == null:
-		return _echouer("Impossible de charger la scène SCML importée: " + chemin_scml)
-
-	_scene_importee = scene.instantiate()
-	if _scene_importee == null:
-		return _echouer("Impossible d'instancier la scène SCML importée: " + chemin_scml)
-
-	_hote.add_child(_scene_importee)
-	_entite_importee_joueur = _trouver_entite_joueur(nom_entite_joueur)
-	if _entite_importee_joueur == null:
-		var nom_racine: String = _scene_importee.name if _scene_importee != null else "<null>"
-		var noms_enfants: String = _noms_enfants(_scene_importee)
-		_detruire_scene_importee()
-		return _echouer(
-			"Entité SCML '%s' introuvable. Racine=%s, enfants directs=%s" % [
-				nom_entite_joueur,
-				nom_racine,
-				noms_enfants
-			]
-		)
-
-	_isoler_entites_non_joueur()
-
-	_animation_player = _entite_importee_joueur.find_child("AnimationPlayer", true, false) as AnimationPlayer
-	if _animation_player == null:
-		_animation_player = _scene_importee.find_child("AnimationPlayer", true, false) as AnimationPlayer
-	if _animation_player == null:
-		_detruire_scene_importee()
-		return _echouer("AnimationPlayer introuvable dans la scène SCML importée.")
-
+	_sprites_importes.assign(entite_joueur.find_children("*", "Sprite2D", true, false))
 	_animation_player.animation_finished.connect(_sur_animation_finie)
-	_collecter_sprites_importes()
+	_actualiser_point_bouche()
 	return true
-
-
-func _echouer(message: String) -> bool:
-	last_error = message
-	push_warning(message)
-	return false
-
 
 func jouer(nom: String, relancer: bool, depart: float, vitesse: float, nom_animation_actuel: String) -> String:
 	if _animation_player == null:
@@ -87,34 +57,42 @@ func jouer(nom: String, relancer: bool, depart: float, vitesse: float, nom_anima
 	_animation_player.play(nom_anim)
 	if depart > 0.0:
 		_animation_player.seek(depart / 1000.0, true)
+	else:
+		# Appliquer la pose immédiatement, avant un éventuel tir dans le même tick.
+		_animation_player.advance(0.0)
 	return nom_anim
-
 
 func position_animation_ms() -> float:
 	if _animation_player == null:
 		return 0.0
 	return _animation_player.current_animation_position * 1000.0
 
+func position_bouche(bouche_y: float) -> Vector2:
+	_bouche_y = bouche_y
+	if not _actualiser_point_bouche():
+		push_error("Impossible de positionner la bouche : sprite_arme ou point_bouche invalide, ou arme masquée.")
+		return Vector2.ZERO
+	return _point_bouche_noeud.global_position
 
-func position_bouche(bouche_y: float, noms_sprites_armes: Array, fallback: Vector2) -> Vector2:
-	var arme_importee := _sprite_arme_importe(noms_sprites_armes)
-	if arme_importee == null or arme_importee.texture == null:
-		return fallback
-	var taille_importee := arme_importee.texture.get_size()
-	return arme_importee.to_global(arme_importee.offset + Vector2(taille_importee.x, taille_importee.y * bouche_y))
-
+func _actualiser_point_bouche() -> bool:
+	if _point_bouche_noeud == null or _sprite_arme == null:
+		return false
+	if _sprite_arme.texture == null or not _sprite_arme.is_visible_in_tree() or is_zero_approx(_sprite_arme.modulate.a):
+		return false
+	var rect := _sprite_arme.get_rect()
+	_point_bouche_noeud.position = rect.position + Vector2(rect.size.x, rect.size.y * _bouche_y)
+	return true
 
 func appliquer_customisation_importee(resoudre: Callable) -> void:
 	if _entite_importee_joueur == null:
 		return
-	for sprite_t in _sprites_importes:
-		var sprite: Sprite2D = sprite_t
+	for sprite in _sprites_importes:
 		if sprite == null or sprite.texture == null:
 			continue
 		var source: Dictionary = _source_sprite(sprite)
 		if source.is_empty():
 			continue
-		var res = resoudre.call(int(source["dossier"]), int(source["fichier"]))
+		var res: Variant = resoudre.call(int(source["dossier"]), int(source["fichier"]))
 		var res_array: Array = res if res is Array else []
 		if res_array.is_empty():
 			sprite.visible = false
@@ -125,7 +103,12 @@ func appliquer_customisation_importee(resoudre: Callable) -> void:
 		if texture_cible == null:
 			continue
 		sprite.texture = texture_cible
+	_actualiser_point_bouche()
 
+func _echouer(message: String) -> bool:
+	last_error = message
+	push_warning(message)
+	return false
 
 func _normaliser_nom_animation(nom: String) -> String:
 	if _animation_player == null:
@@ -137,27 +120,8 @@ func _normaliser_nom_animation(nom: String) -> String:
 		return avec_prefixe
 	return ""
 
-
 func _sur_animation_finie(nom: StringName) -> void:
-	var nom_str := String(nom)
-	if nom_str.begins_with(_prefixe_lib_anim):
-		nom_str = nom_str.trim_prefix(_prefixe_lib_anim)
-	animation_terminee.emit(nom_str)
-
-
-func _sprite_arme_importe(noms_sprites_armes: Array) -> Sprite2D:
-	if _entite_importee_joueur == null:
-		return null
-	for nom_t in noms_sprites_armes:
-		var nom := String(nom_t)
-		if _sprites_armes.has(nom):
-			return _sprites_armes[nom]
-		var sprite := _entite_importee_joueur.find_child(nom, true, false) as Sprite2D
-		if sprite != null:
-			_sprites_armes[nom] = sprite
-			return sprite
-	return null
-
+	animation_terminee.emit(String(nom).trim_prefix(_prefixe_lib_anim))
 
 func _indexer_infos_fichiers() -> void:
 	_infos_par_chemin.clear()
@@ -172,35 +136,17 @@ func _indexer_infos_fichiers() -> void:
 				"fichier": int(id_fichier)
 			}
 
-
-func _collecter_sprites_importes() -> void:
-	_sprites_importes.clear()
-	if _entite_importee_joueur == null:
-		return
-	_collecter_sprites_recursive(_entite_importee_joueur)
-
-
-func _collecter_sprites_recursive(noeud: Node) -> void:
-	if noeud is Sprite2D:
-		_sprites_importes.append(noeud)
-	for enfant in noeud.get_children():
-		_collecter_sprites_recursive(enfant)
-
-
 func _source_sprite(sprite: Sprite2D) -> Dictionary:
 	var ressource_path := _normaliser_chemin_ressource(String(sprite.texture.resource_path))
 	var chemin := ""
-	if _infos_par_chemin.has(ressource_path):
+	if sprite.has_meta("source_scml_path"):
+		chemin = String(sprite.get_meta("source_scml_path"))
+	elif _infos_par_chemin.has(ressource_path):
 		chemin = ressource_path
 		sprite.set_meta("source_scml_path", chemin)
-	elif sprite.has_meta("source_scml_path"):
-		chemin = String(sprite.get_meta("source_scml_path"))
 	else:
 		return {}
-
-	var info = _infos_par_chemin.get(chemin, {})
-	return info if info is Dictionary else {}
-
+	return _infos_par_chemin.get(chemin, {})
 
 func _texture_cachee(chemin: String) -> Texture2D:
 	var normalise := _normaliser_chemin_ressource(chemin)
@@ -210,58 +156,5 @@ func _texture_cachee(chemin: String) -> Texture2D:
 	_textures_cache[normalise] = texture
 	return texture
 
-
 func _normaliser_chemin_ressource(chemin: String) -> String:
 	return chemin.replace("\\", "/")
-
-
-func _isoler_entites_non_joueur() -> void:
-	if _scene_importee == null or _entite_importee_joueur == null:
-		return
-	if _entite_importee_joueur == _scene_importee:
-		return
-	for enfant in _scene_importee.get_children():
-		if enfant == _entite_importee_joueur:
-			continue
-		if enfant is Node and enfant.is_ancestor_of(_entite_importee_joueur):
-			continue
-		if enfant is CanvasItem:
-			(enfant as CanvasItem).visible = false
-
-
-func _trouver_entite_joueur(nom_entite_joueur: String) -> Node2D:
-	if _scene_importee == null:
-		return null
-	var trouvee := _scene_importee.find_child(nom_entite_joueur, true, false) as Node2D
-	if trouvee != null:
-		return trouvee
-	if _scene_importee is Node2D:
-		var racine := _scene_importee as Node2D
-		var ap_racine := racine.find_child("AnimationPlayer", true, false) as AnimationPlayer
-		if ap_racine != null:
-			return racine
-	for enfant in _scene_importee.get_children():
-		var candidat := enfant as Node2D
-		if candidat == null:
-			continue
-		var ap := candidat.find_child("AnimationPlayer", true, false) as AnimationPlayer
-		if ap != null:
-			return candidat
-	return null
-
-
-func _noms_enfants(noeud: Node) -> String:
-	if noeud == null:
-		return "[]"
-	var noms: Array[String] = []
-	for enfant in noeud.get_children():
-		noms.append(enfant.name)
-	return str(noms)
-
-
-func _detruire_scene_importee() -> void:
-	if _scene_importee != null:
-		_scene_importee.queue_free()
-	_scene_importee = null
-	_entite_importee_joueur = null
-	_animation_player = null

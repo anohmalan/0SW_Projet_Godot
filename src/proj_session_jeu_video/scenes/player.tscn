@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://ckhtrmccg5wo1" path="res://scripts/player/States/player_dead.gd" id="10_dead"]
 [ext_resource type="Script" uid="uid://btr55misobym1" path="res://scripts/player/arsenal_player.gd" id="11_arsenal"]
 [ext_resource type="Script" uid="uid://cthltb3whxbyk" path="res://scripts/player/vie_player.gd" id="12_vie"]
+[ext_resource type="PackedScene" uid="uid://uytint6cpquv" path="res://scenes/Spriter_player_only.tscn" id="13_spriter"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xjhyt"]
 radius = 14.0
@@ -25,8 +26,14 @@ script = ExtResource("1_uj1k6")
 position = Vector2(0, -58)
 shape = SubResource("CapsuleShape2D_xjhyt")
 
-[node name="Visuel" type="Node2D" parent="." unique_id=2019020059]
+[node name="Visuel" type="Node2D" parent="." unique_id=2019020059 node_paths=PackedStringArray("entite_joueur", "animation_player", "sprite_arme", "point_bouche")]
 script = ExtResource("2_2y66e")
+entite_joueur = NodePath("Spriter/Skeleton")
+animation_player = NodePath("Spriter/Skeleton/AnimationPlayer")
+sprite_arme = NodePath("Spriter/Skeleton/bone_000/bone_001/bone_003/bone_004/bone_005/bone_018/AK47")
+point_bouche = NodePath("Spriter/Skeleton/bone_000/bone_001/bone_003/bone_004/bone_005/bone_018/AK47/Muzzle")
+
+[node name="Spriter" parent="Visuel" unique_id=1731785453 instance=ExtResource("13_spriter")]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1545197382]
 position = Vector2(0, -60)

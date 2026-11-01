@@ -20,11 +20,14 @@ func rafraichir() -> void:
 	_player.arme_changee.emit(armes[index_arme], munitions[index_arme])
 
 
-func gerer_commandes() -> void:
+func gerer_commandes() -> bool:
 	if Input.is_action_just_pressed("arme_suivante"):
 		_arme_suivante()
 	if Input.is_action_pressed("tir") and temps_depuis_tir >= armes[index_arme].cadence:
-		_tirer()
+		# La pose de visée doit être choisie avant de calculer l'origine du tir.
+		temps_depuis_tir = 0.0
+		return true
+	return false
 
 
 func ajouter_munitions(i: int, quantite: int) -> void:
@@ -38,6 +41,7 @@ func ajouter_munitions(i: int, quantite: int) -> void:
 func _equiper(i: int) -> void:
 	index_arme = i
 	_player.visuel.definir_carte("Gun", armes[i].carte)
+	_player.visuel.position_bouche(armes[i].bouche_y)
 	rafraichir()
 
 
@@ -49,10 +53,10 @@ func _arme_suivante() -> void:
 			return
 
 
-func _tirer() -> void:
+func tirer() -> void:
 	var arme := armes[index_arme]
 	temps_depuis_tir = 0.0
-	var bouche := _player.visuel.position_bouche(arme.bouche_y)
+	var bouche: Vector2 = _player.visuel.position_bouche(arme.bouche_y)
 	for i in arme.projectiles:
 		var ecart := deg_to_rad(randf_range(-arme.dispersion, arme.dispersion))
 		_player.tir_demande.emit(bouche, Vector2(_player.direction, 0.0).rotated(ecart), arme)

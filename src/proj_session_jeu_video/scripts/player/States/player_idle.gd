@@ -24,7 +24,7 @@ func physics_update(_delta: float) -> void:
 	if axe != 0.0:
 		Transitioned.emit(self, "PlayerRun")
 	if Input.is_action_just_pressed("saut") and player.is_on_floor():
-		Transitioned.emit(self, &"PlayerJump")
+		Transitioned.emit(self, "PlayerJump")
 
 func exit() -> void:
 	print("On sort de idle")
