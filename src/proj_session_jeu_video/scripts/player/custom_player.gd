@@ -23,6 +23,7 @@ const CATEGORIES := {
 var _selection: Dictionary = {}
 var _categorie := "Head"
 var _groupe_categories := ButtonGroup.new()
+var _transfert_confirmation := false
 
 func _ready() -> void:
 	_selection = ApparencePlayer.selection.duplicate(true)
@@ -33,12 +34,45 @@ func _ready() -> void:
 	for categorie: String in CATEGORIES:
 		_ajouter_categorie(categorie)
 
-	_afficher_categorie(_categorie)
+	_afficher_categorie(_categorie, false)
 
 	_styliser_action(_retour, false)
 	_styliser_action(_enregistrer, true)
+	_donner_focus_initial.call_deferred()
 
-func _afficher_categorie(categorie: String) -> void:
+func _input(event: InputEvent) -> void:
+	if _transfert_confirmation:
+		return
+
+	if event.is_action("confirmer"):
+		get_viewport().set_input_as_handled()
+
+		if event.is_echo():
+			return
+
+		var validation := InputEventAction.new()
+		validation.action = "ui_accept"
+		validation.pressed = event.is_action_pressed("confirmer")
+
+		_transfert_confirmation = true
+		get_viewport().push_input(validation)
+		_transfert_confirmation = false
+		return
+
+	if event.is_action("ui_accept"):
+		get_viewport().set_input_as_handled()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("retour") and not event.is_echo():
+		get_viewport().set_input_as_handled()
+		_on_retour_custom_pressed()
+
+func _donner_focus_initial() -> void:
+	var bouton := _groupe_categories.get_pressed_button()
+	if bouton != null:
+		bouton.grab_focus()
+
+func _afficher_categorie(categorie: String, transferer_focus: bool = true) -> void:
 	_categorie = categorie
 	_titre_categorie.text = CATEGORIES[categorie]
 
@@ -52,6 +86,14 @@ func _afficher_categorie(categorie: String) -> void:
 	for carte: String in _custom_apercu.variantes(categorie):
 		var texte := carte.trim_prefix(categorie + " - ")
 		_ajouter_choix(carte, texte, groupe)
+
+	if transferer_focus:
+		_focaliser_choix.call_deferred(groupe)
+
+func _focaliser_choix(groupe: ButtonGroup) -> void:
+	var bouton := groupe.get_pressed_button()
+	if is_instance_valid(bouton) and bouton.is_inside_tree():
+		bouton.grab_focus()
 
 # func _ajouter_choix(carte: String, texte: String, groupe: ButtonGroup) -> void:
 # 	var bouton := Button.new()
@@ -89,6 +131,7 @@ func _on_retour_custom_pressed() -> void:
 
 func _ajouter_categorie(categorie: String) -> void:
 	var bouton := Button.new()
+	bouton.focus_mode = Control.FOCUS_ALL
 	bouton.text = CATEGORIES[categorie]
 	bouton.custom_minimum_size = Vector2(190, 52)
 	bouton.alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -135,6 +178,7 @@ func _style_categorie(fond: Color, bordure: Color) -> StyleBoxFlat:
 
 func _ajouter_choix(carte: String, texte: String, groupe: ButtonGroup) -> void:
 	var bouton := Button.new()
+	bouton.focus_mode = Control.FOCUS_ALL
 	bouton.custom_minimum_size = Vector2(160, 160)
 	bouton.toggle_mode = true
 	bouton.button_group = groupe
@@ -153,6 +197,9 @@ func _ajouter_choix(carte: String, texte: String, groupe: ButtonGroup) -> void:
 	)
 	bouton.add_theme_stylebox_override(
 		"hover_pressed", _style_carte(Color("#397466"), Color("#B5EC64"))
+	)
+	bouton.add_theme_stylebox_override(
+		"focus", _style_carte(Color.TRANSPARENT, Color.WHITE)
 	)
 
 	_grille.add_child(bouton)
@@ -193,6 +240,7 @@ func _style_carte(fond: Color, bordure: Color) -> StyleBoxFlat:
 	return style
 
 func _styliser_action(bouton: Button, principale: bool) -> void:
+	bouton.focus_mode = Control.FOCUS_ALL
 	bouton.custom_minimum_size = Vector2(180, 52)
 	bouton.add_theme_font_size_override("font_size", 20)
 	bouton.add_theme_color_override("font_color", Color("#FFFFFF"))
