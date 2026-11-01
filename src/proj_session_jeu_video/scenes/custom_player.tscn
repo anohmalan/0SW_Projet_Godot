@@ -60,6 +60,7 @@ stretch = true
 
 [node name="Vue" type="SubViewport" parent="Marge/Colonne/Contenu/Apercu" unique_id=1126192200]
 transparent_bg = true
+handle_input_locally = false
 gui_disable_input = true
 size = Vector2i(320, 495)
 size_2d_override = Vector2i(320, 400)

@@ -6,7 +6,7 @@ signal animation_terminee(nom: String)
 const CHEMIN_SCML := "res://assets/sprites/sprites_joueur/Spriter.scml"
 const PREFIXE_LIB_ANIM := "scml/"
 const ORDRE_CATEGORIES := ["Head", "Balaclava", "Mask", "Googles",
-		"Head Gear", "Shirt", "Jacket", "Pants", "Gun"]
+		"Head Gear","Strap", "Shirt", "Jacket", "Pants", "Gun"]
 const IMPORTED_ADAPTER_SCRIPT := preload("res://scripts/player/visuel_player_imported_adapter.gd")
 const CUSTOMIZATION_SCRIPT := preload("res://scripts/player/visuel_player_customization.gd")
 
@@ -111,3 +111,30 @@ func _appliquer_customisation_importee() -> void:
 
 func _sur_animation_finie_importee(nom: String) -> void:
 	animation_terminee.emit(nom)
+
+func miniature_variante(categorie: String, carte: String) -> Texture2D:
+	if carte.is_empty():
+		return null
+
+	if not _donnees.cartes.has(carte):
+		push_error("Variante inconnue pour la miniature : " + carte)
+		return null
+
+	for regle: Dictionary in _donnees.cartes[carte]:
+		var dossier := int(regle["cible_dossier"])
+		var fichier := int(regle["cible_fichier"])
+
+		if dossier < 0 or fichier < 0:
+			continue
+
+		var infos_dossier: Dictionary = _loader.dossiers[dossier]
+		if String(infos_dossier["nom"]) != categorie.to_lower():
+			continue
+
+		var info: Dictionary = infos_dossier["fichiers"][fichier]
+		var texture := load(String(info["chemin"])) as Texture2D
+		if texture == null:
+			push_error("Impossible de charger la miniature : " + String(info["chemin"]))
+		return texture
+
+	return null

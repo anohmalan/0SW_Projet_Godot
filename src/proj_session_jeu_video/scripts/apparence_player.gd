@@ -1,7 +1,7 @@
 extends Node
 
 const CHEMIN := "user://apparence_player.cfg"
-const CATEGORIES := ["Head", "Balaclava", "Mask", "Googles", "Head Gear", "Shirt", "Jacket", "Pants"] 
+const CATEGORIES := ["Head", "Balaclava", "Mask", "Googles", "Head Gear","Strap", "Shirt", "Jacket", "Pants"]
 
 var selection: Dictionary = {}
 var erreur_chargement := ""
@@ -14,7 +14,7 @@ func _ready() -> void:
 
 func _charger() -> void:
 	if not FileAccess.file_exists(CHEMIN):
-		return 
+		return
 	
 	var fichier := ConfigFile.new()
 	var erreur := fichier.load(CHEMIN)
@@ -26,6 +26,10 @@ func _charger() -> void:
 	if not valeurs is Dictionary:
 		_signaler_erreur("Le fichier d'apparence ne contient pas une sélection valide.")
 		return
+	
+	if valeurs.get("Head Gear", "") == "Head Gear - No Strap":
+		valeurs.erase("Head Gear")
+		valeurs["Strap"] = "Strap - No Strap"
 
 	if not _selection_valide(valeurs):
 		_signaler_erreur("Le fichier d'apparence contient des variantes inconnues.")

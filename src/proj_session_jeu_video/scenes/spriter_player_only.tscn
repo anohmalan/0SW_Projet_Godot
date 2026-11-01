@@ -1,97 +1,92 @@
 [gd_scene format=3 uid="uid://nnisu6315o2u"]
 
 [ext_resource type="PackedScene" uid="uid://iwgxfmmt06d3" path="res://assets/sprites/sprites_joueur/Spriter.scml" id="1_h7fam"]
-[ext_resource type="Texture2D" uid="uid://clt88l1m3wx7j" path="res://assets/sprites/sprites_joueur/bullet/bullet.png" id="3_7gq71"]
 
 [node name="Spriter" unique_id=1667269197 instance=ExtResource("1_h7fam")]
 
-[node name="bone_002" parent="Skeleton/bone_000/bone_001" parent_id_path=PackedInt32Array(326459249) index="0" unique_id=845527245]
-scale = Vector2(0.99999976, 0.99999976)
+[node name="bone_002" parent="Skeleton/bone_000/bone_001" parent_id_path=PackedInt32Array(303845288) index="0" unique_id=874891734]
+scale = Vector2(0.9999996, 0.9999996)
 
-[node name="bone_019" parent="Skeleton/bone_000/bone_001/bone_002" index="0" unique_id=979797796]
-scale = Vector2(0.99999976, 0.99999976)
+[node name="bone_019" parent="Skeleton/bone_000/bone_001/bone_002" index="0" unique_id=1465786832]
+scale = Vector2(0.9999996, 0.9999996)
 
-[node name="bone_020" parent="Skeleton/bone_000/bone_001/bone_002" index="1" unique_id=801571665]
-scale = Vector2(0.99999976, 0.99999976)
+[node name="bone_020" parent="Skeleton/bone_000/bone_001/bone_002" index="1" unique_id=1417649104]
+scale = Vector2(0.9999996, 0.9999996)
 
-[node name="bone_021" parent="Skeleton/bone_000/bone_001/bone_002" index="2" unique_id=1123435501]
-scale = Vector2(0.99999976, 0.99999976)
+[node name="bone_021" parent="Skeleton/bone_000/bone_001/bone_002" index="2" unique_id=1298845525]
+scale = Vector2(0.9999996, 0.9999996)
 
-[node name="bone_022" parent="Skeleton/bone_000/bone_001/bone_002" index="3" unique_id=1890367973]
-scale = Vector2(0.99999976, 0.99999976)
+[node name="bone_022" parent="Skeleton/bone_000/bone_001/bone_002" index="3" unique_id=756017135]
+scale = Vector2(0.9999996, 0.9999996)
 
-[node name="bone_023" parent="Skeleton/bone_000/bone_001/bone_002" index="4" unique_id=1329551776]
-scale = Vector2(0.99999976, 0.99999976)
+[node name="bone_023" parent="Skeleton/bone_000/bone_001/bone_002" index="4" unique_id=2046138961]
+scale = Vector2(0.9999996, 0.9999996)
 
-[node name="bone_004" parent="Skeleton/bone_000/bone_001/bone_003" parent_id_path=PackedInt32Array(481213753) index="0" unique_id=717255464]
-scale = Vector2(0.99999976, 0.99999976)
+[node name="bone_004" parent="Skeleton/bone_000/bone_001/bone_003" parent_id_path=PackedInt32Array(1317357477) index="0" unique_id=1200149592]
+scale = Vector2(0.9999996, 0.9999996)
 
-[node name="bone_005" parent="Skeleton/bone_000/bone_001/bone_003/bone_004" index="0" unique_id=1420527457]
+[node name="bone_005" parent="Skeleton/bone_000/bone_001/bone_003/bone_004" index="0" unique_id=666560473]
 scale = Vector2(0.9999999, 0.9999999)
 
-[node name="bone_018" parent="Skeleton/bone_000/bone_001/bone_003/bone_004/bone_005" index="0" unique_id=465702136]
+[node name="bone_018" parent="Skeleton/bone_000/bone_001/bone_003/bone_004/bone_005" index="0" unique_id=1835187027]
 scale = Vector2(0.99999976, 0.99999976)
 
-[node name="bone_007" parent="Skeleton/bone_000/bone_001/bone_006" parent_id_path=PackedInt32Array(612031845) index="0" unique_id=1604803707]
+[node name="Muzzle" type="Marker2D" parent="Skeleton/bone_000/bone_001/bone_003/bone_004/bone_005/bone_018/AK47" parent_id_path=PackedInt32Array(2064395537) index="0" unique_id=2061772218]
+position = Vector2(174, -100)
+
+[node name="bone_007" parent="Skeleton/bone_000/bone_001/bone_006" parent_id_path=PackedInt32Array(386590969) index="0" unique_id=689988637]
 scale = Vector2(0.9999998, 0.9999998)
 
-[node name="bone_009" parent="Skeleton/bone_000" parent_id_path=PackedInt32Array(1420153229) index="1" unique_id=35848140]
+[node name="bone_009" parent="Skeleton/bone_000" parent_id_path=PackedInt32Array(1550039019) index="1" unique_id=446625754]
 rotation = -0.29208484
 scale = Vector2(1, -1)
 
-[node name="bone_012" parent="Skeleton/bone_000" parent_id_path=PackedInt32Array(1420153229) index="2" unique_id=1293970276]
-scale = Vector2(0.99999976, 0.99999976)
+[node name="bone_012" parent="Skeleton/bone_000" parent_id_path=PackedInt32Array(1550039019) index="2" unique_id=642303613]
+scale = Vector2(0.9999996, 0.9999996)
 
-[node name="bone_025" parent="Skeleton/bone_024" parent_id_path=PackedInt32Array(1867256854) index="0" unique_id=1322810611]
+[node name="bone_025" parent="Skeleton/bone_024" parent_id_path=PackedInt32Array(955451327) index="0" unique_id=246184799]
 rotation = -0.07634432
-scale = Vector2(0.99999976, 0.99999976)
+scale = Vector2(0.9999996, 0.9999996)
 
-[node name="bone_026" parent="Skeleton/bone_024/bone_025" index="0" unique_id=585389499]
-scale = Vector2(0.99999976, 0.99999976)
+[node name="bone_026" parent="Skeleton/bone_024/bone_025" index="0" unique_id=1979579327]
+scale = Vector2(0.9999996, 0.9999996)
 
-[node name="bone_042" parent="Skeleton/bone_024/bone_025/bone_026" index="0" unique_id=124963597]
-scale = Vector2(0.99999976, 0.99999976)
+[node name="bone_042" parent="Skeleton/bone_024/bone_025/bone_026" index="0" unique_id=1628240754]
+scale = Vector2(0.9999996, 0.9999996)
 
-[node name="bone_028" parent="Skeleton/bone_024/bone_025/bone_027" parent_id_path=PackedInt32Array(493248414) index="0" unique_id=1487010756]
+[node name="bone_028" parent="Skeleton/bone_024/bone_025/bone_027" parent_id_path=PackedInt32Array(1914912006) index="0" unique_id=2084536539]
 rotation = -0.6066311
 
-[node name="bone_029" parent="Skeleton/bone_024/bone_025/bone_027/bone_028" index="0" unique_id=1867741341]
+[node name="bone_029" parent="Skeleton/bone_024/bone_025/bone_027/bone_028" index="0" unique_id=1446085230]
+scale = Vector2(0.9999996, 0.9999996)
+
+[node name="bone_030" parent="Skeleton/bone_024/bone_025" index="2" unique_id=169538836]
+rotation = -2.5822837
 scale = Vector2(0.99999976, 0.99999976)
 
-[node name="bone_030" parent="Skeleton/bone_024/bone_025" index="2" unique_id=2046592654]
-rotation = -2.5822837
+[node name="bone_031" parent="Skeleton/bone_024/bone_025/bone_030" index="0" unique_id=1928322072]
 scale = Vector2(0.9999998, 0.9999998)
 
-[node name="bone_031" parent="Skeleton/bone_024/bone_025/bone_030" index="0" unique_id=996645270]
-scale = Vector2(0.9999998, 0.9999998)
-
-[node name="bone_039" parent="Skeleton/bone_024/bone_025" index="3" unique_id=1980569165]
+[node name="bone_039" parent="Skeleton/bone_024/bone_025" index="3" unique_id=1384734860]
 rotation = -0.0029748122
 
-[node name="bone_040" parent="Skeleton/bone_024/bone_025" index="4" unique_id=2077221550]
+[node name="bone_040" parent="Skeleton/bone_024/bone_025" index="4" unique_id=1982116413]
 rotation = -0.0029748122
 
-[node name="bone_033" parent="Skeleton/bone_024" parent_id_path=PackedInt32Array(1867256854) index="1" unique_id=153550823]
+[node name="bone_033" parent="Skeleton/bone_024" parent_id_path=PackedInt32Array(955451327) index="1" unique_id=1463047147]
 rotation = -3.1168857
 
-[node name="bone_035" parent="Skeleton/bone_024/bone_033/bone_034" parent_id_path=PackedInt32Array(351787517) index="0" unique_id=944593582]
+[node name="bone_035" parent="Skeleton/bone_024/bone_033/bone_034" parent_id_path=PackedInt32Array(1681966813) index="0" unique_id=2042146034]
 rotation = -0.09482223
 
-[node name="bone_036" parent="Skeleton/bone_024" parent_id_path=PackedInt32Array(1867256854) index="2" unique_id=805869492]
+[node name="bone_036" parent="Skeleton/bone_024" parent_id_path=PackedInt32Array(955451327) index="2" unique_id=304981829]
 rotation = -1.4089025
 
-[node name="bone_037" parent="Skeleton/bone_024/bone_036" index="0" unique_id=1491237589]
+[node name="bone_037" parent="Skeleton/bone_024/bone_036" index="0" unique_id=1992315288]
 rotation = -1.9623725
 
-[node name="@Skeleton2D@72507" parent="." index="1" unique_id=1944111714]
+[node name="@Skeleton2D@132953" parent="." index="1" unique_id=513168461]
 visible = false
 
-[node name="@Skeleton2D@72508" parent="." index="2" unique_id=1568996404]
+[node name="@Skeleton2D@132954" parent="." index="2" unique_id=1194737546]
 visible = false
-
-[node name="bullet" parent="@Skeleton2D@72508" index="1" unique_id=1248832395]
-texture = ExtResource("3_7gq71")
-offset = Vector2(-31.5, -12)
-
-[node name="Muzzle" type="Marker2D" parent="Skeleton/bone_000/bone_001/bone_003/bone_004/bone_005/bone_018/AK47" index="0" unique_id=2061772218]
-position = Vector2(174, -100)
