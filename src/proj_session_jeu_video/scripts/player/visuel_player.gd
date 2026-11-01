@@ -6,9 +6,20 @@ signal animation_terminee(nom: String)
 const CHEMIN_SCML := "res://assets/sprites/sprites_joueur/Spriter.scml"
 const PREFIXE_LIB_ANIM := "scml/"
 const ORDRE_CATEGORIES := ["Head", "Balaclava", "Mask", "Googles",
-		"Head Gear","Strap", "Shirt", "Jacket", "Pants", "Gun"]
+	"Head Gear","Strap", "Shirt", "Jacket", "Pants", "Gun"]
 const IMPORTED_ADAPTER_SCRIPT := preload("res://scripts/player/visuel_player_imported_adapter.gd")
 const CUSTOMIZATION_SCRIPT := preload("res://scripts/player/visuel_player_customization.gd")
+const SOURCES_MINIATURES := {
+    "Head": Vector2i(0, 0),
+    "Balaclava": Vector2i(1, 0),
+    "Mask": Vector2i(7, 3),
+    "Googles": Vector2i(3, 0),
+    "Head Gear": Vector2i(5, 16),
+    "Shirt": Vector2i(9, 3),
+    "Jacket": Vector2i(6, 6),
+    "Pants": Vector2i(8, 0),
+    "Strap": Vector2i(5, 22)
+}
 
 var vitesse: float = 1.0
 var nom_animation: String = ""
@@ -113,28 +124,36 @@ func _sur_animation_finie_importee(nom: String) -> void:
 	animation_terminee.emit(nom)
 
 func miniature_variante(categorie: String, carte: String) -> Texture2D:
-	if carte.is_empty():
+	if not SOURCES_MINIATURES.has(categorie):
+		push_error("Catégorie inconnue pour la miniature : " + categorie)
 		return null
 
-	if not _donnees.cartes.has(carte):
-		push_error("Variante inconnue pour la miniature : " + carte)
+	var source: Vector2i = SOURCES_MINIATURES[categorie]
+	var dossier := source.x
+	var fichier := source.y
+
+	if not carte.is_empty():
+		if not _donnees.cartes.has(carte):
+			push_error("Variante inconnue pour la miniature : " + carte)
+			return null
+
+		for regle: Dictionary in _donnees.cartes[carte]:
+			if int(regle["dossier"]) != source.x:
+				continue
+			if int(regle["fichier"]) != source.y:
+				continue
+
+			dossier = int(regle["cible_dossier"])
+			fichier = int(regle["cible_fichier"])
+			break
+
+	if dossier < 0 or fichier < 0:
 		return null
 
-	for regle: Dictionary in _donnees.cartes[carte]:
-		var dossier := int(regle["cible_dossier"])
-		var fichier := int(regle["cible_fichier"])
+	var infos_dossier: Dictionary = _loader.dossiers[dossier]
+	var info: Dictionary = infos_dossier["fichiers"][fichier]
+	var texture := load(String(info["chemin"])) as Texture2D
 
-		if dossier < 0 or fichier < 0:
-			continue
-
-		var infos_dossier: Dictionary = _loader.dossiers[dossier]
-		if String(infos_dossier["nom"]) != categorie.to_lower():
-			continue
-
-		var info: Dictionary = infos_dossier["fichiers"][fichier]
-		var texture := load(String(info["chemin"])) as Texture2D
-		if texture == null:
-			push_error("Impossible de charger la miniature : " + String(info["chemin"]))
-		return texture
-
-	return null
+	if texture == null:
+		push_error("Impossible de charger la miniature : " + String(info["chemin"]))
+	return texture

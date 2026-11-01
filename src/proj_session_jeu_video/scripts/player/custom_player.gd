@@ -28,17 +28,15 @@ func _ready() -> void:
 	_selection = ApparencePlayer.selection.duplicate(true)
 	_custom_apercu.appliquer_apparence(_selection)
 	_statut.text = ApparencePlayer.erreur_chargement
+	_statut.text = ApparencePlayer.erreur_chargement
 
 	for categorie: String in CATEGORIES:
-		var bouton := Button.new()
-		bouton.text = CATEGORIES[categorie]
-		bouton.toggle_mode = true
-		bouton.button_group = _groupe_categories
-		bouton.button_pressed = categorie == _categorie
-		bouton.pressed.connect(_afficher_categorie.bind(categorie))
-		_categories.add_child(bouton)
+		_ajouter_categorie(categorie)
 
 	_afficher_categorie(_categorie)
+
+	_styliser_action(_retour, false)
+	_styliser_action(_enregistrer, true)
 
 func _afficher_categorie(categorie: String) -> void:
 	_categorie = categorie
@@ -88,6 +86,52 @@ func _on_retour_custom_pressed() -> void:
 	if erreur != OK:
 		_statut.text = "Impossible de revenir au menu : " + error_string(erreur)
 		push_error(_statut.text)
+
+func _ajouter_categorie(categorie: String) -> void:
+	var bouton := Button.new()
+	bouton.text = CATEGORIES[categorie]
+	bouton.custom_minimum_size = Vector2(190, 52)
+	bouton.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	bouton.icon = _custom_apercu.miniature_variante(categorie, "")
+	bouton.expand_icon = true
+	bouton.add_theme_constant_override("icon_max_width", 32)
+	bouton.add_theme_constant_override("h_separation", 12)
+	bouton.add_theme_font_size_override("font_size", 18)
+
+	bouton.toggle_mode = true
+	bouton.button_group = _groupe_categories
+	bouton.button_pressed = categorie == _categorie
+	bouton.pressed.connect(_afficher_categorie.bind(categorie))
+
+	bouton.add_theme_stylebox_override(
+		"normal", _style_categorie(Color("#28534D"), Color("#416D65"))
+	)
+	bouton.add_theme_stylebox_override(
+		"hover", _style_categorie(Color("#32665C"), Color("#77A89A"))
+	)
+	bouton.add_theme_stylebox_override(
+		"pressed", _style_categorie(Color("#009D83"), Color("#B5EC64"))
+	)
+	bouton.add_theme_stylebox_override(
+		"hover_pressed", _style_categorie(Color("#00AE91"), Color("#B5EC64"))
+	)
+	bouton.add_theme_stylebox_override(
+		"focus", _style_categorie(Color.TRANSPARENT, Color("#FFFFFF"))
+	)
+
+	_categories.add_child(bouton)
+
+func _style_categorie(fond: Color, bordure: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = fond
+	style.border_color = bordure
+	style.set_border_width_all(2)
+	style.set_corner_radius_all(10)
+	style.content_margin_left = 12
+	style.content_margin_right = 12
+	style.content_margin_top = 6
+	style.content_margin_bottom = 6
+	return style
 
 func _ajouter_choix(carte: String, texte: String, groupe: ButtonGroup) -> void:
 	var bouton := Button.new()
@@ -147,3 +191,28 @@ func _style_carte(fond: Color, bordure: Color) -> StyleBoxFlat:
 	style.set_border_width_all(3)
 	style.set_corner_radius_all(12)
 	return style
+
+func _styliser_action(bouton: Button, principale: bool) -> void:
+	bouton.custom_minimum_size = Vector2(180, 52)
+	bouton.add_theme_font_size_override("font_size", 20)
+	bouton.add_theme_color_override("font_color", Color("#FFFFFF"))
+	bouton.add_theme_color_override("font_hover_color", Color("#FFFFFF"))
+	bouton.add_theme_color_override("font_pressed_color", Color("#FFFFFF"))
+
+	var fond := Color("#009D83") if principale else Color("#28534D")
+	var survol := Color("#00AE91") if principale else Color("#32665C")
+	var appui := Color("#007D69") if principale else Color("#1D403B")
+	var bordure := Color("#B5EC64") if principale else Color("#77A89A")
+
+	bouton.add_theme_stylebox_override(
+		"normal", _style_categorie(fond, bordure)
+	)
+	bouton.add_theme_stylebox_override(
+		"hover", _style_categorie(survol, bordure)
+	)
+	bouton.add_theme_stylebox_override(
+		"pressed", _style_categorie(appui, bordure)
+	)
+	bouton.add_theme_stylebox_override(
+		"focus", _style_categorie(Color.TRANSPARENT, Color.WHITE)
+	)

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://de56ua32xx6br"]
 
 [ext_resource type="Script" uid="uid://860wfpqjar06" path="res://scripts/player/custom_player.gd" id="1_qm7v8"]
+[ext_resource type="PackedScene" uid="uid://biopt84v10yqs" path="res://scenes/arriere_plan_menu.tscn" id="2_fuvl6"]
 [ext_resource type="PackedScene" uid="uid://dojrirqfsng1t" path="res://scenes/apercu_player.tscn" id="2_qj230"]
 
 [node name="CustomPlayer" type="Control" unique_id=806975062]
@@ -13,6 +14,7 @@ grow_vertical = 2
 script = ExtResource("1_qm7v8")
 
 [node name="Fond" type="ColorRect" parent="." unique_id=38125541]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,6 +23,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0.09019608, 0.24705882, 0.22745098, 1)
+
+[node name="arriere_plan_menu" parent="." unique_id=28243250 instance=ExtResource("2_fuvl6")]
 
 [node name="Marge" type="MarginContainer" parent="." unique_id=939627318]
 layout_mode = 1
@@ -47,13 +51,20 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 20
 
-[node name="CategoriesCustom" type="VBoxContainer" parent="Marge/Colonne/Contenu" unique_id=2089991197]
+[node name="DefilementCategories" type="ScrollContainer" parent="Marge/Colonne/Contenu" unique_id=1146207736]
+custom_minimum_size = Vector2(210, 0)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="CategoriesCustom" type="VBoxContainer" parent="Marge/Colonne/Contenu/DefilementCategories" unique_id=2089991197]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
 
 [node name="Apercu" type="SubViewportContainer" parent="Marge/Colonne/Contenu" unique_id=1403881833]
-custom_minimum_size = Vector2(320, 400)
+custom_minimum_size = Vector2(470, 400)
 layout_mode = 2
 mouse_filter = 2
 stretch = true
@@ -62,14 +73,14 @@ stretch = true
 transparent_bg = true
 handle_input_locally = false
 gui_disable_input = true
-size = Vector2i(320, 495)
+size = Vector2i(470, 495)
 size_2d_override = Vector2i(320, 400)
 render_target_update_mode = 4
 
 [node name="VisuelCustom" parent="Marge/Colonne/Contenu/Apercu/Vue" unique_id=1248584445 instance=ExtResource("2_qj230")]
 unique_name_in_owner = true
-position = Vector2(160, 270)
-scale = Vector2(0.5, 0.5)
+position = Vector2(280, 289)
+scale = Vector2(0.7, 0.7)
 
 [node name="Choix" type="VBoxContainer" parent="Marge/Colonne/Contenu" unique_id=185174016]
 layout_mode = 2
@@ -96,6 +107,8 @@ layout_mode = 2
 
 [node name="Actions" type="HBoxContainer" parent="Marge/Colonne" unique_id=373792935]
 layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
 
 [node name="RetourCustom" type="Button" parent="Marge/Colonne/Actions" unique_id=577548315]
 unique_name_in_owner = true
