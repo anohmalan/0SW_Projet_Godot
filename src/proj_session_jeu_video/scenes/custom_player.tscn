@@ -47,7 +47,8 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 20
 
-[node name="Categories" type="VBoxContainer" parent="Marge/Colonne/Contenu" unique_id=2089991197]
+[node name="CategoriesCustom" type="VBoxContainer" parent="Marge/Colonne/Contenu" unique_id=2089991197]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 
@@ -64,7 +65,8 @@ size = Vector2i(320, 495)
 size_2d_override = Vector2i(320, 400)
 render_target_update_mode = 4
 
-[node name="Visuel" parent="Marge/Colonne/Contenu/Apercu/Vue" unique_id=1248584445 instance=ExtResource("2_qj230")]
+[node name="VisuelCustom" parent="Marge/Colonne/Contenu/Apercu/Vue" unique_id=1248584445 instance=ExtResource("2_qj230")]
+unique_name_in_owner = true
 position = Vector2(160, 270)
 scale = Vector2(0.5, 0.5)
 
@@ -72,29 +74,37 @@ scale = Vector2(0.5, 0.5)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CategorieActuelle" type="Label" parent="Marge/Colonne/Contenu/Choix" unique_id=599397671]
+[node name="CategorieActuelleCustom" type="Label" parent="Marge/Colonne/Contenu/Choix" unique_id=599397671]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Defilement" type="ScrollContainer" parent="Marge/Colonne/Contenu/Choix" unique_id=172501152]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Grille" type="GridContainer" parent="Marge/Colonne/Contenu/Choix/Defilement" unique_id=1524215222]
+[node name="GrilleCustom" type="GridContainer" parent="Marge/Colonne/Contenu/Choix/Defilement" unique_id=1524215222]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/h_separation = 12
 theme_override_constants/v_separation = 12
 columns = 2
 
-[node name="Statut" type="Label" parent="Marge/Colonne" unique_id=1584090466]
+[node name="StatutCustom" type="Label" parent="Marge/Colonne" unique_id=1584090466]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Actions" type="HBoxContainer" parent="Marge/Colonne" unique_id=373792935]
 layout_mode = 2
 
-[node name="Retour" type="Button" parent="Marge/Colonne/Actions" unique_id=577548315]
+[node name="RetourCustom" type="Button" parent="Marge/Colonne/Actions" unique_id=577548315]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Retour"
 
-[node name="Enregistrer" type="Button" parent="Marge/Colonne/Actions" unique_id=1131563292]
+[node name="EnregistrerCustom" type="Button" parent="Marge/Colonne/Actions" unique_id=1131563292]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Enregistrer"
+
+[connection signal="pressed" from="Marge/Colonne/Actions/RetourCustom" to="." method="_on_retour_custom_pressed"]
+[connection signal="pressed" from="Marge/Colonne/Actions/EnregistrerCustom" to="." method="_on_enregistrer_custom_pressed"]

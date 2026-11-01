@@ -6,7 +6,7 @@ const CATEGORIES := ["Head", "Balaclava", "Mask", "Googles", "Head Gear", "Shirt
 var selection: Dictionary = {}
 var erreur_chargement := ""
 
-var _donnees := SpriteAnimations.new()
+var _donnees := SpriterAnimations.new()
 
 func _ready() -> void:
 	_donnees.charger(VisuelPlayer.CHEMIN_SCML)
@@ -22,7 +22,7 @@ func _charger() -> void:
 		_signaler_erreur("Lecture de l'apparence impossible : " + error_string(erreur))
 		return
 
-	var valeurs := Variant = fichier.get_value("apparence", "selection", null)
+	var valeurs : Variant = fichier.get_value("apparence", "selection", null)
 	if not valeurs is Dictionary:
 		_signaler_erreur("Le fichier d'apparence ne contient pas une sélection valide.")
 		return
@@ -45,7 +45,7 @@ func _selection_valide(valeurs: Dictionary) -> bool:
 		var carte: Variant = valeurs[categorie]
 		if not carte is String:
 			return false
-		if not carte.begins_with(String(categorie) + "-"):
+		if not carte.begins_with(String(categorie) + " - "):
 			return false
 		if not _donnees.cartes.has(carte):
 			return false

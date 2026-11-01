@@ -103,6 +103,12 @@ func appliquer_customisation_importee(resoudre: Callable) -> void:
 		if texture_cible == null:
 			continue
 		sprite.texture = texture_cible
+		if String(_loader.dossiers[res_array[0]]["nom"]) == "head gear":
+			var pivot: Vector2 = cible_info["pivot"]
+			sprite.offset = Vector2(
+				-pivot.x * texture_cible.get_width(),
+				-pivot.y * texture_cible.get_height()
+			)
 	_actualiser_point_bouche()
 
 func _echouer(message: String) -> bool:

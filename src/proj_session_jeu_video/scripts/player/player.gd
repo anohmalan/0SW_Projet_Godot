@@ -30,6 +30,7 @@ func _ready() -> void:
 	_orienter(1)
 	sante.initialiser(self)
 	arsenal.initialiser(self)
+	visuel.appliquer_apparence(ApparencePlayer.selection)
 
 
 func _physics_process(delta: float) -> void:

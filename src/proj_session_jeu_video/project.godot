@@ -15,6 +15,10 @@ run/main_scene="uid://buoswoxe8mro2"
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/icon.svg"
 
+[autoload]
+
+ApparencePlayer="*uid://c1vvgox4rr12l"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/godot_scml_importer/plugin.cfg")
