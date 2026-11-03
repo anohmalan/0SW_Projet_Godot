@@ -2,76 +2,102 @@
 
 [ext_resource type="Script" uid="uid://dlde0w04y6sb0" path="res://scripts/menu_principal.gd" id="1_i85hu"]
 [ext_resource type="PackedScene" uid="uid://biopt84v10yqs" path="res://scenes/arriere_plan_menu.tscn" id="2_mk4g1"]
-[ext_resource type="Texture2D" uid="uid://djuv3otftsiyx" path="res://assets/menu/menu_buttons/jouer_button.png" id="3_iep14"]
-[ext_resource type="Texture2D" uid="uid://dy286apdbcu8t" path="res://assets/menu/menu_buttons/reglages_button.png" id="4_qcl6i"]
-[ext_resource type="Texture2D" uid="uid://bpkyaxlkdma5m" path="res://assets/menu/menu_buttons/quit_button.png" id="5_nxt0m"]
-[ext_resource type="Texture2D" uid="uid://c14aih5mqi02d" path="res://assets/menu/menu_buttons/custom_player_button.png" id="6_2xgxd"]
+[ext_resource type="PackedScene" uid="uid://dojrirqfsng1t" path="res://scenes/apercu_player.tscn" id="3_iep14"]
 
-[node name="Menu Principal" type="Node2D" unique_id=1220415264]
+[node name="MenuPrincipal" type="Control" unique_id=1121587512]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_i85hu")
 
 [node name="arriere_plan_menu" parent="." unique_id=28243250 instance=ExtResource("2_mk4g1")]
 visible = false
 position = Vector2(-1, -2)
 
-[node name="Interface" type="Control" parent="." unique_id=1203804539]
-layout_mode = 3
+[node name="Fond" type="ColorRect" parent="." unique_id=1698143732]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -1.0
-offset_top = -2.0
-offset_right = -1.0
-offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+color = Color(0.09019608, 0.24705882, 0.22745098, 1)
 
-[node name="Button_gestionnaire" type="Control" parent="Interface" unique_id=722072740]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="Marge" type="MarginContainer" parent="." unique_id=505388554]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
 
-[node name="Jouer" type="TextureButton" parent="Interface/Button_gestionnaire" unique_id=141530318]
-layout_mode = 0
-offset_left = 412.0
-offset_top = 492.0
-offset_right = 729.0
-offset_bottom = 598.0
-texture_normal = ExtResource("3_iep14")
-ignore_texture_size = true
-stretch_mode = 0
+[node name="Colonne" type="VBoxContainer" parent="Marge" unique_id=1245539081]
+layout_mode = 2
+theme_override_constants/separation = 12
 
-[node name="Réglages" type="TextureButton" parent="Interface/Button_gestionnaire" unique_id=1163842691]
-layout_mode = 0
-offset_left = 924.0
-offset_top = 31.0
-offset_right = 1121.0
-offset_bottom = 80.0
-texture_normal = ExtResource("4_qcl6i")
-ignore_texture_size = true
-stretch_mode = 0
+[node name="Titre" type="Label" parent="Marge/Colonne" unique_id=1557403361]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94509804, 0.9607843, 0.8745098, 1)
+theme_override_colors/font_outline_color = Color(0.0627451, 0.1764706, 0.16078432, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 32
+text = "OPÉRATION DRAPEAUX"
+horizontal_alignment = 1
 
-[node name="Quitter" type="TextureButton" parent="Interface/Button_gestionnaire" unique_id=2087103007]
-layout_mode = 0
-offset_left = 760.0
-offset_top = 498.0
-offset_right = 1044.0
-offset_bottom = 575.0
-texture_normal = ExtResource("5_nxt0m")
-ignore_texture_size = true
-stretch_mode = 0
+[node name="Apercu" type="SubViewportContainer" parent="Marge/Colonne" unique_id=1659693088]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+stretch = true
 
-[node name="CustomPlayer" type="TextureButton" parent="Interface/Button_gestionnaire" unique_id=1577363832]
-layout_mode = 0
-offset_left = 105.0
-offset_top = 495.0
-offset_right = 391.0
-offset_bottom = 578.0
-texture_normal = ExtResource("6_2xgxd")
-ignore_texture_size = true
-stretch_mode = 0
+[node name="Vue" type="SubViewport" parent="Marge/Colonne/Apercu" unique_id=654958387]
+transparent_bg = true
+gui_disable_input = true
+size = Vector2i(1104, 444)
+render_target_update_mode = 4
 
-[connection signal="pressed" from="Interface/Button_gestionnaire/Jouer" to="." method="_on_jouer_pressed"]
-[connection signal="pressed" from="Interface/Button_gestionnaire/Réglages" to="." method="_on_réglages_pressed"]
-[connection signal="pressed" from="Interface/Button_gestionnaire/Quitter" to="." method="_on_quitter_pressed"]
-[connection signal="pressed" from="Interface/Button_gestionnaire/CustomPlayer" to="." method="_on_custom_player_pressed"]
+[node name="VisuelMenu" parent="Marge/Colonne/Apercu/Vue" unique_id=1248584445 instance=ExtResource("3_iep14")]
+unique_name_in_owner = true
+scale = Vector2(0.6, 0.6)
+
+[node name="Actions" type="HBoxContainer" parent="Marge/Colonne" unique_id=871288320]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Jouer" type="Button" parent="Marge/Colonne/Actions" unique_id=75889132]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 52)
+layout_mode = 2
+text = "Jouer"
+
+[node name="Customisation" type="Button" parent="Marge/Colonne/Actions" unique_id=1729213222]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 52)
+layout_mode = 2
+text = "Soldat"
+
+[node name="Reglages" type="Button" parent="Marge/Colonne/Actions" unique_id=1738125901]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 52)
+layout_mode = 2
+text = "Réglages"
+
+[node name="Quitter" type="Button" parent="Marge/Colonne/Actions" unique_id=1643663068]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 52)
+layout_mode = 2
+text = "Quitter"
+
+[node name="StatutMenu" type="Label" parent="Marge/Colonne" unique_id=923417055]
+unique_name_in_owner = true
+layout_mode = 2
