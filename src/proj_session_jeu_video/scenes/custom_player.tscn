@@ -3,18 +3,66 @@
 [ext_resource type="Script" uid="uid://860wfpqjar06" path="res://scripts/player/custom_player.gd" id="1_qm7v8"]
 [ext_resource type="PackedScene" uid="uid://biopt84v10yqs" path="res://scenes/arriere_plan_menu.tscn" id="2_fuvl6"]
 [ext_resource type="PackedScene" uid="uid://dojrirqfsng1t" path="res://scenes/apercu_player.tscn" id="2_qj230"]
+[ext_resource type="Texture2D" uid="uid://bql2486ax7djm" path="res://assets/menu/custom_emblem.svg" id="3_emblem"]
+[ext_resource type="Texture2D" uid="uid://bu84tp008mrje" path="res://assets/menu/icon_back.svg" id="4_back"]
+[ext_resource type="Texture2D" uid="uid://5gq8d0nxt8ti" path="res://assets/menu/icon_save.svg" id="5_save"]
+[ext_resource type="Script" uid="uid://0fnev5ltb4m" path="res://scripts/player/platforme_apercu.gd" id="6_platform"]
+[ext_resource type="Script" path="res://scripts/player/cadre_titre_custom.gd" id="7_title_frame"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4vyda"]
-bg_color = Color(0, 0, 0, 0.3)
-corner_radius_top_left = 20
-corner_radius_top_right = 20
-corner_radius_bottom_right = 20
-corner_radius_bottom_left = 20
+bg_color = Color(0.00784314, 0.0470588, 0.0431373, 0.88)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.121569, 0.717647, 0.54902, 0.8)
+corner_radius_top_left = 14
+corner_radius_top_right = 6
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 10
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_xjhyt"]
 color = Color(0, 0.68235296, 0.5686275, 1)
 grow_end = -128.0
 thickness = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_options"]
+content_margin_left = 16.0
+content_margin_top = 14.0
+content_margin_right = 16.0
+content_margin_bottom = 14.0
+bg_color = Color(0.00784314, 0.0352941, 0.0352941, 0.72)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.105882, 0.560784, 0.454902, 0.8)
+corner_radius_top_left = 16
+corner_radius_top_right = 6
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.38)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_preview"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.00784314, 0.0470588, 0.0431373, 0.84)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.207843, 0.878431, 0.623529, 0.95)
+corner_radius_top_left = 16
+corner_radius_top_right = 6
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0.941176, 0.592157, 0.25)
+shadow_size = 12
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fuvl6"]
 bg_color = Color(0.09019608, 0.24705882, 0.22745098, 1)
@@ -38,6 +86,7 @@ grow_vertical = 2
 script = ExtResource("1_qm7v8")
 
 [node name="Fond" type="ColorRect" parent="." unique_id=38125541]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -48,7 +97,6 @@ mouse_filter = 2
 color = Color(0.09019608, 0.24705882, 0.22745098, 1)
 
 [node name="arriere_plan_menu" parent="." unique_id=28243250 instance=ExtResource("2_fuvl6")]
-visible = false
 
 [node name="Marge" type="MarginContainer" parent="." unique_id=939627318]
 layout_mode = 1
@@ -57,23 +105,52 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 16
 
 [node name="Colonne" type="VBoxContainer" parent="Marge" unique_id=2026826105]
 layout_mode = 2
+theme_override_constants/separation = 10
 
-[node name="Titre" type="Label" parent="Marge/Colonne" unique_id=1925784832]
+[node name="CadreTitre" type="Control" parent="Marge/Colonne"]
+custom_minimum_size = Vector2(760, 78)
+layout_mode = 2
+size_flags_horizontal = 0
+script = ExtResource("7_title_frame")
+
+[node name="MargeTitre" type="MarginContainer" parent="Marge/Colonne/CadreTitre"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 58
+theme_override_constants/margin_bottom = 6
+
+[node name="BandeauTitre" type="HBoxContainer" parent="Marge/Colonne/CadreTitre/MargeTitre" unique_id=41824624]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Embleme" type="TextureRect" parent="Marge/Colonne/CadreTitre/MargeTitre/BandeauTitre" unique_id=94289396]
+custom_minimum_size = Vector2(76, 58)
+layout_mode = 2
+texture = ExtResource("3_emblem")
+stretch_mode = 5
+
+[node name="Titre" type="Label" parent="Marge/Colonne/CadreTitre/MargeTitre/BandeauTitre" unique_id=1925784832]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.94509804, 0.9607843, 0.8745098, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.4)
 theme_override_colors/font_outline_color = Color(0.0627451, 0.1764706, 0.16078432, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 28
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 36
 text = "CUSTOMISE TON SOLDAT"
 
 [node name="Contenu" type="HBoxContainer" parent="Marge/Colonne" unique_id=896565569]
@@ -116,6 +193,7 @@ theme_override_styles/separator = SubResource("StyleBoxLine_xjhyt")
 [node name="Defilement" type="ScrollContainer" parent="Marge/Colonne/Contenu/Choix" unique_id=172501152]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_options")
 follow_focus = true
 
 [node name="GrilleCustom" type="GridContainer" parent="Marge/Colonne/Contenu/Choix/Defilement" unique_id=1524215222]
@@ -125,24 +203,36 @@ theme_override_constants/h_separation = 12
 theme_override_constants/v_separation = 12
 columns = 4
 
-[node name="Apercu" type="SubViewportContainer" parent="Marge/Colonne/Contenu" unique_id=1403881833]
+[node name="ApercuCadre" type="PanelContainer" parent="Marge/Colonne/Contenu" unique_id=1237947985]
+custom_minimum_size = Vector2(340, 400)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_preview")
+
+[node name="Apercu" type="SubViewportContainer" parent="Marge/Colonne/Contenu/ApercuCadre" unique_id=1403881833]
 custom_minimum_size = Vector2(320, 400)
 layout_mode = 2
 mouse_filter = 2
 stretch = true
 
-[node name="Vue" type="SubViewport" parent="Marge/Colonne/Contenu/Apercu" unique_id=1126192200]
+[node name="Vue" type="SubViewport" parent="Marge/Colonne/Contenu/ApercuCadre/Apercu" unique_id=1126192200]
 transparent_bg = true
 handle_input_locally = false
 gui_disable_input = true
-size = Vector2i(320, 522)
+size = Vector2i(324, 468)
 size_2d_override = Vector2i(323, 400)
 render_target_update_mode = 4
 
-[node name="VisuelCustom" parent="Marge/Colonne/Contenu/Apercu/Vue" unique_id=1248584445 instance=ExtResource("2_qj230")]
+[node name="PlateformeApercu" type="Node2D" parent="Marge/Colonne/Contenu/ApercuCadre/Apercu/Vue" unique_id=226572172]
+script = ExtResource("6_platform")
+
+[node name="VisuelCustom" parent="Marge/Colonne/Contenu/ApercuCadre/Apercu/Vue" unique_id=1248584445 instance=ExtResource("2_qj230")]
 unique_name_in_owner = true
-position = Vector2(156.00003, 271.00003)
+position = Vector2(156.00003, 247.00006)
 scale = Vector2(0.7, 0.7)
+
+[node name="PlateformeApercuAvant" type="Node2D" parent="Marge/Colonne/Contenu/ApercuCadre/Apercu/Vue" unique_id=532112415]
+script = ExtResource("6_platform")
+avant_personnage = true
 
 [node name="Actions" type="HBoxContainer" parent="Marge/Colonne" unique_id=373792935]
 layout_mode = 2
@@ -153,11 +243,13 @@ alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 text = "Retour"
+icon = ExtResource("4_back")
 
 [node name="EnregistrerCustom" type="Button" parent="Marge/Colonne/Actions" unique_id=1131563292]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Enregistrer"
+icon = ExtResource("5_save")
 
 [node name="ConfirmationRetour" type="ColorRect" parent="." unique_id=902604728]
 unique_name_in_owner = true

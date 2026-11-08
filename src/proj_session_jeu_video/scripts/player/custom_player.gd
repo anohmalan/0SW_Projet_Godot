@@ -39,7 +39,7 @@ func _ready() -> void:
 
 	_afficher_categorie(_categorie, false)
 
-	_styliser_action(_retour, false)
+	_styliser_action(_retour, true)
 	_styliser_action(_enregistrer, true)
 	_styliser_action(_enregistrer_et_quitter, true)
 	_styliser_action(_quitter_sans_sauver, false)
@@ -96,6 +96,7 @@ func _donner_focus_initial() -> void:
 func _afficher_categorie(categorie: String, transferer_focus: bool = true) -> void:
 	_categorie = categorie
 	_titre_categorie.text = CATEGORIES[categorie]
+	_actualiser_focus_categories()
 
 	for enfant in _grille.get_children():
 		_grille.remove_child(enfant)
@@ -107,6 +108,7 @@ func _afficher_categorie(categorie: String, transferer_focus: bool = true) -> vo
 	for carte: String in _custom_apercu.variantes(categorie):
 		var texte := carte.trim_prefix(categorie + " - ")
 		_ajouter_choix(carte, texte, groupe)
+	_actualiser_focus_choix()
 
 	if transferer_focus:
 		_focaliser_choix.call_deferred(groupe)
@@ -115,6 +117,24 @@ func _focaliser_choix(groupe: ButtonGroup) -> void:
 	var bouton := groupe.get_pressed_button()
 	if is_instance_valid(bouton) and bouton.is_inside_tree():
 		bouton.grab_focus()
+
+
+func _actualiser_focus_categories() -> void:
+	for bouton: Button in _categories.get_children():
+		var fond := Color("#00A980") if bouton.button_pressed else Color("#0A3C33")
+		bouton.add_theme_stylebox_override(
+			"focus", _style_categorie(fond, Color.WHITE, true)
+		)
+
+
+func _actualiser_focus_choix() -> void:
+	for bouton: Button in _grille.get_children():
+		var selectionne := bouton.button_pressed
+		var fond := Color("#173F35") if selectionne else Color("#0B332D")
+		var bordure := Color("#FFD84F") if selectionne else Color.WHITE
+		bouton.add_theme_stylebox_override(
+			"focus", _style_carte(fond, bordure, true)
+		)
 
 # func _ajouter_choix(carte: String, texte: String, groupe: ButtonGroup) -> void:
 # 	var bouton := Button.new()
@@ -133,7 +153,7 @@ func _choisir(categorie: String, carte: String) -> void:
 		_selection[categorie] = carte
 
 	_custom_apercu.appliquer_apparence(_selection)
-	
+	_actualiser_focus_choix()
 	_actualiser_bouton_enregistrer()
 
 func _on_enregistrer_custom_pressed() -> void:
@@ -157,7 +177,7 @@ func _ajouter_categorie(categorie: String) -> void:
 	var bouton := Button.new()
 	bouton.focus_mode = Control.FOCUS_ALL
 	bouton.text = CATEGORIES[categorie]
-	bouton.custom_minimum_size = Vector2(190, 52)
+	bouton.custom_minimum_size = Vector2(190, 48)
 	bouton.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	bouton.icon = _custom_apercu.miniature_variante(categorie, "")
 	bouton.expand_icon = true
@@ -171,39 +191,47 @@ func _ajouter_categorie(categorie: String) -> void:
 	bouton.pressed.connect(_afficher_categorie.bind(categorie))
 
 	bouton.add_theme_stylebox_override(
-		"normal", _style_categorie(Color.TRANSPARENT, Color.TRANSPARENT)
+		"normal", _style_categorie(Color("#062823"), Color("#1B5E51"))
 	)
 	bouton.add_theme_stylebox_override(
-		"hover", _style_categorie(Color("#32665C"), Color("#77A89A"))
+		"hover", _style_categorie(Color("#104E42"), Color("#35DDA6"), true)
 	)
 	bouton.add_theme_stylebox_override(
-		"pressed", _style_categorie(Color("#009D83"), Color("#416D65"))
+		"pressed", _style_categorie(Color("#00A980"), Color("#73FFD0"), true)
 	)
 	bouton.add_theme_stylebox_override(
-		"hover_pressed", _style_categorie(Color("#00AE91"), Color("#416D65"))
+		"hover_pressed", _style_categorie(Color("#00C894"), Color("#A1FFE0"), true)
 	)
 	bouton.add_theme_stylebox_override(
-		"focus", _style_categorie(Color.TRANSPARENT, Color("#FFFFFF"))
+		"focus", _style_categorie(Color("#0A3C33"), Color.WHITE, true)
 	)
 
 	_categories.add_child(bouton)
 
-func _style_categorie(fond: Color, bordure: Color) -> StyleBoxFlat:
+func _style_categorie(
+	fond: Color, bordure: Color, illumine: bool = false
+) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color = fond
 	style.border_color = bordure
 	style.set_border_width_all(2)
-	style.set_corner_radius_all(10)
+	style.corner_radius_top_left = 14
+	style.corner_radius_top_right = 5
+	style.corner_radius_bottom_right = 14
+	style.corner_radius_bottom_left = 5
 	style.content_margin_left = 12
 	style.content_margin_right = 12
 	style.content_margin_top = 6
 	style.content_margin_bottom = 6
+	if illumine:
+		style.shadow_color = Color(0.0, 1.0, 0.66, 0.38)
+		style.shadow_size = 8
 	return style
 
 func _ajouter_choix(carte: String, texte: String, groupe: ButtonGroup) -> void:
 	var bouton := Button.new()
 	bouton.focus_mode = Control.FOCUS_ALL
-	bouton.custom_minimum_size = Vector2(95, 95)
+	bouton.custom_minimum_size = Vector2(106, 128)
 	bouton.toggle_mode = true
 	bouton.button_group = groupe
 	bouton.button_pressed = _selection.get(_categorie, "") == carte
@@ -211,19 +239,21 @@ func _ajouter_choix(carte: String, texte: String, groupe: ButtonGroup) -> void:
 	bouton.pressed.connect(_choisir.bind(_categorie, carte))
 
 	bouton.add_theme_stylebox_override(
-		"normal", _style_carte(Color("#28534d71"), Color("#416d6561"))
+		"normal", _style_carte(Color("#062723"), Color("#286B5D"))
 	)
 	bouton.add_theme_stylebox_override(
-		"hover", _style_carte(Color("#32665C"), Color("#77A89A"))
+		"hover", _style_carte(Color("#0D493D"), Color("#43E7B0"), true)
 	)
 	bouton.add_theme_stylebox_override(
-		"pressed", _style_carte(Color("#32665C"), Color("#B5EC64"))
+		"pressed", _style_carte(Color("#173F35"), Color("#FFD84F"), true)
 	)
 	bouton.add_theme_stylebox_override(
-		"hover_pressed", _style_carte(Color("#397466"), Color("#B5EC64"))
+		"hover_pressed", _style_carte(Color("#235646"), Color("#FFE98A"), true)
 	)
+	var fond_focus := Color("#173F35") if bouton.button_pressed else Color("#0B332D")
+	var bordure_focus := Color("#FFD84F") if bouton.button_pressed else Color.WHITE
 	bouton.add_theme_stylebox_override(
-		"focus", _style_carte(Color.TRANSPARENT, Color.WHITE)
+		"focus", _style_carte(fond_focus, bordure_focus, true)
 	)
 
 	_grille.add_child(bouton)
@@ -233,7 +263,7 @@ func _ajouter_choix(carte: String, texte: String, groupe: ButtonGroup) -> void:
 	bouton.add_child(marge)
 	marge.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for cote in ["margin_left", "margin_top", "margin_right", "margin_bottom"]:
-		marge.add_theme_constant_override(cote, 12)
+		marge.add_theme_constant_override(cote, 8)
 
 	var colonne := VBoxContainer.new()
 	colonne.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -241,7 +271,7 @@ func _ajouter_choix(carte: String, texte: String, groupe: ButtonGroup) -> void:
 
 	var miniature := TextureRect.new()
 	miniature.texture = _custom_apercu.miniature_variante(_categorie, carte)
-	miniature.custom_minimum_size = Vector2(0, 60)
+	miniature.custom_minimum_size = Vector2(0, 78)
 	miniature.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	miniature.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	miniature.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -250,18 +280,30 @@ func _ajouter_choix(carte: String, texte: String, groupe: ButtonGroup) -> void:
 
 	var etiquette := Label.new()
 	etiquette.text = texte
-	etiquette.add_theme_font_size_override("font_size", 10)
+	etiquette.add_theme_font_size_override("font_size", 14)
 	etiquette.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	etiquette.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	etiquette.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	colonne.add_child(etiquette)
 
-func _style_carte(fond: Color, bordure: Color) -> StyleBoxFlat:
+func _style_carte(
+	fond: Color, bordure: Color, illumine: bool = false
+) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color = fond
 	style.border_color = bordure
-	style.set_border_width_all(3)
-	style.set_corner_radius_all(12)
+	style.set_border_width_all(2)
+	style.corner_radius_top_left = 12
+	style.corner_radius_top_right = 4
+	style.corner_radius_bottom_right = 12
+	style.corner_radius_bottom_left = 4
+	style.content_margin_left = 5
+	style.content_margin_top = 5
+	style.content_margin_right = 5
+	style.content_margin_bottom = 5
+	if illumine:
+		style.shadow_color = Color(0.0, 1.0, 0.66, 0.4)
+		style.shadow_size = 10
 	return style
 
 func _styliser_action(bouton: Button, principale: bool) -> void:
@@ -272,10 +314,10 @@ func _styliser_action(bouton: Button, principale: bool) -> void:
 	bouton.add_theme_color_override("font_hover_color", Color("#FFFFFF"))
 	bouton.add_theme_color_override("font_pressed_color", Color("#FFFFFF"))
 
-	var fond := Color("#009D83") if principale else Color("#28534D")
-	var survol := Color("#00AE91") if principale else Color("#32665C")
-	var appui := Color("#007D69") if principale else Color("#1D403B")
-	var bordure := Color("#B5EC64") if principale else Color("#77A89A")
+	var fond := Color("#00B77D") if principale else Color("#073A35")
+	var survol := Color("#00D995") if principale else Color("#10574B")
+	var appui := Color("#08745B") if principale else Color("#0A302B")
+	var bordure := Color("#8CFFD5") if principale else Color("#31977D")
 
 	bouton.add_theme_stylebox_override(
 		"normal", _style_categorie(fond, bordure)
@@ -287,7 +329,7 @@ func _styliser_action(bouton: Button, principale: bool) -> void:
 		"pressed", _style_categorie(appui, bordure)
 	)
 	bouton.add_theme_stylebox_override(
-		"focus", _style_categorie(Color.TRANSPARENT, Color.WHITE)
+		"focus", _style_categorie(Color("#00C98A") if principale else fond, Color.WHITE, true)
 	)
 
 func _sauvegarder_et_quitter() -> void:
