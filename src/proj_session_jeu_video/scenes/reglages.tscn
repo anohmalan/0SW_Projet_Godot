@@ -1,32 +1,137 @@
 [gd_scene format=3 uid="uid://jbcugp625jq2"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fpr03"]
+bg_color = Color(0.15686275, 0.3254902, 0.3019608, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.46666667, 0.65882355, 0.6039216, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
 [node name="Reglages" type="Control" unique_id=1519443476]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="." unique_id=862960201]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="Fond" type="ColorRect" parent="." unique_id=1345145685]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.09019608, 0.24705882, 0.22745098, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=1603730361]
+[node name="Marge" type="MarginContainer" parent="." unique_id=1796573660]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Colonne" type="VBoxContainer" parent="Marge" unique_id=732358430]
 layout_mode = 2
+theme_override_constants/separation = 12
 
-[node name="Title" type="Label" parent="PanelContainer/VBoxContainer" unique_id=1694316616]
+[node name="Titre" type="Label" parent="Marge/Colonne" unique_id=733995581]
 layout_mode = 2
-text = "Réglages"
+theme_override_colors/font_color = Color(0.94509804, 0.9607843, 0.8745098, 1)
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/font_size = 32
+text = "RÉGLAGES"
+horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=489072963]
+[node name="Centre" type="CenterContainer" parent="Marge/Colonne" unique_id=792967581]
 layout_mode = 2
+size_flags_vertical = 3
 
-[node name="VolumeLabel" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=505007501]
+[node name="Panneau" type="PanelContainer" parent="Marge/Colonne/Centre" unique_id=1760192770]
+custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fpr03")
 
-[node name="VolumeSlider" type="HSlider" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=198018877]
+[node name="MargePanneau" type="MarginContainer" parent="Marge/Colonne/Centre/Panneau" unique_id=669621597]
 layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
 
-[node name="Button" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1810696712]
+[node name="Options" type="VBoxContainer" parent="Marge/Colonne/Centre/Panneau/MargePanneau" unique_id=1030475837]
 layout_mode = 2
+theme_override_constants/separation = 24
 
-[node name="PleinEcran" type="CheckBox" parent="PanelContainer/VBoxContainer" unique_id=472933385]
+[node name="General" type="HBoxContainer" parent="Marge/Colonne/Centre/Panneau/MargePanneau/Options" unique_id=519981084]
 layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="TexteGeneral" type="Label" parent="Marge/Colonne/Centre/Panneau/MargePanneau/Options/General" unique_id=1797131612]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+text = "Volume général"
+
+[node name="VolumeGeneral" type="HSlider" parent="Marge/Colonne/Centre/Panneau/MargePanneau/Options/General" unique_id=1138957674]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+step = 5.0
+value = 100.0
+
+[node name="ValeurGeneral" type="Label" parent="Marge/Colonne/Centre/Panneau/MargePanneau/Options/General" unique_id=1673606647]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "100 %"
+horizontal_alignment = 2
+
+[node name="Musique" type="HBoxContainer" parent="Marge/Colonne/Centre/Panneau/MargePanneau/Options" unique_id=890923180]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="TexteMusique" type="Label" parent="Marge/Colonne/Centre/Panneau/MargePanneau/Options/Musique" unique_id=410769832]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+text = "Musique"
+
+[node name="VolumeMusique" type="HSlider" parent="Marge/Colonne/Centre/Panneau/MargePanneau/Options/Musique" unique_id=793612380]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+step = 5.0
+value = 100.0
+
+[node name="ValeurMusique" type="Label" parent="Marge/Colonne/Centre/Panneau/MargePanneau/Options/Musique" unique_id=1715255029]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "100 %"
+horizontal_alignment = 2
+
+[node name="PleinEcran" type="CheckBox" parent="Marge/Colonne/Centre/Panneau/MargePanneau/Options" unique_id=337419894]
+layout_mode = 2
+text = "Plein écran"
+
+[node name="Actions" type="HBoxContainer" parent="Marge/Colonne" unique_id=265500041]
+layout_mode = 2
+alignment = 2
+
+[node name="RetourReglages" type="Button" parent="Marge/Colonne/Actions" unique_id=208006430]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 52)
+layout_mode = 2
+text = "Retour"
