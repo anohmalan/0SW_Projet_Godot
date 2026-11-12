@@ -28,7 +28,7 @@ shape = SubResource("CapsuleShape2D_xjhyt")
 [node name="Visuel" parent="." unique_id=1248584445 instance=ExtResource("2_3v2ag")]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1545197382]
-position = Vector2(0, -60)
+position = Vector2(431, -78)
 
 [node name="StateMachine" type="Node" parent="." unique_id=1363263861 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("3_machine")
