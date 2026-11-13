@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://5lcqhpcr5eak"]
+
+[ext_resource type="Texture2D" uid="uid://u6qwlicr3br8" path="res://scenes/niveau_1/plateforme.png" id="1_x7ywa"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fpr03"]
+size = Vector2(88, 36)
+
+[sub_resource type="Animation" id="Animation_awq6h"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatableBody2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_3xdp2"]
+resource_name = "plateforme_haut_bas"
+length = 4.0
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatableBody2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 820)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0xbn2"]
+_data = {
+&"RESET": SubResource("Animation_awq6h"),
+&"plateforme_haut_bas": SubResource("Animation_3xdp2")
+}
+
+[node name="PlateformeHautBas" type="Node2D" unique_id=850719914]
+
+[node name="AnimatableBody2D" type="AnimatableBody2D" parent="." unique_id=758349085]
+
+[node name="Sprite2D" type="Sprite2D" parent="AnimatableBody2D" unique_id=59051362]
+position = Vector2(0, 1)
+scale = Vector2(0.7, 0.67307687)
+texture = ExtResource("1_x7ywa")
+region_enabled = true
+region_rect = Rect2(120, 0, 140, 60)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatableBody2D" unique_id=1855414816]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_fpr03")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=847891307]
+libraries/ = SubResource("AnimationLibrary_0xbn2")
+autoplay = &"plateforme_haut_bas"

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cfxm3jyenslpk"
-path="res://.godot/imported/Atlas pixel art jungle industrielle néon.png-f1ff3762fe9e0355bcd4531ae203daa5.ctex"
+uid="uid://bpw28dr364b8s"
+path="res://.godot/imported/haut.png-757825af6d53c39506d3c9cd18a8c95d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Atlas pixel art jungle industrielle néon.png"
-dest_files=["res://.godot/imported/Atlas pixel art jungle industrielle néon.png-f1ff3762fe9e0355bcd4531ae203daa5.ctex"]
+source_file="res://scenes/niveau_1/haut.png"
+dest_files=["res://.godot/imported/haut.png-757825af6d53c39506d3c9cd18a8c95d.ctex"]
 
 [params]
 
