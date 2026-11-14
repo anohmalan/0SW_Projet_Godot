@@ -9,6 +9,7 @@ var _portee := 0.0
 var _degats := 0
 var _origine := Vector2.ZERO
 var _couleur := Color.YELLOW
+var _attend_premier_deplacement := false
 
 
 func _ready() -> void:
@@ -18,6 +19,12 @@ func _ready() -> void:
 
 func activer(pos: Vector2, dir: Vector2, arme: Arme, du_joueur: bool) -> void:
 	global_position = pos
+	print("[BALLE] Arme=", arme.nom,
+		" position demandée=", pos,
+		" position globale réelle=", global_position,
+		" position écran=", get_global_transform_with_canvas().origin,
+		" position locale=", position,
+		" direction=", dir.normalized())
 	_origine = pos
 	_direction = dir.normalized()
 	rotation = _direction.angle()
@@ -25,6 +32,7 @@ func activer(pos: Vector2, dir: Vector2, arme: Arme, du_joueur: bool) -> void:
 	_portee = arme.portee
 	_degats = arme.degats
 	_couleur = arme.couleur
+	_attend_premier_deplacement = true
 	# Couches : 4 = tirs du joueur, 5 = tirs des ennemis.
 	# Masque : le monde (1) et la cible (3 = ennemis, ou 2 = joueur).
 	collision_layer = 0
@@ -47,6 +55,9 @@ func desactiver() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if _attend_premier_deplacement:
+		_attend_premier_deplacement = false
+		return
 	global_position += _direction * _vitesse * delta
 	if not Geometrie.dans_portee(_origine, global_position, _portee):
 		desactiver()

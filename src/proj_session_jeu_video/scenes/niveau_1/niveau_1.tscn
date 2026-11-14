@@ -2,12 +2,21 @@
 
 [ext_resource type="PackedScene" uid="uid://dgbxjolpg6hlv" path="res://scenes/niveau_1/world_niveau_1.tscn" id="1_rr1pk"]
 [ext_resource type="PackedScene" uid="uid://b8bfrc2yg18uv" path="res://scenes/player.tscn" id="2_lhb2u"]
+[ext_resource type="Script" uid="uid://cmmo2ppgt5b04" path="res://scripts/pool_balles.gd" id="3_lhb2u"]
+[ext_resource type="PackedScene" uid="uid://dhl8ra2bf3oj6" path="res://scenes/balle.tscn" id="4_balle"]
+[ext_resource type="Script" uid="uid://b7u2lsnyrbjy8" path="res://scripts/niveau_1/controle_niveau_1.gd" id="5_controle"]
 
 [node name="Niveau1" type="Node2D" unique_id=689121013]
+script = ExtResource("5_controle")
 
 [node name="WorldNiveau1" parent="." unique_id=696970129 instance=ExtResource("1_rr1pk")]
 scale = Vector2(1.1, 1.1)
 
 [node name="Player" parent="." unique_id=92563011 instance=ExtResource("2_lhb2u")]
-position = Vector2(1559, -252)
+position = Vector2(59, 398)
 scale = Vector2(0.9, 0.9)
+
+[node name="PoolBalles" type="Node" parent="." unique_id=1035987516]
+script = ExtResource("3_lhb2u")
+scene_balle = ExtResource("4_balle")
+metadata/_custom_type_script = "uid://cmmo2ppgt5b04"

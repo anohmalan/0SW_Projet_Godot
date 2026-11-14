@@ -7,7 +7,6 @@ var index_arme := 0
 var temps_depuis_tir := 99.0
 var _player: Player
 
-
 func initialiser(player: Player) -> void:
 	_player = player
 	armes = Arme.catalogue()
@@ -56,10 +55,19 @@ func _arme_suivante() -> void:
 func tirer() -> void:
 	var arme := armes[index_arme]
 	temps_depuis_tir = 0.0
-	var bouche: Vector2 = _player.visuel.position_bouche(arme.bouche_y)
+	var direction_base := Vector2(_player.direction, 0.0)
+	var position_bouche: Vector2 = _player.visuel.position_bouche(arme.bouche_y)
+	var decalage_bouche := arme.decalage_bouche
+	decalage_bouche.x *= _player.direction
+	var origine_tir := position_bouche + decalage_bouche
+	print("[TIR] Arme=", arme.nom,
+		" direction=", direction_base,
+		" bouche (globale)=", position_bouche,
+		" correction=", decalage_bouche,
+		" départ projectile=", origine_tir)
 	for i in arme.projectiles:
 		var ecart := deg_to_rad(randf_range(-arme.dispersion, arme.dispersion))
-		_player.tir_demande.emit(bouche, Vector2(_player.direction, 0.0).rotated(ecart), arme)
+		_player.tir_demande.emit(origine_tir, direction_base.rotated(ecart), arme)
 	if munitions[index_arme] > 0:
 		munitions[index_arme] -= 1
 		_player.munitions_changees.emit(munitions[index_arme])

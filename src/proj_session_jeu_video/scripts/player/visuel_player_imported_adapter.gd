@@ -72,6 +72,13 @@ func position_bouche(bouche_y: float) -> Vector2:
 	if not _actualiser_point_bouche():
 		push_error("Impossible de positionner la bouche : sprite_arme ou point_bouche invalide, ou arme masquée.")
 		return Vector2.ZERO
+	var rect := _sprite_arme.get_rect()
+	var position_ecran := _point_bouche_noeud.get_global_transform_with_canvas().origin
+	print("[BOUCHE_DEBUG] rect arme=", rect,
+		" sprite globale=", _sprite_arme.global_position,
+		" marqueur local=", _point_bouche_noeud.position,
+		" marqueur global=", _point_bouche_noeud.global_position,
+		" marqueur écran=", position_ecran)
 	return _point_bouche_noeud.global_position
 
 func _actualiser_point_bouche() -> bool:

@@ -8,7 +8,7 @@ signal munitions_changees(munitions: int)
 signal est_mort
 
 @export var vitesse := 220.0
-@export var vitesse_saut := 520.0
+@export var vitesse_saut := 560.0
 @export var gravite := 1400.0
 @export var echelle_visuel := 0.25
 
@@ -55,6 +55,24 @@ func rafraichir() -> void:
 
 func recevoir_degats(quantite: int, origine_x: float = INF) -> void:
 	sante.recevoir_degats(quantite, origine_x)
+
+
+func mourir() -> void:
+	if state_machine.current_state is PlayerDead:
+		return
+	sante.vie = 0
+	vie_changee.emit(sante.vie, sante.vie_max)
+	state_machine.change_state("PlayerDead")
+
+
+func reapparaitre(position_depart: Vector2) -> void:
+	global_position = position_depart
+	velocity = Vector2.ZERO
+	sante.initialiser(self)
+	sante.arreter_invincibilite()
+	_orienter(1)
+	state_machine.change_state(&"PlayerIdle")
+	rafraichir()
 
 
 func ajouter_munitions(i: int, quantite: int) -> void:
