@@ -8,8 +8,6 @@
 size = Vector2(88, 36)
 
 [node name="PlateformeHautBas" type="AnimatableBody2D" unique_id=850719914]
-collision_layer = 1
-collision_mask = 1
 sync_to_physics = false
 script = ExtResource("2_mouvement")
 
@@ -26,3 +24,4 @@ shape = SubResource("RectangleShape2D_fpr03")
 
 [node name="KillZone" parent="." unique_id=1033346080 instance=ExtResource("3_3xdp2")]
 position = Vector2(0, 22)
+scale = Vector2(0.8, 0.8)

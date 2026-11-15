@@ -21,7 +21,7 @@ script = ExtResource("5_controle")
 scale = Vector2(1.1, 1.1)
 
 [node name="Player" parent="." unique_id=92563011 instance=ExtResource("2_lhb2u")]
-position = Vector2(59, 398)
+position = Vector2(29.000004, 558)
 scale = Vector2(0.9, 0.9)
 
 [node name="Ennemis" type="Node2D" parent="." unique_id=1815584652]
@@ -43,11 +43,14 @@ metadata/_custom_type_script = "uid://cmmo2ppgt5b04"
 [node name="HUD" parent="." unique_id=144127719 instance=ExtResource("10_hud")]
 
 [node name="MenuPause" parent="." unique_id=534241768 instance=ExtResource("11_pause")]
+visible = false
 
 [node name="Drapeau" parent="." unique_id=1012840629 instance=ExtResource("12_drapeau")]
-position = Vector2(1703, -1129)
+position = Vector2(1678, -1098)
+scale = Vector2(0.8, 0.8)
 
 [node name="EcranVictoire" parent="." unique_id=1804396860 instance=ExtResource("13_victoire")]
+visible = false
 
 [node name="PoolOrbes" type="Node" parent="." unique_id=1855374953]
 script = ExtResource("3_lhb2u")
