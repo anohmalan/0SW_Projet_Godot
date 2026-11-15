@@ -262,7 +262,11 @@ func _charger() -> void:
 	sourdine = bool(fichier.get_value("son", "sourdine", sourdine))
 	plein_ecran = bool(fichier.get_value("affichage", "plein_ecran", plein_ecran))
 	for action in ACTIONS_MODIFIABLES:
-		var liste: Variant = fichier.get_value("touches", String(action), null)
+		# Action ajoutée après la sauvegarde (ex. « carte ») : on garde ses touches par défaut.
+		# get_value(..., null) ne compte pas comme une valeur par défaut : il faut tester la clé.
+		if not fichier.has_section_key("touches", String(action)):
+			continue
+		var liste: Variant = fichier.get_value("touches", String(action))
 		if not liste is Array:
 			continue
 		InputMap.action_erase_events(action)
