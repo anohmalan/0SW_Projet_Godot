@@ -13,6 +13,7 @@ extends Resource
 @export var bouche_y := 0.3        # hauteur du bout du canon dans l'image (0 = haut, 1 = bas)
 @export var decalage_bouche := Vector2.ZERO # correction en pixels du point calculé
 @export var couleur := Color(1.0, 0.85, 0.2)
+@export var son := "tir_fusil"           # effet joué à chaque tir (Audio)
 
 static func catalogue() -> Array[Arme]:
 	var liste: Array[Arme] = []
@@ -21,19 +22,19 @@ static func catalogue() -> Array[Arme]:
 		"portee": 520.0, "vitesse_balle": 900.0, "projectiles": 1,
 		"dispersion": 2.0, "munitions_max": -1, "bouche_y": 0.288,
 		"decalage_bouche": Vector2(-16.0, -7.0),
-		"couleur": Color(1.0, 0.85, 0.2)}))
+		"couleur": Color(1.0, 0.85, 0.2), "son": "tir_fusil"}))
 	liste.append(_nouvelle({
 		"nom": "Fusil à pompe", "carte": "Gun - Shotgun 1", "cadence": 0.6, "degats": 6,
 		"portee": 280.0, "vitesse_balle": 800.0, "projectiles": 6,
 		"dispersion": 14.0, "munitions_max": 24, "bouche_y": 0.241,
 		"decalage_bouche": Vector2(-16.0, 0.0),
-		"couleur": Color(1.0, 0.55, 0.2)}))
+		"couleur": Color(1.0, 0.55, 0.2), "son": "tir_pompe"}))
 	liste.append(_nouvelle({
 		"nom": "Fusil de précision", "carte": "Gun - Sniper", "cadence": 0.9, "degats": 45,
 		"portee": 1100.0, "vitesse_balle": 1600.0, "projectiles": 1,
 		"dispersion": 0.0, "munitions_max": 12, "bouche_y": 0.484,
 		"decalage_bouche": Vector2(-16.0, 0.0),
-		"couleur": Color(0.6, 0.9, 1.0)}))
+		"couleur": Color(0.6, 0.9, 1.0), "son": "tir_sniper"}))
 	return liste
 
 

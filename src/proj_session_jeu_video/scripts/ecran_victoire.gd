@@ -22,6 +22,7 @@ func _ready() -> void:
 	var boutons: Array[Button] = [_rejouer, _niveaux, _menu_principal]
 	for bouton in boutons:
 		StyleMenu.styliser_bouton(bouton)
+		Audio.brancher_bouton(bouton)
 	StyleMenu.chainer_focus_vertical(boutons)
 	_rejouer.pressed.connect(_changer_scene.bind(""))
 	_niveaux.pressed.connect(_changer_scene.bind(SCENE_CHOIX_NIVEAU))
@@ -37,6 +38,8 @@ func afficher(temps: float, ennemis_vaincus: int, morts: int, victoire: bool = t
 	_statistiques.text = _texte_statistiques(temps, ennemis_vaincus, morts, records)
 	visible = true
 	get_tree().paused = true
+	Audio.arreter_musique()
+	Audio.jouer("victoire" if victoire else "game_over")
 	_contenu.modulate.a = 0.0
 	create_tween().tween_property(_contenu, "modulate:a", 1.0, 0.4)
 	_rejouer.grab_focus()

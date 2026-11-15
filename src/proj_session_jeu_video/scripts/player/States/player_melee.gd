@@ -13,6 +13,7 @@ func enter() -> void:
 	_temps = 0.0
 	_a_frappe = false
 	player.temps_depuis_melee = 0.0
+	Audio.jouer("couteau", Vector2.INF, -3.0)
 	var nom := "Melee"
 	if player.accroupi:
 		nom = "Crouch_Melee"

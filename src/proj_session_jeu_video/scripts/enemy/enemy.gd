@@ -124,6 +124,7 @@ func exploser() -> void:
 		explosion.position = position + sprite.position
 		explosion.scale *= echelle
 		get_parent().add_child(explosion)
+	Audio.jouer("explosion", global_position)
 	var player := joueur_cible()
 	if player != null and distance_joueur(player) <= rayon_explosion:
 		player.recevoir_degats(degats_explosion, global_position.x)
@@ -200,6 +201,7 @@ func tirer() -> void:
 	if player != null:
 		dir = (point_vise(player) - origine).normalized()
 	tir_demande.emit(origine, dir, arme)
+	Audio.jouer("tir_ennemi", origine, -4.0)
 
 
 ## Laisse peut-être un butin à sa place, dans le même parent que l'ennemi.

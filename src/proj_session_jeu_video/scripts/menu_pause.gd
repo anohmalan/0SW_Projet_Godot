@@ -24,6 +24,7 @@ func _ready() -> void:
 	var boutons: Array[Button] = [_reprendre, _recommencer, _reglages, _menu_principal]
 	for bouton in boutons:
 		StyleMenu.styliser_bouton(bouton)
+		Audio.brancher_bouton(bouton)
 	StyleMenu.chainer_focus_vertical(boutons)
 
 
@@ -51,6 +52,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func ouvrir() -> void:
 	visible = true
+	Audio.attenuer_musique(true)
 	_panneau_reglages.visible = false
 	_panneau_pause.visible = true
 	get_tree().paused = true
@@ -60,6 +62,7 @@ func ouvrir() -> void:
 func fermer() -> void:
 	visible = false
 	get_tree().paused = false
+	Audio.attenuer_musique(false)
 
 
 func _ouvrir_reglages() -> void:
@@ -77,10 +80,12 @@ func _fermer_reglages() -> void:
 
 func _recommencer_niveau() -> void:
 	get_tree().paused = false
+	Audio.attenuer_musique(false)
 	get_tree().reload_current_scene()
 
 
 func _retour_menu_principal() -> void:
 	get_tree().paused = false
+	Audio.attenuer_musique(false)
 	get_tree().change_scene_to_file(SCENE_MENU_PRINCIPAL)
 

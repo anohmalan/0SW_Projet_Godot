@@ -50,6 +50,8 @@ func _unhandled_input(event: InputEvent) -> void:
 func ouvrir() -> void:
 	visible = true
 	get_tree().paused = true
+	Audio.jouer("carte")
+	Audio.attenuer_musique(true)
 	_aide.text = "%s / Échap : fermer" % Parametres.description(&"carte", Parametres.Peripherique.CLAVIER)
 	_temps = 0.0
 	set_process(true)
@@ -59,6 +61,8 @@ func ouvrir() -> void:
 func fermer() -> void:
 	visible = false
 	get_tree().paused = false
+	Audio.jouer("carte", Vector2.INF, 0.0, 0.0)
+	Audio.attenuer_musique(false)
 	set_process(false)
 
 

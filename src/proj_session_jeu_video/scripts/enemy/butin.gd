@@ -67,11 +67,15 @@ func _appliquer(player: Player) -> bool:
 	if player.state_machine.current_state is PlayerDead:
 		return false
 	if type == Type.SOIN:
-		return player.sante.soigner(QUANTITES[type])
+		var soigne := player.sante.soigner(QUANTITES[type])
+		if soigne:
+			Audio.jouer("soin")
+		return soigne
 	var i: int = INDEX_ARME[type]
 	if player.arsenal.munitions[i] >= player.arsenal.armes[i].munitions_max:
 		return false
 	player.ajouter_munitions(i, QUANTITES[type])
+	Audio.jouer("munitions")
 	return true
 
 

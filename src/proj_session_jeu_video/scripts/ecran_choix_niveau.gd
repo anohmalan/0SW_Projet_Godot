@@ -37,6 +37,7 @@ var _en_transition := false
 
 
 func _ready() -> void:
+	Audio.musique("menu")
 	var premiere: Button = null
 	var identifiants: Array = NIVEAUX.map(func(n: Dictionary) -> String: return n["id"])
 	for i in NIVEAUX.size():
@@ -46,6 +47,7 @@ func _ready() -> void:
 			premiere = carte
 	_styliser_retour()
 	_retour.pressed.connect(_retour_menu)
+	Audio.brancher_bouton(_retour)
 	modulate.a = 0.0
 	create_tween().tween_property(self, "modulate:a", 1.0, 0.3)
 	if premiere != null:
@@ -95,6 +97,7 @@ func _creer_carte(niveau: Dictionary, debloque: bool) -> Button:
 	carte.add_theme_stylebox_override("disabled", _style_carte(Color(0.02, 0.12, 0.11, 0.8), Color(0.2, 0.35, 0.32), false))
 	if disponible:
 		carte.pressed.connect(_lancer_niveau.bind(niveau["scene"]))
+		Audio.brancher_bouton(carte)
 
 	var contenu := VBoxContainer.new()
 	contenu.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 14)

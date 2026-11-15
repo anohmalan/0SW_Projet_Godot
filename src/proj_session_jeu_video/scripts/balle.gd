@@ -62,6 +62,7 @@ func _sur_contact(corps: Node2D) -> void:
 		return
 	if corps.has_method("recevoir_degats"):
 		corps.recevoir_degats(_degats, _origine.x)
+		Audio.jouer("impact", global_position, -8.0)
 	desactiver()
 
 

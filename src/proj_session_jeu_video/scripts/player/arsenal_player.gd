@@ -58,6 +58,7 @@ func _changer_arme(sens: int) -> void:
 func tirer() -> void:
 	var arme := armes[index_arme]
 	temps_depuis_tir = 0.0
+	Audio.jouer(arme.son, Vector2.INF, -4.0)
 	var direction_base := Vector2(_player.direction, 0.0)
 	var position_bouche: Vector2 = _player.visuel.position_bouche(arme.bouche_y)
 	var decalage_bouche := arme.decalage_bouche

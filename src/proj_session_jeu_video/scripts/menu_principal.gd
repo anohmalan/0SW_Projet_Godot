@@ -15,6 +15,7 @@ var _position_fond_initiale := Vector2.ZERO
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	Audio.musique("menu")
 	_position_fond_initiale = _fond.position
 	_visuel.appliquer_apparence(ApparencePlayer.selection)
 	_statut.text = ApparencePlayer.erreur_chargement
@@ -37,6 +38,7 @@ func _ready() -> void:
 	for index in range(boutons.size()):
 		var bouton := boutons[index]
 		_styliser_bouton(bouton, false)
+		Audio.brancher_bouton(bouton)
 
 		var precedent := boutons[posmod(index - 1, boutons.size())]
 		var suivant := boutons[(index + 1) % boutons.size()]

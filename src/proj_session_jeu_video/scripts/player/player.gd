@@ -163,6 +163,7 @@ func essayer_de_sauter() -> bool:
 	_temps_depuis_appui_saut = INF
 	_temps_hors_sol = INF  # un seul saut par contact avec le sol
 	_vient_de_sauter = true
+	Audio.jouer("saut", Vector2.INF, -6.0)
 	return true
 
 
@@ -325,6 +326,7 @@ func _surbrillance_reapparition() -> void:
 	visuel.flasher(EFFET_REAPPARITION.COULEUR.lightened(0.3), 0.8)
 	var effet: Node2D = EFFET_REAPPARITION.new()
 	effet.position = position
+	Audio.jouer("reapparition")
 	get_parent().add_child(effet)
 
 

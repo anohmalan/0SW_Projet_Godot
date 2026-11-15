@@ -2,6 +2,8 @@ extends Node2D
 
 ## Identifiant du niveau dans la progression sauvegardée (doit correspondre à l'écran de choix).
 @export var identifiant := "niveau_1"
+## Piste de assets/audio/musique jouée pendant le niveau.
+@export var piste_musique := "niveau_1"
 ## Cartes masquées tant que le joueur n'a pas vu les zones (mini-map et grande carte).
 @export var brouillard_de_guerre := true
 ## Intervalle entre deux mises à jour des zones explorées, en secondes.
@@ -29,6 +31,7 @@ var _attente_exploration := 0.0
 
 
 func _ready() -> void:
+	Audio.musique(piste_musique)
 	player.tir_demande.connect(_on_tir_demande)
 	player.est_mort.connect(_on_player_est_mort)
 	player.camera.limiter(_zone_camera())
@@ -112,4 +115,5 @@ func _on_player_est_mort() -> void:
 	pool_balles.tout_desactiver()
 	pool_orbes.tout_desactiver()
 	player.reapparaitre(player.derniere_position_sure)
+	Audio.jouer("coeur_perdu")
 	hud.afficher_message("Cœur perdu — %d restant%s" % [restants, "s" if restants > 1 else ""])

@@ -14,6 +14,8 @@ func enter() -> void:
 	player.sante.arreter_invincibilite()
 	player.visuel.animation_terminee.connect(_sur_animation_terminee)
 	player.visuel.jouer("Dead", true)
+	# Toutes les morts passent par ici : coup fatal, chute mortelle, kill zone.
+	Audio.jouer("mort_joueur")
 
 func handle_inputs(_input_event: InputEvent) -> void:
 	pass

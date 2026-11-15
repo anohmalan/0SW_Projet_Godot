@@ -37,8 +37,10 @@ func recevoir_degats(quantite: int, origine_x: float = INF, recul: bool = true) 
 	_player.vie_changee.emit(vie, vie_max)
 	_player.visuel.flasher()
 	if vie == 0:
+		# Le son de mort est joué par l'état PlayerDead.
 		_player.state_machine.change_state(&"PlayerDead")
 		return
+	Audio.jouer("joueur_touche" if recul else "chute")
 	if recul:
 		var sens := float(-_player.direction)
 		if origine_x != INF:
