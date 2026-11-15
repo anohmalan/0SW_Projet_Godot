@@ -2,6 +2,7 @@ extends Node2D
 
 @onready var player: Player = $Player
 @onready var pool_balles: PoolBalles = $PoolBalles
+@onready var pool_orbes: PoolBalles = $PoolOrbes
 @onready var conteneur_ennemis: Node2D = $Ennemis
 
 var _position_depart := Vector2.ZERO
@@ -34,7 +35,7 @@ func _on_tir_demande(position_tir: Vector2, direction: Vector2, arme: Arme) -> v
 
 
 func _on_tir_ennemi(position_tir: Vector2, direction: Vector2, arme: Arme) -> void:
-	pool_balles.tirer(position_tir, direction, arme, false)
+	pool_orbes.tirer(position_tir, direction, arme, false)
 
 
 func _on_player_est_mort() -> void:
@@ -45,6 +46,7 @@ func _on_player_est_mort() -> void:
 ## Le niveau repart de zéro : balles effacées, ennemis replacés et soignés.
 func _reinitialiser_ennemis() -> void:
 	pool_balles.tout_desactiver()
+	pool_orbes.tout_desactiver()
 	for ennemi in conteneur_ennemis.get_children():
 		conteneur_ennemis.remove_child(ennemi)
 		ennemi.queue_free()
