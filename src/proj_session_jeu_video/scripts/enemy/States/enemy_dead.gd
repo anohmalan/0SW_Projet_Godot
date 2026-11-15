@@ -6,6 +6,7 @@ extends BaseState
 
 func enter() -> void:
 	enemy.desactiver_collisions()
+	enemy.barre_vie.cacher()
 	enemy.velocity.x = 0.0
 	enemy.sprite.animation_finished.connect(_sur_fin_animation)
 	enemy.sprite.play(&"death")

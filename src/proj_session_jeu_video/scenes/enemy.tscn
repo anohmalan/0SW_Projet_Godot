@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scripts/enemy/States/enemy_attack.gd" id="5_attack"]
 [ext_resource type="Script" path="res://scripts/enemy/States/enemy_hurt.gd" id="6_hurt"]
 [ext_resource type="Script" path="res://scripts/enemy/States/enemy_dead.gd" id="7_dead"]
+[ext_resource type="Script" path="res://scripts/enemy/barre_vie_ennemi.gd" id="12_barre"]
 [ext_resource type="Texture2D" uid="uid://vomcdggd7dic" path="res://assets/sprites/sprites_enemy/outline/MOVE.png" id="8_move"]
 [ext_resource type="Texture2D" uid="uid://1xsmug3orqli" path="res://assets/sprites/sprites_enemy/outline/ATTACK.png" id="9_attack"]
 [ext_resource type="Texture2D" uid="uid://b2g1qqspe50ox" path="res://assets/sprites/sprites_enemy/outline/HURT.png" id="10_hurt"]
@@ -201,6 +202,11 @@ autoplay = "move"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(2, 4)
 shape = SubResource("CircleShape2D_corps")
+
+[node name="BarreVie" type="Node2D" parent="."]
+z_index = 1
+position = Vector2(2, -66)
+script = ExtResource("12_barre")
 
 [node name="ZoneContact" type="Area2D" parent="."]
 collision_layer = 0

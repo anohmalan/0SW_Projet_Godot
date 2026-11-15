@@ -37,6 +37,7 @@ var _tween_flash: Tween
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var zone_contact: Area2D = $ZoneContact
+@onready var barre_vie: BarreVieEnnemi = $BarreVie
 @onready var state_machine: StateMachine = $StateMachine
 
 
@@ -67,6 +68,7 @@ func recevoir_degats(quantite: int, origine_x: float = INF) -> void:
 		return
 	vie = maxi(vie - quantite, 0)
 	flasher()
+	barre_vie.afficher(vie, vie_max)
 	if vie == 0:
 		state_machine.change_state(&"EnemyDead")
 		return
