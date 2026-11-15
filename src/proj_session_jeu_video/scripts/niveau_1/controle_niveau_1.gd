@@ -4,6 +4,8 @@ extends Node2D
 @onready var pool_balles: PoolBalles = $PoolBalles
 @onready var pool_orbes: PoolBalles = $PoolOrbes
 @onready var conteneur_ennemis: Node2D = $Ennemis
+@onready var carte: TileMapLayer = $WorldNiveau1/TileMapLayer
+@onready var hud: HUD = $HUD
 
 var _position_depart := Vector2.ZERO
 ## Copies hors de l'arbre des ennemis tels que placés dans l'éditeur.
@@ -14,10 +16,21 @@ func _ready() -> void:
 	_position_depart = player.global_position
 	player.tir_demande.connect(_on_tir_demande)
 	player.est_mort.connect(_on_player_est_mort)
+	player.camera.limiter(_zone_du_niveau())
+	hud.brancher(player)
 	for ennemi in conteneur_ennemis.get_children():
 		if ennemi is Enemy:
 			_modeles_ennemis.append(ennemi.duplicate())
 			_brancher_ennemi(ennemi)
+
+
+## Rectangle (coordonnées globales) couvert par les tuiles peintes du niveau.
+func _zone_du_niveau() -> Rect2:
+	var cases := carte.get_used_rect()
+	var demi_tuile := Vector2(carte.tile_set.tile_size) * 0.5
+	var debut := carte.to_global(carte.map_to_local(cases.position) - demi_tuile)
+	var fin := carte.to_global(carte.map_to_local(cases.end) - demi_tuile)
+	return Rect2(debut, fin - debut)
 
 
 func _exit_tree() -> void:

@@ -41,6 +41,7 @@ var _tween_flash: Tween
 
 
 func _ready() -> void:
+	_masquer_autres_entites()
 	_loader.charger_images(CHEMIN_SCML)
 	_donnees.charger(CHEMIN_SCML)
 	_customization.initialiser(_donnees, ORDRE_CATEGORIES)
@@ -58,6 +59,18 @@ func _ready() -> void:
 	_installer_materiau_flash()
 
 	jouer("Idle")
+
+
+## Le .scml contient aussi les entités "Effects" (explosion) et "Bullet". L'import en fait
+## des squelettes frères de celui du soldat, aux noms générés (@Skeleton2D@…) qui changent
+## à chaque réimport : on les masque donc par code plutôt que dans la scène.
+func _masquer_autres_entites() -> void:
+	if entite_joueur == null:
+		return
+	var racine_spriter := entite_joueur.get_parent()
+	for enfant in racine_spriter.get_children():
+		if enfant != entite_joueur and enfant is CanvasItem:
+			enfant.visible = false
 
 
 ## Un seul matériau sur le Visuel : chaque pièce du squelette Spriter en hérite.

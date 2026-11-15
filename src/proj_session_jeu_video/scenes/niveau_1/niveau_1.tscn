@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/orbe_ennemi.tscn" id="7_orbe"]
 [ext_resource type="PackedScene" path="res://scenes/enemy_kamikaze.tscn" id="8_kamikaze"]
 [ext_resource type="PackedScene" path="res://scenes/enemy_sentinelle.tscn" id="9_sentinelle"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="10_hud"]
 
 [node name="Niveau1" type="Node2D" unique_id=689121013]
 script = ExtResource("5_controle")
@@ -20,15 +21,15 @@ scale = Vector2(1.1, 1.1)
 position = Vector2(59, 398)
 scale = Vector2(0.9, 0.9)
 
-[node name="Ennemis" type="Node2D" parent="."]
+[node name="Ennemis" type="Node2D" parent="." unique_id=1815584652]
 
 [node name="Enemy" parent="Ennemis" unique_id=2012770801 instance=ExtResource("6_enemy")]
 position = Vector2(420, 509)
 
-[node name="Kamikaze" parent="Ennemis" instance=ExtResource("8_kamikaze")]
+[node name="Kamikaze" parent="Ennemis" unique_id=1461450654 instance=ExtResource("8_kamikaze")]
 position = Vector2(1340, 450)
 
-[node name="Sentinelle" parent="Ennemis" instance=ExtResource("9_sentinelle")]
+[node name="Sentinelle" parent="Ennemis" unique_id=1827519838 instance=ExtResource("9_sentinelle")]
 position = Vector2(2045, 300)
 
 [node name="PoolBalles" type="Node" parent="." unique_id=1035987516]
@@ -36,7 +37,9 @@ script = ExtResource("3_lhb2u")
 scene_balle = ExtResource("4_balle")
 metadata/_custom_type_script = "uid://cmmo2ppgt5b04"
 
-[node name="PoolOrbes" type="Node" parent="."]
+[node name="HUD" parent="." unique_id=144127719 instance=ExtResource("10_hud")]
+
+[node name="PoolOrbes" type="Node" parent="." unique_id=1855374953]
 script = ExtResource("3_lhb2u")
 scene_balle = ExtResource("7_orbe")
 taille = 32

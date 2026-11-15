@@ -1,0 +1,98 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_hud"]
+
+[sub_resource type="Theme" id="Theme_hud"]
+Label/colors/font_color = Color(0.945, 0.961, 0.875, 1)
+Label/colors/font_outline_color = Color(0.027, 0.227, 0.196, 1)
+Label/constants/outline_size = 3
+Label/font_sizes/font_size = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_panneau"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(0.027, 0.227, 0.208, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.282, 0.663, 0.569, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 6
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_fond_vie"]
+bg_color = Color(0, 0, 0, 0.55)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_vie"]
+bg_color = Color(0, 0.851, 0.584, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="Marge" type="MarginContainer" parent="."]
+offset_right = 360.0
+offset_bottom = 100.0
+theme = SubResource("Theme_hud")
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+
+[node name="Panneau" type="PanelContainer" parent="Marge"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBox_panneau")
+
+[node name="Colonne" type="VBoxContainer" parent="Marge/Panneau"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="LigneVie" type="HBoxContainer" parent="Marge/Panneau/Colonne"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="EtiquetteVie" type="Label" parent="Marge/Panneau/Colonne/LigneVie"]
+layout_mode = 2
+text = "PV"
+
+[node name="BarreVie" type="ProgressBar" parent="Marge/Panneau/Colonne/LigneVie"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 14)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("StyleBox_fond_vie")
+theme_override_styles/fill = SubResource("StyleBox_vie")
+value = 100.0
+show_percentage = false
+
+[node name="TexteVie" type="Label" parent="Marge/Panneau/Colonne/LigneVie"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "100 / 100"
+
+[node name="LigneArme" type="HBoxContainer" parent="Marge/Panneau/Colonne"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NomArme" type="Label" parent="Marge/Panneau/Colonne/LigneArme"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Arme"
+
+[node name="Munitions" type="Label" parent="Marge/Panneau/Colonne/LigneArme"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "∞"

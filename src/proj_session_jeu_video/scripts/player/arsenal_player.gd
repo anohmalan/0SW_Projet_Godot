@@ -21,7 +21,9 @@ func rafraichir() -> void:
 
 func gerer_commandes() -> bool:
 	if Input.is_action_just_pressed("arme_suivante"):
-		_arme_suivante()
+		_changer_arme(1)
+	elif Input.is_action_just_pressed("arme_précédente"):
+		_changer_arme(-1)
 	if Input.is_action_pressed("tir") and temps_depuis_tir >= armes[index_arme].cadence:
 		# La pose de visée doit être choisie avant de calculer l'origine du tir.
 		temps_depuis_tir = 0.0
@@ -44,9 +46,10 @@ func _equiper(i: int) -> void:
 	rafraichir()
 
 
-func _arme_suivante() -> void:
+## Passe à la prochaine arme qui a encore des munitions, dans le sens donné (1 ou -1).
+func _changer_arme(sens: int) -> void:
 	for pas in range(1, armes.size()):
-		var i := (index_arme + pas) % armes.size()
+		var i := posmod(index_arme + pas * sens, armes.size())
 		if munitions[i] != 0:
 			_equiper(i)
 			return
@@ -67,4 +70,4 @@ func tirer() -> void:
 		munitions[index_arme] -= 1
 		_player.munitions_changees.emit(munitions[index_arme])
 		if munitions[index_arme] == 0:
-			_arme_suivante()
+			_changer_arme(1)
