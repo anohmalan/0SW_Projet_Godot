@@ -58,6 +58,9 @@ var temps_depuis_melee := 99.0
 var _hauteur_debout := 0.0
 ## Point le plus haut (y minimal) atteint depuis que le joueur a quitté le sol.
 var _y_plus_haut := 0.0
+## Vrai jusqu'au premier contact avec le sol après une apparition : la descente depuis le
+## point d'apparition n'est pas une vraie chute.
+var _ignorer_chute := true
 
 @onready var visuel: VisuelPlayer = $Visuel
 @onready var state_machine: StateMachine = $StateMachine
@@ -178,8 +181,9 @@ func _suivre_chute(etait_au_sol: bool) -> void:
 		# Au sol, _y_plus_haut suit le joueur : en l'air, il ne garde que le point le plus haut.
 		_y_plus_haut = minf(_y_plus_haut, global_position.y)
 		return
-	if not etait_au_sol:
+	if not etait_au_sol and not _ignorer_chute:
 		_atterrir(global_position.y - _y_plus_haut)
+	_ignorer_chute = false
 	_y_plus_haut = global_position.y
 
 
@@ -281,6 +285,7 @@ func reapparaitre(position_depart: Vector2) -> void:
 	_temps_depuis_appui_saut = INF
 	_vient_de_sauter = false
 	_y_plus_haut = position_depart.y
+	_ignorer_chute = true
 	se_relever(true)
 	sante.initialiser(self)
 	sante.arreter_invincibilite()
