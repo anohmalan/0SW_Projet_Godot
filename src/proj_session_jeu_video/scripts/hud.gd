@@ -14,23 +14,39 @@ const COULEUR_TEXTE := Color("#F1F5DF")
 @onready var _nom_arme: Label = %NomArme
 @onready var _munitions: Label = %Munitions
 @onready var minimap: Minimap = %Minimap
+@onready var _message: Label = %Message
+@onready var _coeurs: CoeursHUD = %Coeurs
 
 var _style_vie: StyleBoxFlat
 var _vie_precedente := -1
 var _tween_vie: Tween
 var _tween_flash: Tween
+var _tween_message: Tween
 
 
 func _ready() -> void:
 	# Copie propre à cette instance : sa couleur change avec la vie.
 	_style_vie = _barre_vie.get_theme_stylebox("fill").duplicate()
 	_barre_vie.add_theme_stylebox_override("fill", _style_vie)
+	_message.modulate.a = 0.0
+
+
+## Message bref au centre-haut de l'écran (ex. « Point de passage activé »).
+func afficher_message(texte: String, duree: float = 2.0) -> void:
+	_message.text = texte
+	if _tween_message:
+		_tween_message.kill()
+	_tween_message = create_tween()
+	_tween_message.tween_property(_message, "modulate:a", 1.0, 0.2)
+	_tween_message.tween_interval(duree)
+	_tween_message.tween_property(_message, "modulate:a", 0.0, 0.5)
 
 
 func brancher(player: Player) -> void:
 	player.vie_changee.connect(_sur_vie_changee)
 	player.arme_changee.connect(_sur_arme_changee)
 	player.munitions_changees.connect(_sur_munitions_changees)
+	player.coeurs_changes.connect(_coeurs.definir)
 	# Le joueur a déjà émis ses valeurs de départ : on les redemande.
 	player.rafraichir()
 

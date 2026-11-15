@@ -3,10 +3,25 @@ extends Node
 
 @export var vie_max := 100
 @export var duree_invincible := 1.2
+## Nombre de chances : chaque mort coûte un cœur, la partie s'arrête à zéro.
+@export var coeurs_max := 3
 
 var vie := 100
+var coeurs := 3
 var invincible := 0.0
 var _player: Player
+
+
+func _ready() -> void:
+	# Les cœurs ne sont remplis qu'une fois par partie : initialiser() ne touche qu'à la vie.
+	coeurs = coeurs_max
+
+
+## Retire un cœur et renvoie le nombre de cœurs restants.
+func perdre_coeur() -> int:
+	coeurs = maxi(coeurs - 1, 0)
+	_player.coeurs_changes.emit(coeurs, coeurs_max)
+	return coeurs
 
 
 func initialiser(player: Player) -> void:

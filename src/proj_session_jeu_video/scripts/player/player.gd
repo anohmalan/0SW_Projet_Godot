@@ -2,6 +2,7 @@ class_name Player
 extends CharacterBody2D
 
 signal vie_changee(vie: int, vie_max: int)
+signal coeurs_changes(coeurs: int, coeurs_max: int)
 signal tir_demande(position: Vector2, direction: Vector2, arme: Arme)
 signal arme_changee(arme: Arme, munitions: int)
 signal munitions_changees(munitions: int)
@@ -46,6 +47,7 @@ signal est_mort
 @export_group("Visuel")
 @export var echelle_visuel := 0.25
 
+const EFFET_REAPPARITION := preload("res://scripts/player/effet_reapparition.gd")
 const DUREE_VISEE := 1.0      # durée de la pose de visée après un tir
 const DUREE_POSE_TIR := 0.25  # immobile, le joueur reste en état Fire pendant ce délai
 
@@ -61,6 +63,8 @@ var _y_plus_haut := 0.0
 ## Vrai jusqu'au premier contact avec le sol après une apparition : la descente depuis le
 ## point d'apparition n'est pas une vraie chute.
 var _ignorer_chute := true
+## Dernier endroit où le joueur se tenait sur le décor fixe : il y réapparaît après une mort.
+var derniere_position_sure := Vector2.ZERO
 
 @onready var visuel: VisuelPlayer = $Visuel
 @onready var state_machine: StateMachine = $StateMachine
@@ -80,6 +84,7 @@ func _ready() -> void:
 	_hauteur_debout = (forme.shape as CapsuleShape2D).height
 	visuel.position = Vector2(0, -170.0 * echelle_visuel)
 	orienter(1)
+	derniere_position_sure = global_position
 	sante.initialiser(self)
 	arsenal.initialiser(self)
 	visuel.appliquer_apparence(ApparencePlayer.selection)
@@ -109,6 +114,7 @@ func _physics_process(delta: float) -> void:
 	var etait_au_sol := is_on_floor()
 	move_and_slide()
 	_suivre_chute(etait_au_sol)
+	_memoriser_position_sure()
 	state_machine.update(delta)
 	if doit_tirer:
 		arsenal.tirer()
@@ -176,6 +182,21 @@ func consommer_saut() -> bool:
 # --- Chute -------------------------------------------------------------------
 
 ## Mémorise le point le plus haut en l'air et applique les dégâts de chute à l'atterrissage.
+## Retient la position du joueur quand il est debout sur le décor (TileMapLayer), et non sur
+## une plateforme mobile ou en plein recul : c'est là qu'il réapparaîtra s'il meurt.
+func _memoriser_position_sure() -> void:
+	if not is_on_floor():
+		return
+	var etat := state_machine.current_state
+	if etat is PlayerDead or etat is PlayerHurt:
+		return
+	var requete := PhysicsRayQueryParameters2D.create(
+		global_position + Vector2(0.0, -4.0), global_position + Vector2(0.0, 8.0), 1, [get_rid()])
+	var impact := get_world_2d().direct_space_state.intersect_ray(requete)
+	if not impact.is_empty() and impact["collider"] is TileMapLayer:
+		derniere_position_sure = global_position
+
+
 func _suivre_chute(etait_au_sol: bool) -> void:
 	if not is_on_floor():
 		# Au sol, _y_plus_haut suit le joueur : en l'air, il ne garde que le point le plus haut.
@@ -263,6 +284,7 @@ func etat_en_l_air() -> StringName:
 
 func rafraichir() -> void:
 	vie_changee.emit(sante.vie, sante.vie_max)
+	coeurs_changes.emit(sante.coeurs, sante.coeurs_max)
 	arsenal.rafraichir()
 
 
@@ -278,6 +300,8 @@ func mourir() -> void:
 	state_machine.change_state("PlayerDead")
 
 
+## Remet le joueur debout, vie pleine, à la position donnée, en gardant son orientation.
+## Il est brièvement invincible : il réapparaît là où il jouait, parfois près d'ennemis.
 func reapparaitre(position_depart: Vector2) -> void:
 	global_position = position_depart
 	velocity = Vector2.ZERO
@@ -288,11 +312,20 @@ func reapparaitre(position_depart: Vector2) -> void:
 	_ignorer_chute = true
 	se_relever(true)
 	sante.initialiser(self)
-	sante.arreter_invincibilite()
-	orienter(1)
 	camera.recentrer()
 	state_machine.change_state(&"PlayerIdle")
+	sante.activer_invincibilite()
+	_surbrillance_reapparition()
 	rafraichir()
+
+
+## Le joueur s'illumine en vert néon puis retrouve ses couleurs, avec un effet de lumière
+## au sol (colonne + anneau) pour bien repérer où il revient.
+func _surbrillance_reapparition() -> void:
+	visuel.flasher(EFFET_REAPPARITION.COULEUR.lightened(0.3), 0.8)
+	var effet: Node2D = EFFET_REAPPARITION.new()
+	effet.position = position
+	get_parent().add_child(effet)
 
 
 func ajouter_munitions(i: int, quantite: int) -> void:

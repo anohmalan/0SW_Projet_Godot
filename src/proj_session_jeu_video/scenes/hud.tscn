@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/hud.gd" id="1_hud"]
 [ext_resource type="PackedScene" path="res://scenes/minimap.tscn" id="2_minimap"]
+[ext_resource type="Script" path="res://scripts/coeurs_hud.gd" id="3_coeurs"]
 
 [sub_resource type="Theme" id="Theme_hud"]
 Label/colors/font_color = Color(0.945, 0.961, 0.875, 1)
@@ -83,6 +84,13 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "100 / 100"
 
+[node name="Coeurs" type="Control" parent="Marge/Panneau/Colonne"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(78, 26)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("3_coeurs")
+
 [node name="LigneArme" type="HBoxContainer" parent="Marge/Panneau/Colonne"]
 layout_mode = 2
 theme_override_constants/separation = 10
@@ -108,3 +116,20 @@ offset_top = 16.0
 offset_right = -16.0
 offset_bottom = 206.0
 grow_horizontal = 0
+
+[node name="Message" type="Label" parent="."]
+unique_name_in_owner = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -300.0
+offset_top = 90.0
+offset_right = 300.0
+offset_bottom = 130.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0, 0.851, 0.584, 1)
+theme_override_colors/font_outline_color = Color(0.027, 0.227, 0.196, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 26
+horizontal_alignment = 1
