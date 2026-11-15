@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://lrii55565dve" path="res://scenes/enemy.tscn" id="1_base"]
+
+[node name="EnemySentinelle" instance=ExtResource("1_base")]
+comportement = 2
+teinte = Color(0.75, 0.65, 1, 1)
+echelle = 1.25
+vitesse_patrouille = 60.0
+vitesse_poursuite = 60.0
+amplitude_flottement = 2.5
+vie_max = 80
+portee_detection = 480.0
+portee_attaque = 450.0
+delai_attaque = 1.1
+chance_butin = 0.9

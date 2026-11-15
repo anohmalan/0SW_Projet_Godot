@@ -4,6 +4,16 @@ extends CharacterBody2D
 signal tir_demande(position: Vector2, direction: Vector2, arme: Arme)
 signal est_mort
 
+## TIREUR : garde ses distances et tire. KAMIKAZE : fonce et explose.
+## SENTINELLE : reste à son poste et tire de loin.
+enum Comportement { TIREUR, KAMIKAZE, SENTINELLE }
+
+@export var comportement := Comportement.TIREUR
+
+@export_group("Apparence")
+@export var teinte := Color.WHITE
+@export var echelle := 1.0
+
 @export_group("Déplacement")
 @export var vitesse_patrouille := 70.0
 @export var vitesse_poursuite := 130.0
@@ -22,6 +32,12 @@ signal est_mort
 @export_group("Butin")
 @export var scene_butin: PackedScene = preload("res://scenes/butin.tscn")
 @export_range(0.0, 1.0) var chance_butin := 0.6
+
+@export_group("Kamikaze")
+@export var duree_amorce := 0.6
+@export var rayon_explosion := 70.0
+@export var degats_explosion := 30
+@export var scene_explosion: PackedScene = preload("res://scenes/explosion.tscn")
 
 const SHADER_FLASH := preload("res://shaders/flash_touche.gdshader")
 const ACCELERATION := 400.0
@@ -54,6 +70,7 @@ func _ready() -> void:
 	arme = _creer_arme()
 	_materiau_flash.shader = SHADER_FLASH
 	sprite.material = _materiau_flash
+	_appliquer_apparence()
 	orienter(direction)
 
 
@@ -76,6 +93,9 @@ func recevoir_degats(quantite: int, origine_x: float = INF) -> void:
 	if vie == 0:
 		state_machine.change_state(&"EnemyDead")
 		return
+	# Un kamikaze amorcé ne se laisse pas interrompre : il faut l'achever.
+	if state_machine.current_state is EnemyExplode:
+		return
 	var sens := float(-direction)
 	if origine_x != INF:
 		sens = 1.0 if global_position.x >= origine_x else -1.0
@@ -86,6 +106,42 @@ func recevoir_degats(quantite: int, origine_x: float = INF) -> void:
 func orienter(d: int) -> void:
 	direction = d
 	sprite.flip_h = d < 0
+
+
+func est_immobile() -> bool:
+	return comportement == Comportement.SENTINELLE
+
+
+## État vers lequel la poursuite bascule quand le joueur est à portée.
+func etat_attaque() -> StringName:
+	return &"EnemyExplode" if comportement == Comportement.KAMIKAZE else &"EnemyAttack"
+
+
+## Fin du kamikaze : explosion visuelle, dégâts de zone, puis disparition.
+func exploser() -> void:
+	if scene_explosion != null:
+		var explosion: Node2D = scene_explosion.instantiate()
+		explosion.position = position + sprite.position
+		explosion.scale *= echelle
+		get_parent().add_child(explosion)
+	var player := joueur_cible()
+	if player != null and distance_joueur(player) <= rayon_explosion:
+		player.recevoir_degats(degats_explosion, global_position.x)
+	vie = 0
+	desactiver_collisions()
+	barre_vie.cacher()
+	lacher_butin()
+	est_mort.emit()
+	queue_free()
+
+
+func _appliquer_apparence() -> void:
+	sprite.modulate = teinte
+	var taille := Vector2.ONE * echelle
+	sprite.scale = taille
+	$CollisionShape2D.scale = taille
+	zone_contact.scale = taille
+	barre_vie.position.y *= echelle
 
 
 func joueur_cible() -> Player:

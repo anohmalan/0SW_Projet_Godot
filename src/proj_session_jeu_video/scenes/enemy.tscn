@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scripts/enemy/States/enemy_hurt.gd" id="6_hurt"]
 [ext_resource type="Script" path="res://scripts/enemy/States/enemy_dead.gd" id="7_dead"]
 [ext_resource type="Script" path="res://scripts/enemy/barre_vie_ennemi.gd" id="12_barre"]
+[ext_resource type="Script" path="res://scripts/enemy/States/enemy_explode.gd" id="13_explode"]
 [ext_resource type="Texture2D" uid="uid://vomcdggd7dic" path="res://assets/sprites/sprites_enemy/outline/MOVE.png" id="8_move"]
 [ext_resource type="Texture2D" uid="uid://1xsmug3orqli" path="res://assets/sprites/sprites_enemy/outline/ATTACK.png" id="9_attack"]
 [ext_resource type="Texture2D" uid="uid://b2g1qqspe50ox" path="res://assets/sprites/sprites_enemy/outline/HURT.png" id="10_hurt"]
@@ -231,6 +232,10 @@ enemy = NodePath("../..")
 
 [node name="EnemyAttack" type="Node" parent="StateMachine" node_paths=PackedStringArray("enemy")]
 script = ExtResource("5_attack")
+enemy = NodePath("../..")
+
+[node name="EnemyExplode" type="Node" parent="StateMachine" node_paths=PackedStringArray("enemy")]
+script = ExtResource("13_explode")
 enemy = NodePath("../..")
 
 [node name="EnemyHurt" type="Node" parent="StateMachine" node_paths=PackedStringArray("enemy")]

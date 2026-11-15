@@ -7,6 +7,8 @@
 [ext_resource type="Script" uid="uid://b7u2lsnyrbjy8" path="res://scripts/niveau_1/controle_niveau_1.gd" id="5_controle"]
 [ext_resource type="PackedScene" uid="uid://lrii55565dve" path="res://scenes/enemy.tscn" id="6_enemy"]
 [ext_resource type="PackedScene" path="res://scenes/orbe_ennemi.tscn" id="7_orbe"]
+[ext_resource type="PackedScene" path="res://scenes/enemy_kamikaze.tscn" id="8_kamikaze"]
+[ext_resource type="PackedScene" path="res://scenes/enemy_sentinelle.tscn" id="9_sentinelle"]
 
 [node name="Niveau1" type="Node2D" unique_id=689121013]
 script = ExtResource("5_controle")
@@ -23,10 +25,10 @@ scale = Vector2(0.9, 0.9)
 [node name="Enemy" parent="Ennemis" unique_id=2012770801 instance=ExtResource("6_enemy")]
 position = Vector2(420, 509)
 
-[node name="Enemy2" parent="Ennemis" instance=ExtResource("6_enemy")]
+[node name="Kamikaze" parent="Ennemis" instance=ExtResource("8_kamikaze")]
 position = Vector2(1340, 450)
 
-[node name="Enemy3" parent="Ennemis" instance=ExtResource("6_enemy")]
+[node name="Sentinelle" parent="Ennemis" instance=ExtResource("9_sentinelle")]
 position = Vector2(2045, 300)
 
 [node name="PoolBalles" type="Node" parent="." unique_id=1035987516]

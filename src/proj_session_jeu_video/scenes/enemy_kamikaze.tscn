@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://lrii55565dve" path="res://scenes/enemy.tscn" id="1_base"]
+
+[node name="EnemyKamikaze" instance=ExtResource("1_base")]
+comportement = 1
+teinte = Color(1, 0.6, 0.4, 1)
+echelle = 0.8
+vitesse_patrouille = 90.0
+vitesse_poursuite = 230.0
+amplitude_flottement = 3.0
+vie_max = 20
+portee_detection = 340.0
+portee_attaque = 55.0
+chance_butin = 0.3

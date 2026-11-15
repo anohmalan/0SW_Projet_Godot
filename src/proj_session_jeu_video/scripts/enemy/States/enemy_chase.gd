@@ -22,9 +22,16 @@ func physics_update(delta: float) -> void:
 		return
 	var sens := 1 if player.global_position.x >= enemy.global_position.x else -1
 	enemy.orienter(sens)
-	# Se place en hauteur, à distance de tir, du côté où il se trouve déjà.
-	var cible := enemy.point_vise(player) + Vector2(-sens * enemy.distance_ideale, -enemy.hauteur_vol)
-	enemy.voler_vers(cible, enemy.vitesse_poursuite, delta)
+	match enemy.comportement:
+		Enemy.Comportement.SENTINELLE:
+			# Reste à son poste ; ne fait que suivre le joueur du regard.
+			enemy.voler_vers(enemy.position_depart, enemy.vitesse_poursuite, delta)
+		Enemy.Comportement.KAMIKAZE:
+			enemy.voler_vers(enemy.point_vise(player), enemy.vitesse_poursuite, delta)
+		_:
+			# Se place en hauteur, à distance de tir, du côté où il se trouve déjà.
+			var cible := enemy.point_vise(player) + Vector2(-sens * enemy.distance_ideale, -enemy.hauteur_vol)
+			enemy.voler_vers(cible, enemy.vitesse_poursuite, delta)
 
 func update(delta: float) -> void:
 	var player := enemy.joueur_cible()
@@ -38,7 +45,7 @@ func update(delta: float) -> void:
 		Transitioned.emit(self, &"EnemyPatrol")
 	elif visible and distance <= enemy.portee_attaque \
 			and enemy.temps_depuis_attaque >= enemy.delai_attaque:
-		Transitioned.emit(self, &"EnemyAttack")
+		Transitioned.emit(self, enemy.etat_attaque())
 
 func exit() -> void:
 	pass
