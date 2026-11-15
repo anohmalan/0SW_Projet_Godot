@@ -1,12 +1,16 @@
 [gd_scene format=3 uid="uid://8rpwifn6chsx"]
 
 [ext_resource type="Script" uid="uid://d3cs8ixmrgohf" path="res://scripts/fond_parallaxe.gd" id="1_fond"]
-[ext_resource type="Texture2D" uid="uid://cyi3x6geyxjpi" path="res://assets/bg_new.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/fonds/niveau_1/1_ciel.png" id="2_ciel"]
+[ext_resource type="Texture2D" path="res://assets/fonds/niveau_1/2_lointain.png" id="3_lointain"]
+[ext_resource type="Texture2D" path="res://assets/fonds/niveau_1/3_industriel.png" id="4_industriel"]
+[ext_resource type="Texture2D" path="res://assets/fonds/niveau_1/4_jungle.png" id="5_jungle"]
 
 [node name="ParallaxeNiveau1" type="CanvasLayer" unique_id=311341440]
 layer = -10
 
-[node name="Fond" type="Control" parent="." unique_id=1203773387]
+[node name="Ciel" type="Control" parent="." unique_id=1203773387]
+texture_filter = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,4 +19,52 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_fond")
-texture = ExtResource("2_bg")
+texture = ExtResource("2_ciel")
+facteur_horizontal = 0.02
+facteur_vertical = 0.01
+miroir_alterne = false
+
+[node name="Lointain" type="Control" parent="."]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_fond")
+texture = ExtResource("3_lointain")
+facteur_horizontal = 0.06
+facteur_vertical = 0.03
+miroir_alterne = false
+
+[node name="Industriel" type="Control" parent="."]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_fond")
+texture = ExtResource("4_industriel")
+facteur_horizontal = 0.12
+facteur_vertical = 0.05
+miroir_alterne = false
+
+[node name="Jungle" type="Control" parent="."]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_fond")
+texture = ExtResource("5_jungle")
+facteur_horizontal = 0.25
+facteur_vertical = 0.08
+miroir_alterne = false

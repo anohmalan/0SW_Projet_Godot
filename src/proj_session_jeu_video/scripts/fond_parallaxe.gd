@@ -21,6 +21,12 @@ extends Control
 		marge_verticale = valeur
 		queue_redraw()
 
+## Retourne une copie sur deux en miroir : masque les raccords d'une image qui ne se répète pas.
+@export var miroir_alterne := true:
+	set(valeur):
+		miroir_alterne = valeur
+		queue_redraw()
+
 @export_group("Aperçu dans l'éditeur")
 ## Zone du niveau (coordonnées du monde) couverte par l'aperçu dans l'éditeur.
 @export var zone_apercu := Rect2(-400, -1250, 3500, 2350):
@@ -66,10 +72,9 @@ func _draw() -> void:
 	var y := clampf(-marge * 0.5 - (centre.y - milieu_y) * facteur_vertical, -marge, 0.0)
 
 	# Horizontal : défilement ralenti, image répétée autant que nécessaire.
-	var x := -fposmod(centre.x * facteur_horizontal, taille.x)
-	while x < ecran.x:
-		draw_texture_rect(texture, Rect2(Vector2(x, y), taille), false)
-		x += taille.x
+	var defilement := centre.x * facteur_horizontal
+	var premiere := floori(defilement / taille.x)
+	_dessiner_rangee(premiere * taille.x - defilement, y, taille, premiere, ecran.x)
 
 
 ## Dans l'éditeur, le CanvasLayer est affiché dans le repère du monde : on répète l'image
@@ -80,7 +85,18 @@ func _dessiner_apercu() -> void:
 		ProjectSettings.get_setting("display/window/size/viewport_height", 648))
 	var taille := _taille_image(ecran)
 	var y := zone_apercu.get_center().y - taille.y * 0.5
-	var x := zone_apercu.position.x
-	while x < zone_apercu.end.x:
-		draw_texture_rect(texture, Rect2(Vector2(x, y), taille), false)
+	_dessiner_rangee(zone_apercu.position.x, y, taille, 0, zone_apercu.end.x)
+
+
+## Dessine des copies côte à côte depuis x jusqu'à x_fin ; avec miroir_alterne, les copies
+## d'indice impair sont retournées pour que chaque raccord relie deux bords identiques.
+func _dessiner_rangee(x: float, y: float, taille: Vector2, indice: int, x_fin: float) -> void:
+	while x < x_fin:
+		if miroir_alterne and posmod(indice, 2) == 1:
+			draw_set_transform(Vector2(x + taille.x, y), 0.0, Vector2(-1.0, 1.0))
+			draw_texture_rect(texture, Rect2(Vector2.ZERO, taille), false)
+			draw_set_transform(Vector2.ZERO)
+		else:
+			draw_texture_rect(texture, Rect2(Vector2(x, y), taille), false)
 		x += taille.x
+		indice += 1
