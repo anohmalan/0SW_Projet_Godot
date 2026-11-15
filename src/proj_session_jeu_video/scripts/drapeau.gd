@@ -23,6 +23,10 @@ func _ready() -> void:
 	_poser_au_sol.call_deferred()
 
 
+func _poser_au_sol() -> void:
+	Geometrie.poser_au_sol(self)
+
+
 ## Rectangle global occupé par le dessin (mât, tissu, halo), avec une petite marge.
 func zone_visible() -> Rect2:
 	var haut := hauteur_mat + 80.0
@@ -33,14 +37,6 @@ func _process(delta: float) -> void:
 	_temps += delta
 	queue_redraw()
 
-
-## Descend le drapeau jusqu'au premier sol (couche « monde ») situé dessous.
-func _poser_au_sol() -> void:
-	var requete := PhysicsRayQueryParameters2D.create(
-		global_position, global_position + Vector2(0.0, 3000.0), 1)
-	var impact := get_world_2d().direct_space_state.intersect_ray(requete)
-	if not impact.is_empty():
-		global_position = impact["position"]
 
 
 func _sur_entree(corps: Node2D) -> void:
