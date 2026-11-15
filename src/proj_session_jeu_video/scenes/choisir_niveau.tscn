@@ -1,3 +1,97 @@
 [gd_scene format=3 uid="uid://c8kew3q5oujtw"]
 
-[node name="Node2D" type="Node2D" unique_id=864983203]
+[ext_resource type="Script" path="res://scripts/ecran_choix_niveau.gd" id="1_ecran"]
+[ext_resource type="PackedScene" uid="uid://biopt84v10yqs" path="res://scenes/arriere_plan_menu.tscn" id="2_fond"]
+[ext_resource type="Texture2D" uid="uid://b2p50i4i3f33b" path="res://assets/menu/title_wing_left.svg" id="3_aile_g"]
+[ext_resource type="Texture2D" uid="uid://b42yeilng0a0x" path="res://assets/menu/title_wing_right.svg" id="4_aile_d"]
+[ext_resource type="Texture2D" path="res://assets/menu/icon_back.svg" id="5_icone_retour"]
+
+[node name="ChoisirNiveau" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ecran")
+
+[node name="arriere_plan_menu" parent="." instance=ExtResource("2_fond")]
+
+[node name="Voile" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.01, 0.06, 0.05, 0.45)
+
+[node name="Marge" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 28
+
+[node name="Colonne" type="VBoxContainer" parent="Marge"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="BandeauTitre" type="HBoxContainer" parent="Marge/Colonne"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 16
+
+[node name="AileGauche" type="TextureRect" parent="Marge/Colonne/BandeauTitre"]
+custom_minimum_size = Vector2(90, 40)
+layout_mode = 2
+texture = ExtResource("3_aile_g")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Titre" type="Label" parent="Marge/Colonne/BandeauTitre"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.945, 0.961, 0.875, 1)
+theme_override_colors/font_outline_color = Color(0.027, 0.227, 0.196, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 38
+text = "CHOISIR UN NIVEAU"
+
+[node name="AileDroite" type="TextureRect" parent="Marge/Colonne/BandeauTitre"]
+custom_minimum_size = Vector2(90, 40)
+layout_mode = 2
+texture = ExtResource("4_aile_d")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Centre" type="CenterContainer" parent="Marge/Colonne"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Cartes" type="HBoxContainer" parent="Marge/Colonne/Centre"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Statut" type="Label" parent="Marge/Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.45, 0.45, 1)
+horizontal_alignment = 1
+
+[node name="Actions" type="HBoxContainer" parent="Marge/Colonne"]
+layout_mode = 2
+
+[node name="Retour" type="Button" parent="Marge/Colonne/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 52)
+layout_mode = 2
+text = "Retour"
+icon = ExtResource("5_icone_retour")
+expand_icon = false
