@@ -24,6 +24,12 @@ signal est_mort
 ## Facteur appliqué à la vitesse de montée quand on relâche saut (saut court).
 @export var coupure_saut := 0.5
 
+@export_group("Chute")
+## En dessous de cette hauteur de chute (pixels), aucun dégât.
+@export var chute_sans_degats := 350.0
+## À partir de cette hauteur, la chute est mortelle ; entre les deux, les dégâts croissent.
+@export var chute_mortelle := 1000.0
+
 @export_group("Accroupi")
 @export var hauteur_accroupi := 80.0
 ## Au-delà de cette pression sur "bas" (stick), le joueur s'accroupit : évite les accroupissements
@@ -50,6 +56,8 @@ var _vient_de_sauter := false
 var accroupi := false
 var temps_depuis_melee := 99.0
 var _hauteur_debout := 0.0
+## Point le plus haut (y minimal) atteint depuis que le joueur a quitté le sol.
+var _y_plus_haut := 0.0
 
 @onready var visuel: VisuelPlayer = $Visuel
 @onready var state_machine: StateMachine = $StateMachine
@@ -95,7 +103,9 @@ func _physics_process(delta: float) -> void:
 	var doit_tirer := false
 	if libre:
 		doit_tirer = arsenal.gerer_commandes()
+	var etait_au_sol := is_on_floor()
 	move_and_slide()
+	_suivre_chute(etait_au_sol)
 	state_machine.update(delta)
 	if doit_tirer:
 		arsenal.tirer()
@@ -158,6 +168,30 @@ func consommer_saut() -> bool:
 	var resultat := _vient_de_sauter
 	_vient_de_sauter = false
 	return resultat
+
+
+# --- Chute -------------------------------------------------------------------
+
+## Mémorise le point le plus haut en l'air et applique les dégâts de chute à l'atterrissage.
+func _suivre_chute(etait_au_sol: bool) -> void:
+	if not is_on_floor():
+		# Au sol, _y_plus_haut suit le joueur : en l'air, il ne garde que le point le plus haut.
+		_y_plus_haut = minf(_y_plus_haut, global_position.y)
+		return
+	if not etait_au_sol:
+		_atterrir(global_position.y - _y_plus_haut)
+	_y_plus_haut = global_position.y
+
+
+func _atterrir(hauteur: float) -> void:
+	if hauteur < chute_sans_degats or state_machine.current_state is PlayerDead:
+		return
+	if hauteur >= chute_mortelle:
+		mourir()
+		return
+	var proportion := (hauteur - chute_sans_degats) / (chute_mortelle - chute_sans_degats)
+	var degats := maxi(1, roundi(proportion * sante.vie_max))
+	sante.recevoir_degats(degats, INF, false)
 
 
 # --- Accroupi ----------------------------------------------------------------
@@ -246,6 +280,7 @@ func reapparaitre(position_depart: Vector2) -> void:
 	_temps_hors_sol = 0.0
 	_temps_depuis_appui_saut = INF
 	_vient_de_sauter = false
+	_y_plus_haut = position_depart.y
 	se_relever(true)
 	sante.initialiser(self)
 	sante.arreter_invincibilite()

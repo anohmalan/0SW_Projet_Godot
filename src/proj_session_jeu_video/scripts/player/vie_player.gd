@@ -14,7 +14,8 @@ func initialiser(player: Player) -> void:
 	vie = vie_max
 
 
-func recevoir_degats(quantite: int, origine_x: float = INF) -> void:
+## recul = false pour les dégâts sans projection (chute) : le joueur reste où il a atterri.
+func recevoir_degats(quantite: int, origine_x: float = INF, recul: bool = true) -> void:
 	if vie == 0 or invincible > 0.0:
 		return
 	vie = maxi(vie - quantite, 0)
@@ -23,10 +24,11 @@ func recevoir_degats(quantite: int, origine_x: float = INF) -> void:
 	if vie == 0:
 		_player.state_machine.change_state(&"PlayerDead")
 		return
-	var sens := float(-_player.direction)
-	if origine_x != INF:
-		sens = 1.0 if _player.global_position.x >= origine_x else -1.0
-	_player.velocity = Vector2(sens * 200.0, -220.0)
+	if recul:
+		var sens := float(-_player.direction)
+		if origine_x != INF:
+			sens = 1.0 if _player.global_position.x >= origine_x else -1.0
+		_player.velocity = Vector2(sens * 200.0, -220.0)
 	_player.state_machine.change_state(&"PlayerHurt")
 
 
