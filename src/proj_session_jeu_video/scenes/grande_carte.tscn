@@ -1,0 +1,63 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/grande_carte.gd" id="1_carte"]
+
+[node name="GrandeCarte" type="CanvasLayer"]
+process_mode = 3
+layer = 12
+script = ExtResource("1_carte")
+
+[node name="Fond" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.05, 0.04, 0.85)
+
+[node name="Marge" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 24
+
+[node name="Colonne" type="VBoxContainer" parent="Marge"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Titre" type="Label" parent="Marge/Colonne"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.851, 0.584, 1)
+theme_override_colors/font_outline_color = Color(0.027, 0.227, 0.196, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 32
+text = "CARTE DU NIVEAU"
+horizontal_alignment = 1
+
+[node name="Zone" type="Control" parent="Marge/Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="Legende" type="RichTextLabel" parent="Marge/Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.945, 0.961, 0.875, 1)
+theme_override_font_sizes/normal_font_size = 18
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+
+[node name="Aide" type="Label" parent="Marge/Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.75, 0.7, 1)
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1

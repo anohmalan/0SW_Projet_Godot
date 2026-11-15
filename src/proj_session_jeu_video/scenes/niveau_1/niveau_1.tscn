@@ -11,8 +11,9 @@
 [ext_resource type="PackedScene" path="res://scenes/enemy_sentinelle.tscn" id="9_sentinelle"]
 [ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="10_hud"]
 [ext_resource type="PackedScene" path="res://scenes/menu_pause.tscn" id="11_pause"]
-[ext_resource type="PackedScene" path="res://scenes/drapeau.tscn" id="12_drapeau"]
+[ext_resource type="PackedScene" uid="uid://cofnvo6r10m4r" path="res://scenes/drapeau.tscn" id="12_drapeau"]
 [ext_resource type="PackedScene" path="res://scenes/ecran_victoire.tscn" id="13_victoire"]
+[ext_resource type="PackedScene" path="res://scenes/grande_carte.tscn" id="14_grande_carte"]
 
 [node name="Niveau1" type="Node2D" unique_id=689121013]
 script = ExtResource("5_controle")
@@ -56,3 +57,6 @@ visible = false
 script = ExtResource("3_lhb2u")
 scene_balle = ExtResource("7_orbe")
 taille = 32
+
+[node name="GrandeCarte" parent="." unique_id=480165573 instance=ExtResource("14_grande_carte")]
+visible = false

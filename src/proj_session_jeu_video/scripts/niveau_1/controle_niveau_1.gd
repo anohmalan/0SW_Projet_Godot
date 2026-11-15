@@ -8,6 +8,7 @@ extends Node2D
 @onready var hud: HUD = $HUD
 @onready var drapeau: Drapeau = $Drapeau
 @onready var ecran_fin: EcranVictoire = $EcranVictoire
+@onready var grande_carte: GrandeCarte = $GrandeCarte
 
 # Statistiques affichées à la fin du niveau.
 var _temps_niveau := 0.0
@@ -20,7 +21,10 @@ func _ready() -> void:
 	player.est_mort.connect(_on_player_est_mort)
 	player.camera.limiter(_zone_camera())
 	hud.brancher(player)
-	hud.minimap.configurer(carte, player)
+	# Une seule image du niveau, partagée par la mini-carte et la grande carte.
+	var carte_niveau: CarteNiveau = CarteNiveau.new(carte)
+	hud.minimap.configurer(carte_niveau, player)
+	grande_carte.configurer(carte_niveau, player)
 	drapeau.atteint.connect(_on_drapeau_atteint)
 	for ennemi in conteneur_ennemis.get_children():
 		if ennemi is Enemy:

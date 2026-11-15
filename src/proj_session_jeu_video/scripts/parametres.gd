@@ -12,7 +12,7 @@ enum Peripherique { CLAVIER, MANETTE }
 ## Actions de jeu que le joueur peut réassigner, dans l'ordre d'affichage.
 const ACTIONS_MODIFIABLES: Array[StringName] = [
 	&"gauche", &"droite", &"bas", &"saut", &"tir", &"melee",
-	&"arme_suivante", &"arme_précédente", &"pause",
+	&"arme_suivante", &"arme_précédente", &"carte", &"pause",
 ]
 const NOMS_ACTIONS := {
 	&"gauche": "Gauche",
@@ -23,6 +23,7 @@ const NOMS_ACTIONS := {
 	&"melee": "Couteau",
 	&"arme_suivante": "Arme suivante",
 	&"arme_précédente": "Arme précédente",
+	&"carte": "Carte du niveau",
 	&"pause": "Pause",
 }
 ## Noms des boutons de manette PlayStation (indices SDL de Godot).
@@ -290,21 +291,21 @@ static func _deserialiser(donnees: Variant) -> InputEvent:
 	match donnees.get("type", ""):
 		"touche":
 			var touche := InputEventKey.new()
-			touche.physical_keycode = int(donnees.get("code", 0))
+			touche.physical_keycode = int(donnees.get("code", 0)) as Key
 			return touche
 		"souris":
 			var souris := InputEventMouseButton.new()
-			souris.button_index = int(donnees.get("bouton", 1))
+			souris.button_index = int(donnees.get("bouton", 1)) as MouseButton
 			return souris
 		"manette_bouton":
 			var bouton := InputEventJoypadButton.new()
 			bouton.device = -1
-			bouton.button_index = int(donnees.get("bouton", 0))
+			bouton.button_index = int(donnees.get("bouton", 0)) as JoyButton
 			return bouton
 		"manette_axe":
 			var axe := InputEventJoypadMotion.new()
 			axe.device = -1
-			axe.axis = int(donnees.get("axe", 0))
+			axe.axis = int(donnees.get("axe", 0)) as JoyAxis
 			axe.axis_value = float(donnees.get("sens", 1.0))
 			return axe
 	return null
