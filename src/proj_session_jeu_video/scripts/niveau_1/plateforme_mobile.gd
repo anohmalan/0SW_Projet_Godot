@@ -1,39 +1,52 @@
-extends CharacterBody2D
+class_name PlateformeMobile
+extends AnimatableBody2D
 
-## Position locale visée par l'AnimationPlayer.
-@export var position_cible: Vector2 = Vector2.ZERO
+## Plateforme qui fait l'aller-retour entre sa position de départ et départ + trajet.
+## Elle ne traverse jamais le niveau : si un élément lui barre la route, elle s'arrête
+## contre lui (à la manière d'une pièce de Tetris) et repart vers l'autre position.
+## Les deux positions sont fixées au démarrage, donc un demi-tour ne la fait jamais dériver.
 
-var _position_cible_precedente := Vector2.ZERO
-var _sens_mouvement := 1.0
+## Déplacement jusqu'à la seconde position, dans le repère du parent.
+@export var trajet := Vector2(0, 1100)
+@export var vitesse := 275.0
+## Temps d'arrêt à chaque extrémité ou contre un obstacle.
+@export var pause := 0.4
+
+var _positions: Array[Vector2] = []
+var _index_cible := 1
+var _attente := 0.0
+
+
+func _ready() -> void:
+	# Déplacée par move_and_collide : la synchronisation avec l'animation ne sert pas ici.
+	sync_to_physics = false
+	var depart := global_position
+	var arrivee := depart + _vers_global(trajet)
+	_positions = [depart, arrivee]
 
 
 func _physics_process(delta: float) -> void:
-	# L'animation fournit le déplacement par image; la plateforme garde une vitesse fluide.
-	var mouvement := (position_cible - _position_cible_precedente) * _sens_mouvement
-	_position_cible_precedente = position_cible
-	if mouvement.length_squared() <= 0.0001:
-		velocity = Vector2.ZERO
+	if _attente > 0.0:
+		_attente -= delta
 		return
-
-	# Un joueur déjà posé sur la plateforme est transporté avec elle, pas traité comme un obstacle.
-	var masque_initial := collision_mask
-	if _joueur_pose_sur_plateforme():
-		collision_mask = collision_mask & 1
-	velocity = mouvement / delta
-	move_and_slide()
-	if get_slide_collision_count() > 0:
-		# Bloquée par un obstacle : elle repart dans l'autre sens.
-		_sens_mouvement *= -1.0
-	collision_mask = masque_initial
+	var ecart := _positions[_index_cible] - global_position
+	var pas := vitesse * delta
+	if ecart.length() <= pas:
+		# Dernier bout de trajet : arrivée ou obstacle juste avant, on repart dans les deux cas.
+		move_and_collide(ecart)
+		_repartir()
+		return
+	if move_and_collide(ecart.normalized() * pas) != null:
+		_repartir()
 
 
-func _joueur_pose_sur_plateforme() -> bool:
-	for noeud_joueur in get_tree().get_nodes_in_group("joueur"):
-		var joueur := noeud_joueur as CharacterBody2D
-		if joueur == null or not joueur.is_on_floor():
-			continue
-		for i in range(joueur.get_slide_collision_count()):
-			var collision := joueur.get_slide_collision(i)
-			if collision.get_collider() == self and collision.get_normal().dot(Vector2.UP) > 0.7:
-				return true
-	return false
+## Prend l'autre position comme cible, après une courte pause.
+func _repartir() -> void:
+	_index_cible = 1 - _index_cible
+	_attente = pause
+
+
+## Convertit un déplacement exprimé dans le repère du parent (ex. monde agrandi ×1,1).
+func _vers_global(deplacement: Vector2) -> Vector2:
+	var parent := get_parent() as Node2D
+	return parent.global_transform.basis_xform(deplacement) if parent != null else deplacement

@@ -7,65 +7,22 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fpr03"]
 size = Vector2(88, 36)
 
-[sub_resource type="Animation" id="Animation_awq6h"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CharacterBody2D:position_cible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_3xdp2"]
-resource_name = "plateforme_haut_bas"
-length = 4.0
-loop_mode = 2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CharacterBody2D:position_cible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(0, 1100)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_0xbn2"]
-_data = {
-&"RESET": SubResource("Animation_awq6h"),
-&"plateforme_haut_bas": SubResource("Animation_3xdp2")
-}
-
-[node name="PlateformeHautBas" type="Node2D" unique_id=850719914]
-
-[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=758349085]
+[node name="PlateformeHautBas" type="AnimatableBody2D" unique_id=850719914]
 collision_layer = 1
-collision_mask = 3
+collision_mask = 1
+sync_to_physics = false
 script = ExtResource("2_mouvement")
 
-[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D" unique_id=59051362]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=59051362]
 position = Vector2(0, 1)
 scale = Vector2(0.7, 0.67307687)
 texture = ExtResource("1_x7ywa")
 region_enabled = true
 region_rect = Rect2(120, 0, 140, 60)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1855414816]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1855414816]
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_fpr03")
 
-[node name="KillZone" parent="CharacterBody2D" unique_id=1033346080 instance=ExtResource("3_3xdp2")]
+[node name="KillZone" parent="." unique_id=1033346080 instance=ExtResource("3_3xdp2")]
 position = Vector2(0, 22)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=847891307]
-libraries/ = SubResource("AnimationLibrary_0xbn2")
-autoplay = &"plateforme_haut_bas"
