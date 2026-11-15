@@ -27,5 +27,4 @@ func physics_update(_delta: float) -> void:
 		Transitioned.emit(self, "PlayerJump")
 
 func exit() -> void:
-	print("On sort de idle")
 	pass

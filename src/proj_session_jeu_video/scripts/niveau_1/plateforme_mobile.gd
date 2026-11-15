@@ -22,9 +22,7 @@ func _physics_process(delta: float) -> void:
 	velocity = mouvement / delta
 	move_and_slide()
 	if get_slide_collision_count() > 0:
-		var collision := get_slide_collision(0)
-		print("[PLATEFORME] obstacle=", collision.get_collider(),
-			" position=", global_position, " cible=", position_cible)
+		# Bloquée par un obstacle : elle repart dans l'autre sens.
 		_sens_mouvement *= -1.0
 	collision_mask = masque_initial
 

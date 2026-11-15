@@ -14,7 +14,6 @@ func enter() -> void:
 	player.sante.arreter_invincibilite()
 	player.visuel.animation_terminee.connect(_sur_animation_terminee)
 	player.visuel.jouer("Dead", true)
-	print("[MORT] PlayerDead démarré; réapparition de secours dans ", _temps_securite, " s")
 
 func handle_inputs(_input_event: InputEvent) -> void:
 	pass
@@ -23,7 +22,7 @@ func physics_update(delta: float) -> void:
 	player.velocity.x = move_toward(player.velocity.x, 0.0, player.vitesse * 4.0 * delta)
 	_temps_securite -= delta
 	if _temps_securite <= 0.0:
-		print("[MORT] Fin d'animation non reçue; déclenchement de la réapparition de secours")
+		# Fin d'animation non reçue : réapparition de secours.
 		_signaler_mort()
 
 func update(_delta: float) -> void:

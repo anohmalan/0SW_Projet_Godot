@@ -60,11 +60,6 @@ func tirer() -> void:
 	var decalage_bouche := arme.decalage_bouche
 	decalage_bouche.x *= _player.direction
 	var origine_tir := position_bouche + decalage_bouche
-	print("[TIR] Arme=", arme.nom,
-		" direction=", direction_base,
-		" bouche (globale)=", position_bouche,
-		" correction=", decalage_bouche,
-		" départ projectile=", origine_tir)
 	for i in arme.projectiles:
 		var ecart := deg_to_rad(randf_range(-arme.dispersion, arme.dispersion))
 		_player.tir_demande.emit(origine_tir, direction_base.rotated(ecart), arme)

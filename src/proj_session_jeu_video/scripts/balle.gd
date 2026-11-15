@@ -19,12 +19,6 @@ func _ready() -> void:
 
 func activer(pos: Vector2, dir: Vector2, arme: Arme, du_joueur: bool) -> void:
 	global_position = pos
-	print("[BALLE] Arme=", arme.nom,
-		" position demandée=", pos,
-		" position globale réelle=", global_position,
-		" position écran=", get_global_transform_with_canvas().origin,
-		" position locale=", position,
-		" direction=", dir.normalized())
 	_origine = pos
 	_direction = dir.normalized()
 	rotation = _direction.angle()

@@ -29,5 +29,4 @@ func physics_update(_delta: float) -> void:
 		player.velocity.y *= 0.5
 
 func exit() -> void:
-	print("On sort de fall")
 	pass

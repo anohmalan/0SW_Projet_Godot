@@ -161,21 +161,3 @@ func _style_bouton(
 		style.shadow_color = Color(0.0, 1.0, 0.62, 0.72)
 		style.shadow_size = 20
 	return style
-
-
-
-func _on_jouer_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/choisir_niveau.tscn")
-
-
-func _on_quitter_pressed() -> void:
-	get_tree().quit()
-
-
-func _on_réglages_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/reglages.tscn")
-
-
-func _on_custom_player_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/custom_player.tscn")
-
