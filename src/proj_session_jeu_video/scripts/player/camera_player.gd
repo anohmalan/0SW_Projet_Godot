@@ -14,6 +14,8 @@ extends Camera2D
 @export var delai_bascule := 0.4
 ## En dessous de cette vitesse, le joueur est considéré comme immobile : pas de bascule.
 @export var vitesse_min_bascule := 60.0
+## Espace montré au-dessus du haut du niveau.
+@export var marge_haut := 150.0
 
 var _cote := 1
 var _temps_autre_cote := 0.0
@@ -42,10 +44,11 @@ func recentrer() -> void:
 	reset_smoothing()
 
 
-## Empêche la caméra de montrer ce qui se trouve hors du niveau.
+## Empêche la caméra de montrer ce qui se trouve hors du niveau. Une marge est laissée
+## au-dessus, pour ne pas couper ce qui dépasse des tuiles les plus hautes.
 func limiter(zone: Rect2) -> void:
 	limit_left = floori(zone.position.x)
-	limit_top = floori(zone.position.y)
+	limit_top = floori(zone.position.y - marge_haut)
 	limit_right = ceili(zone.end.x)
 	limit_bottom = ceili(zone.end.y)
 

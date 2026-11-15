@@ -23,7 +23,7 @@ func _ready() -> void:
 	_position_depart = player.global_position
 	player.tir_demande.connect(_on_tir_demande)
 	player.est_mort.connect(_on_player_est_mort)
-	player.camera.limiter(_zone_du_niveau())
+	player.camera.limiter(_zone_camera())
 	hud.brancher(player)
 	hud.minimap.configurer(carte, player)
 	drapeau.atteint.connect(_on_drapeau_atteint)
@@ -39,6 +39,12 @@ func _process(delta: float) -> void:
 
 
 ## Rectangle (coordonnées globales) couvert par les tuiles peintes du niveau.
+## Zone que la caméra peut montrer : les tuiles du niveau, plus le drapeau (mât et halo
+## compris), qui peut dépasser au-dessus des tuiles les plus hautes.
+func _zone_camera() -> Rect2:
+	return _zone_du_niveau().merge(drapeau.zone_visible())
+
+
 func _zone_du_niveau() -> Rect2:
 	var cases := carte.get_used_rect()
 	var demi_tuile := Vector2(carte.tile_set.tile_size) * 0.5

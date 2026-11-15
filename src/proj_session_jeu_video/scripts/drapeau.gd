@@ -23,6 +23,12 @@ func _ready() -> void:
 	_poser_au_sol.call_deferred()
 
 
+## Rectangle global occupé par le dessin (mât, tissu, halo), avec une petite marge.
+func zone_visible() -> Rect2:
+	var haut := hauteur_mat + 80.0
+	return Rect2(global_position + Vector2(-80.0, -haut), Vector2(80.0 + largeur_tissu + 80.0, haut + 20.0))
+
+
 func _process(delta: float) -> void:
 	_temps += delta
 	queue_redraw()
