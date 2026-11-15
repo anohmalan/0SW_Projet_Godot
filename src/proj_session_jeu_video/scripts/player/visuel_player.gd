@@ -99,7 +99,8 @@ func flasher(couleur: Color = Color.WHITE, duree: float = 0.18) -> void:
 
 
 func jouer(nom: String, relancer: bool = false, depart: float = 0.0) -> void:
-	vitesse = 2.0 if nom.begins_with("Jump") else 1.0
+	# Les animations Spriter de saut et de couteau durent 1 s ou plus : on les joue deux fois plus vite.
+	vitesse = 2.0 if nom.begins_with("Jump") or nom.ends_with("Melee") else 1.0
 
 	var nom_importe: String = _imported_adapter.jouer(nom, relancer, depart, vitesse, nom_animation)
 	if not nom_importe.is_empty():

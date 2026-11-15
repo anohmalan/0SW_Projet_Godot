@@ -24,6 +24,19 @@ signal est_mort
 ## Facteur appliqué à la vitesse de montée quand on relâche saut (saut court).
 @export var coupure_saut := 0.5
 
+@export_group("Accroupi")
+@export var hauteur_accroupi := 80.0
+## Au-delà de cette pression sur "bas" (stick), le joueur s'accroupit : évite les accroupissements
+## involontaires en courant avec le stick légèrement incliné.
+@export var seuil_accroupi := 0.6
+
+@export_group("Corps à corps")
+@export var degats_melee := 25
+@export var duree_melee := 0.5
+## Moment du coup de couteau, en secondes après le début de l'animation.
+@export var moment_impact := 0.2
+@export var delai_melee := 0.15
+
 @export_group("Visuel")
 @export var echelle_visuel := 0.25
 
@@ -34,18 +47,26 @@ var direction := 1
 var _temps_hors_sol := 0.0
 var _temps_depuis_appui_saut := INF
 var _vient_de_sauter := false
+var accroupi := false
+var temps_depuis_melee := 99.0
+var _hauteur_debout := 0.0
 
 @onready var visuel: VisuelPlayer = $Visuel
 @onready var state_machine: StateMachine = $StateMachine
 @onready var arsenal: ArsenalPlayer = $Arsenal
 @onready var sante: ViePlayer = $Vie
 @onready var camera: CameraPlayer = $Camera2D
+@onready var forme: CollisionShape2D = $CollisionShape2D
+@onready var zone_melee: Area2D = $ZoneMelee
 
 
 func _ready() -> void:
 	# Le joueur pilote la machine une fois par tick, avant et apres les collisions.
 	state_machine.set_physics_process(false)
 	state_machine.set_process(false)
+	# Forme propre à cette instance : on change sa hauteur quand le joueur s'accroupit.
+	forme.shape = forme.shape.duplicate()
+	_hauteur_debout = (forme.shape as CapsuleShape2D).height
 	visuel.position = Vector2(0, -170.0 * echelle_visuel)
 	orienter(1)
 	sante.initialiser(self)
@@ -61,11 +82,18 @@ func _physics_process(delta: float) -> void:
 		_temps_depuis_appui_saut = 0.0
 	else:
 		_temps_depuis_appui_saut += delta
+	temps_depuis_melee += delta
 	if not is_on_floor():
 		velocity.y = minf(velocity.y + gravite * delta, vitesse_chute_max)
+	var etat := state_machine.current_state
+	var libre := not (etat is PlayerHurt or etat is PlayerDead or etat is PlayerMelee)
+	# Le coup de couteau est possible depuis n'importe quel état « libre », au sol comme en l'air.
+	if libre and Input.is_action_just_pressed("melee") and temps_depuis_melee >= delai_melee:
+		state_machine.change_state(&"PlayerMelee")
+		libre = false
 	state_machine.physics_update(delta)
 	var doit_tirer := false
-	if not (state_machine.current_state is PlayerHurt or state_machine.current_state is PlayerDead):
+	if libre:
 		doit_tirer = arsenal.gerer_commandes()
 	move_and_slide()
 	state_machine.update(delta)
@@ -89,9 +117,15 @@ func deplacer_horizontalement(delta: float) -> float:
 	return axe
 
 
+## Ralentit jusqu'à l'arrêt sans lire l'entrée (accroupi, coup au sol).
+func freiner_horizontalement(delta: float) -> void:
+	velocity.x = move_toward(velocity.x, 0.0, deceleration_sol * delta)
+
+
 func orienter(d: int) -> void:
 	direction = d
 	visuel.scale = Vector2(echelle_visuel * d, echelle_visuel)
+	zone_melee.scale.x = d
 
 
 ## Au sol, ou à peine décollé : évite de basculer en chute pour une seule image
@@ -124,6 +158,51 @@ func consommer_saut() -> bool:
 	var resultat := _vient_de_sauter
 	_vient_de_sauter = false
 	return resultat
+
+
+# --- Accroupi ----------------------------------------------------------------
+
+func veut_s_accroupir() -> bool:
+	return is_on_floor() and Input.get_action_strength("bas") >= seuil_accroupi
+
+
+func s_accroupir() -> void:
+	if accroupi:
+		return
+	accroupi = true
+	_appliquer_hauteur(hauteur_accroupi)
+
+
+## Renvoie false (et reste accroupi) si un plafond empêche de se relever.
+func se_relever(forcer: bool = false) -> bool:
+	if not accroupi:
+		return true
+	if not forcer and not peut_se_relever():
+		return false
+	accroupi = false
+	_appliquer_hauteur(_hauteur_debout)
+	return true
+
+
+func peut_se_relever() -> bool:
+	if not accroupi:
+		return true
+	return not test_move(global_transform, Vector2(0.0, -(_hauteur_debout - hauteur_accroupi)))
+
+
+## La capsule garde ses pieds au même endroit : seul le haut descend.
+func _appliquer_hauteur(hauteur: float) -> void:
+	(forme.shape as CapsuleShape2D).height = hauteur
+	forme.position.y = -hauteur * 0.5
+
+
+# --- Corps à corps -----------------------------------------------------------
+
+## Inflige les dégâts du couteau à tout ce qui se trouve dans la zone de frappe.
+func frapper() -> void:
+	for corps in zone_melee.get_overlapping_bodies():
+		if corps != self and corps.has_method("recevoir_degats"):
+			corps.recevoir_degats(degats_melee, global_position.x)
 
 
 # --- Choix des états ---------------------------------------------------------
@@ -167,6 +246,7 @@ func reapparaitre(position_depart: Vector2) -> void:
 	_temps_hors_sol = 0.0
 	_temps_depuis_appui_saut = INF
 	_vient_de_sauter = false
+	se_relever(true)
 	sante.initialiser(self)
 	sante.arreter_invincibilite()
 	orienter(1)

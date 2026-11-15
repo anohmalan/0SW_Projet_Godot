@@ -23,6 +23,8 @@ func physics_update(delta: float) -> void:
 	player.deplacer_horizontalement(delta)
 	if player.essayer_de_sauter():
 		Transitioned.emit(self, &"PlayerJump")
+	elif player.veut_s_accroupir():
+		Transitioned.emit(self, &"PlayerCrouch")
 
 func exit() -> void:
 	pass

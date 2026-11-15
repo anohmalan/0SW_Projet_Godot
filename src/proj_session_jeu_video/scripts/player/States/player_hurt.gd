@@ -7,6 +7,7 @@ var temps_restant := 0.0
 
 func enter() -> void:
 	temps_restant = duree
+	player.se_relever()
 	player.sante.activer_invincibilite()
 	player.visuel.jouer("Hurt")
 
