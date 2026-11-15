@@ -26,5 +26,6 @@ func exit() -> void:
 	enemy.sprite.animation_finished.disconnect(_sur_fin_animation)
 
 func _sur_fin_animation() -> void:
+	enemy.lacher_butin()
 	enemy.est_mort.emit()
 	enemy.queue_free()

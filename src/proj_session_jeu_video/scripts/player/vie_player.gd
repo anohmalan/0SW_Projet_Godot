@@ -30,6 +30,15 @@ func recevoir_degats(quantite: int, origine_x: float = INF) -> void:
 	_player.state_machine.change_state(&"PlayerHurt")
 
 
+## Renvoie false si le soin est inutile (mort ou vie déjà pleine).
+func soigner(quantite: int) -> bool:
+	if vie == 0 or vie >= vie_max:
+		return false
+	vie = mini(vie + quantite, vie_max)
+	_player.vie_changee.emit(vie, vie_max)
+	return true
+
+
 func update(delta: float) -> void:
 	if invincible > 0.0:
 		invincible -= delta

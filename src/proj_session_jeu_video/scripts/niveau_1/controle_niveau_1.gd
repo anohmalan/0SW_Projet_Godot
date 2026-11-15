@@ -44,6 +44,7 @@ func _on_player_est_mort() -> void:
 
 
 ## Le niveau repart de zéro : balles effacées, ennemis replacés et soignés.
+## Les butins, lâchés dans le même conteneur que les ennemis, disparaissent aussi.
 func _reinitialiser_ennemis() -> void:
 	pool_balles.tout_desactiver()
 	pool_orbes.tout_desactiver()

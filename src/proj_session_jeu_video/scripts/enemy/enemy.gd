@@ -19,6 +19,10 @@ signal est_mort
 @export var delai_attaque := 1.6
 @export var degats_contact := 10
 
+@export_group("Butin")
+@export var scene_butin: PackedScene = preload("res://scenes/butin.tscn")
+@export_range(0.0, 1.0) var chance_butin := 0.6
+
 const SHADER_FLASH := preload("res://shaders/flash_touche.gdshader")
 const ACCELERATION := 400.0
 const MASQUE_DECOR := 1 # couche "monde" : ce qui bloque la vue
@@ -140,6 +144,16 @@ func tirer() -> void:
 	if player != null:
 		dir = (point_vise(player) - origine).normalized()
 	tir_demande.emit(origine, dir, arme)
+
+
+## Laisse peut-être un butin à sa place, dans le même parent que l'ennemi.
+func lacher_butin() -> void:
+	if scene_butin == null or randf() > chance_butin:
+		return
+	var butin: Butin = scene_butin.instantiate()
+	butin.type = Butin.type_au_hasard()
+	butin.position = position
+	get_parent().add_child(butin)
 
 
 ## Le corps ne gêne plus les balles ni le joueur, mais tombe encore sur le décor.
