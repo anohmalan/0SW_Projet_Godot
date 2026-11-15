@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://8rpwifn6chsx"]
+
+[ext_resource type="Script" uid="uid://d3cs8ixmrgohf" path="res://scripts/fond_parallaxe.gd" id="1_fond"]
+[ext_resource type="Texture2D" uid="uid://cyi3x6geyxjpi" path="res://assets/bg_new.png" id="2_bg"]
+
+[node name="ParallaxeNiveau1" type="CanvasLayer" unique_id=311341440]
+layer = -10
+
+[node name="Fond" type="Control" parent="." unique_id=1203773387]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_fond")
+texture = ExtResource("2_bg")

@@ -14,9 +14,12 @@
 [ext_resource type="PackedScene" uid="uid://cofnvo6r10m4r" path="res://scenes/drapeau.tscn" id="12_drapeau"]
 [ext_resource type="PackedScene" path="res://scenes/ecran_victoire.tscn" id="13_victoire"]
 [ext_resource type="PackedScene" path="res://scenes/grande_carte.tscn" id="14_grande_carte"]
+[ext_resource type="PackedScene" path="res://scenes/niveau_1/parallaxe_niveau_1.tscn" id="15_parallaxe"]
 
 [node name="Niveau1" type="Node2D" unique_id=689121013]
 script = ExtResource("5_controle")
+
+[node name="Parallaxe" parent="." instance=ExtResource("15_parallaxe")]
 
 [node name="WorldNiveau1" parent="." unique_id=696970129 instance=ExtResource("1_rr1pk")]
 scale = Vector2(1.1, 1.1)
