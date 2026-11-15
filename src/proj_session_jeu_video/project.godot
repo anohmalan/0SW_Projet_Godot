@@ -18,6 +18,7 @@ config/icon="res://assets/icon.svg"
 [autoload]
 
 ApparencePlayer="*uid://c1vvgox4rr12l"
+Parametres="*res://scripts/parametres.gd"
 
 [editor_plugins]
 

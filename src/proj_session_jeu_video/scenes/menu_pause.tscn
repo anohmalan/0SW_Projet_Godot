@@ -1,0 +1,83 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/menu_pause.gd" id="1_pause"]
+[ext_resource type="Script" path="res://scripts/panneau_reglages.gd" id="2_panneau"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_panneau"]
+content_margin_left = 36.0
+content_margin_top = 28.0
+content_margin_right = 36.0
+content_margin_bottom = 32.0
+bg_color = Color(0.027, 0.227, 0.208, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.282, 0.663, 0.569, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 12
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 12
+
+[node name="MenuPause" type="CanvasLayer"]
+process_mode = 3
+layer = 10
+script = ExtResource("1_pause")
+
+[node name="Fond" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.05, 0.04, 0.6)
+
+[node name="Centre" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panneau" type="PanelContainer" parent="Centre"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_panneau")
+
+[node name="Colonne" type="VBoxContainer" parent="Centre/Panneau"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Titre" type="Label" parent="Centre/Panneau/Colonne"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.851, 0.584, 1)
+theme_override_colors/font_outline_color = Color(0.027, 0.227, 0.196, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 40
+text = "PAUSE"
+horizontal_alignment = 1
+
+[node name="Reprendre" type="Button" parent="Centre/Panneau/Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Reprendre"
+
+[node name="Recommencer" type="Button" parent="Centre/Panneau/Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Recommencer"
+
+[node name="Reglages" type="Button" parent="Centre/Panneau/Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Réglages"
+
+[node name="MenuPrincipal" type="Button" parent="Centre/Panneau/Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Menu principal"
+
+[node name="PanneauReglages" type="PanelContainer" parent="Centre"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+script = ExtResource("2_panneau")

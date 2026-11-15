@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/enemy_kamikaze.tscn" id="8_kamikaze"]
 [ext_resource type="PackedScene" path="res://scenes/enemy_sentinelle.tscn" id="9_sentinelle"]
 [ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="10_hud"]
+[ext_resource type="PackedScene" path="res://scenes/menu_pause.tscn" id="11_pause"]
 
 [node name="Niveau1" type="Node2D" unique_id=689121013]
 script = ExtResource("5_controle")
@@ -38,6 +39,8 @@ scene_balle = ExtResource("4_balle")
 metadata/_custom_type_script = "uid://cmmo2ppgt5b04"
 
 [node name="HUD" parent="." unique_id=144127719 instance=ExtResource("10_hud")]
+
+[node name="MenuPause" parent="." instance=ExtResource("11_pause")]
 
 [node name="PoolOrbes" type="Node" parent="." unique_id=1855374953]
 script = ExtResource("3_lhb2u")
