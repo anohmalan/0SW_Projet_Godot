@@ -84,9 +84,3 @@ rotation = -1.4089025
 
 [node name="bone_037" parent="Skeleton/bone_024/bone_036" index="0" unique_id=1182018873]
 rotation = -1.9623725
-
-[node name="@Skeleton2D@379626" parent="." index="1" unique_id=543871008]
-visible = false
-
-[node name="@Skeleton2D@379627" parent="." index="2" unique_id=1390431381]
-visible = false

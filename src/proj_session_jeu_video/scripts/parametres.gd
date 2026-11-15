@@ -115,7 +115,7 @@ func _regler_bus(nom: StringName, valeur: float) -> void:
 
 # --- Touches -----------------------------------------------------------------
 
-static func peripherique_de(evenement: InputEvent) -> int:
+func peripherique_de(evenement: InputEvent) -> int:
 	if evenement is InputEventKey or evenement is InputEventMouseButton:
 		return Peripherique.CLAVIER
 	if evenement is InputEventJoypadButton or evenement is InputEventJoypadMotion:
@@ -224,7 +224,7 @@ static func _identiques(a: InputEvent, b: InputEvent) -> bool:
 	return false
 
 
-static func _meme_type(a: InputEvent, b: InputEvent) -> bool:
+func _meme_type(a: InputEvent, b: InputEvent) -> bool:
 	if peripherique_de(a) == Peripherique.CLAVIER and peripherique_de(b) == Peripherique.CLAVIER:
 		return true
 	return a.get_class() == b.get_class()

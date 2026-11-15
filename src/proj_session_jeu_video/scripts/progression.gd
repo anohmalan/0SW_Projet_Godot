@@ -52,7 +52,7 @@ func enregistrer_victoire(identifiant: String, temps: float, morts: int, ennemis
 	return resultat
 
 
-static func formater_temps(secondes: float) -> String:
+func formater_temps(secondes: float) -> String:
 	var total := int(secondes)
 	return "%d:%02d" % [total / 60, total % 60]
 
