@@ -2,8 +2,7 @@
 version=1
 
 [launcher]
-version=1.14.0
-project_name="proj_session_jeu_video"
+version=1.11.1
 
 [editor]
 channel=official
