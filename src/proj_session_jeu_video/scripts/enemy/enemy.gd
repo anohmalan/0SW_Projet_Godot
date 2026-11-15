@@ -19,7 +19,9 @@ signal est_mort
 @export var delai_attaque := 1.6
 @export var degats_contact := 10
 
+const SHADER_FLASH := preload("res://shaders/flash_touche.gdshader")
 const ACCELERATION := 400.0
+const MASQUE_DECOR := 1 # couche "monde" : ce qui bloque la vue
 const HAUTEUR_CENTRE_JOUEUR := 58.0
 const DECALAGE_OEIL := Vector2(14.0, -17.0) # sortie du rayon, sprite tourné vers la droite
 const IMAGE_TIR := 2                         # image de l'animation "attack" où l'œil tire
@@ -30,6 +32,8 @@ var position_depart := Vector2.ZERO
 var temps_depuis_attaque := 99.0
 var arme: Arme
 var _temps := 0.0
+var _materiau_flash := ShaderMaterial.new()
+var _tween_flash: Tween
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var zone_contact: Area2D = $ZoneContact
@@ -43,6 +47,8 @@ func _ready() -> void:
 	vie = vie_max
 	position_depart = global_position
 	arme = _creer_arme()
+	_materiau_flash.shader = SHADER_FLASH
+	sprite.material = _materiau_flash
 	orienter(direction)
 
 
@@ -60,6 +66,7 @@ func recevoir_degats(quantite: int, origine_x: float = INF) -> void:
 	if vie <= 0:
 		return
 	vie = maxi(vie - quantite, 0)
+	flasher()
 	if vie == 0:
 		state_machine.change_state(&"EnemyDead")
 		return
@@ -88,6 +95,28 @@ func point_vise(player: Player) -> Vector2:
 
 func distance_joueur(player: Player) -> float:
 	return global_position.distance_to(point_vise(player))
+
+
+## Vrai si aucun élément du décor ne se trouve entre l'œil et le joueur.
+func voit_joueur(player: Player) -> bool:
+	var requete := PhysicsRayQueryParameters2D.create(
+		global_position + sprite.position, point_vise(player), MASQUE_DECOR, [get_rid()])
+	return get_world_2d().direct_space_state.intersect_ray(requete).is_empty()
+
+
+## Le joueur est-il assez proche ET visible ?
+func detecte_joueur(player: Player, portee: float) -> bool:
+	return player != null and distance_joueur(player) <= portee and voit_joueur(player)
+
+
+func flasher(couleur: Color = Color.WHITE, duree: float = 0.15) -> void:
+	if _tween_flash:
+		_tween_flash.kill()
+	_materiau_flash.set_shader_parameter("couleur_flash", couleur)
+	_materiau_flash.set_shader_parameter("intensite", 1.0)
+	_tween_flash = create_tween()
+	_tween_flash.tween_property(_materiau_flash, "shader_parameter/intensite", 0.0, duree) \
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 
 ## Vol amorti vers un point : ralentit en approchant pour ne pas osciller.

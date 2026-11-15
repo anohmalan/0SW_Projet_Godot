@@ -29,7 +29,7 @@ func physics_update(delta: float) -> void:
 
 func update(_delta: float) -> void:
 	var player := enemy.joueur_cible()
-	if player != null and enemy.distance_joueur(player) <= enemy.portee_detection:
+	if enemy.detecte_joueur(player, enemy.portee_detection):
 		Transitioned.emit(self, &"EnemyChase")
 
 func exit() -> void:

@@ -25,6 +25,12 @@ func tirer(pos: Vector2, dir: Vector2, arme: Arme, du_joueur: bool) -> void:
 	# Aucune balle libre : le tir est ignoré (peu probable avec 64 balles).
 
 
+func tout_desactiver() -> void:
+	for b in _balles:
+		if b.actif:
+			b.desactiver()
+
+
 # Pour l'affichage F12 plus tard.
 func nombre_actives() -> int:
 	var n := 0
