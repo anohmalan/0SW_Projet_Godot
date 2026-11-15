@@ -3,7 +3,7 @@ extends RefCounted
 
 ## Image d'un niveau (1 pixel par tuile) construite une seule fois à partir de sa TileMapLayer,
 ## partagée par la mini-carte et la grande carte. Fournit aussi la conversion monde → cases,
-## les couleurs et le dessin des icônes communes.
+## les couleurs, le dessin des icônes communes et le brouillard de guerre (zones explorées).
 
 const COULEUR_SOLIDE := Color(0.33, 0.78, 0.66, 0.95)
 const COULEUR_DECOR := Color(0.1, 0.32, 0.28, 0.55)
@@ -17,9 +17,17 @@ const COULEURS_ENNEMIS := {
 	Enemy.Comportement.SENTINELLE: Color("#B98CFF"),
 }
 
+const COULEUR_BROUILLARD := Color(0.01, 0.05, 0.045, 0.94)
+
 var calque: TileMapLayer
 var texture: ImageTexture
 var cases := Rect2i()
+
+## Brouillard : opaque sur les cases jamais vues, transparent sur les cases explorées.
+var texture_brouillard: ImageTexture
+var _brouillard: Image
+var _explore := PackedByteArray()
+var _brouillard_modifie := false
 
 
 func _init(p_calque: TileMapLayer) -> void:
@@ -48,6 +56,56 @@ func _construire() -> void:
 		var solide := a_physique and donnees != null and donnees.get_collision_polygons_count(0) > 0
 		image.set_pixelv(cellule - cases.position, COULEUR_SOLIDE if solide else COULEUR_DECOR)
 	texture = ImageTexture.create_from_image(image)
+
+	_brouillard = Image.create(cases.size.x, cases.size.y, false, Image.FORMAT_RGBA8)
+	_brouillard.fill(COULEUR_BROUILLARD)
+	_explore.resize(cases.size.x * cases.size.y)
+	_explore.fill(0)
+	texture_brouillard = ImageTexture.create_from_image(_brouillard)
+
+
+# --- Brouillard de guerre ----------------------------------------------------
+
+## Marque comme explorées toutes les cases couvertes par un rectangle du monde
+## (typiquement la zone affichée par la caméra).
+func reveler(zone_monde: Rect2) -> void:
+	if _brouillard == null:
+		return
+	var a := en_cases(zone_monde.position)
+	var b := en_cases(zone_monde.end)
+	var debut := Vector2i(clampi(floori(minf(a.x, b.x)), 0, cases.size.x), clampi(floori(minf(a.y, b.y)), 0, cases.size.y))
+	var fin := Vector2i(clampi(ceili(maxf(a.x, b.x)), 0, cases.size.x), clampi(ceili(maxf(a.y, b.y)), 0, cases.size.y))
+	for y in range(debut.y, fin.y):
+		for x in range(debut.x, fin.x):
+			var index := y * cases.size.x + x
+			if _explore[index] == 0:
+				_explore[index] = 1
+				_brouillard.set_pixel(x, y, Color.TRANSPARENT)
+				_brouillard_modifie = true
+
+
+func reveler_tout() -> void:
+	if _brouillard == null:
+		return
+	_explore.fill(1)
+	_brouillard.fill(Color.TRANSPARENT)
+	_brouillard_modifie = true
+
+
+## Envoie les cases nouvellement explorées à la texture (une fois par mise à jour, pas par case).
+func appliquer_brouillard() -> void:
+	if _brouillard_modifie:
+		texture_brouillard.update(_brouillard)
+		_brouillard_modifie = false
+
+
+func est_explore(position_monde: Vector2) -> bool:
+	if _brouillard == null:
+		return true
+	var c := Vector2i(en_cases(position_monde).floor())
+	if c.x < 0 or c.y < 0 or c.x >= cases.size.x or c.y >= cases.size.y:
+		return false
+	return _explore[c.y * cases.size.x + c.x] == 1
 
 
 # --- Icônes communes ---------------------------------------------------------

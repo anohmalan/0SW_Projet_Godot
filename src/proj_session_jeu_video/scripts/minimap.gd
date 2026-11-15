@@ -70,7 +70,9 @@ func _draw() -> void:
 	if _pret():
 		var origine: Vector2 = _carte.en_cases(_point_joueur())
 		var coin: Vector2 = _centre() - origine * pixels_par_tuile
-		draw_texture_rect(_carte.texture, Rect2(coin, Vector2(_carte.cases.size) * pixels_par_tuile), false)
+		var rect_image := Rect2(coin, Vector2(_carte.cases.size) * pixels_par_tuile)
+		draw_texture_rect(_carte.texture, rect_image, false)
+		draw_texture_rect(_carte.texture_brouillard, rect_image, false)
 		_dessiner_vue(origine)
 		_dessiner_marqueurs(origine)
 		CarteNiveau.dessiner_joueur(self, _centre(), _player.direction)
@@ -86,11 +88,13 @@ func _point_joueur() -> Vector2:
 
 
 func _dessiner_marqueurs(origine: Vector2) -> void:
+	# Brouillard : seuls les ennemis et butins des zones déjà explorées sont montrés.
 	for butin in get_tree().get_nodes_in_group("butins"):
-		draw_circle(_vers_minimap(butin.global_position, origine), 2.0, CarteNiveau.COULEUR_BUTIN)
+		if _carte.est_explore(butin.global_position):
+			draw_circle(_vers_minimap(butin.global_position, origine), 2.0, CarteNiveau.COULEUR_BUTIN)
 	for noeud in get_tree().get_nodes_in_group("ennemis"):
 		var ennemi := noeud as Enemy
-		if ennemi == null or ennemi.vie <= 0:
+		if ennemi == null or ennemi.vie <= 0 or not _carte.est_explore(ennemi.global_position):
 			continue
 		draw_circle(_vers_minimap(ennemi.global_position, origine), 3.0, CarteNiveau.couleur_ennemi(ennemi))
 

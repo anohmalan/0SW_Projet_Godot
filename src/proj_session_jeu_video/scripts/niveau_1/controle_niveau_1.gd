@@ -1,5 +1,12 @@
 extends Node2D
 
+## Cartes masquées tant que le joueur n'a pas vu les zones (mini-map et grande carte).
+@export var brouillard_de_guerre := true
+## Intervalle entre deux mises à jour des zones explorées, en secondes.
+@export var intervalle_exploration := 0.15
+
+const MARGE_EXPLORATION := 32.0 # pixels ajoutés autour de ce que montre la caméra
+
 @onready var player: Player = $Player
 @onready var pool_balles: PoolBalles = $PoolBalles
 @onready var pool_orbes: PoolBalles = $PoolOrbes
@@ -15,6 +22,9 @@ var _temps_niveau := 0.0
 var _ennemis_vaincus := 0
 var _morts := 0
 
+var _carte_niveau: CarteNiveau
+var _attente_exploration := 0.0
+
 
 func _ready() -> void:
 	player.tir_demande.connect(_on_tir_demande)
@@ -22,9 +32,15 @@ func _ready() -> void:
 	player.camera.limiter(_zone_camera())
 	hud.brancher(player)
 	# Une seule image du niveau, partagée par la mini-carte et la grande carte.
-	var carte_niveau: CarteNiveau = CarteNiveau.new(carte)
-	hud.minimap.configurer(carte_niveau, player)
-	grande_carte.configurer(carte_niveau, player)
+	_carte_niveau = CarteNiveau.new(carte)
+	hud.minimap.configurer(_carte_niveau, player)
+	grande_carte.configurer(_carte_niveau, player)
+	if not brouillard_de_guerre:
+		_carte_niveau.reveler_tout()
+		_carte_niveau.appliquer_brouillard()
+	else:
+		# La caméra n'est placée qu'après la première image : on révèle le départ juste après.
+		_explorer.call_deferred()
 	drapeau.atteint.connect(_on_drapeau_atteint)
 	for ennemi in conteneur_ennemis.get_children():
 		if ennemi is Enemy:
@@ -34,6 +50,20 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	# Le compteur s'arrête de lui-même pendant la pause (nœud pausable).
 	_temps_niveau += delta
+	if brouillard_de_guerre:
+		_attente_exploration -= delta
+		if _attente_exploration <= 0.0:
+			_attente_exploration = intervalle_exploration
+			_explorer()
+
+
+## Révèle sur les cartes tout ce que la caméra montre en ce moment.
+func _explorer() -> void:
+	var camera := player.camera
+	var demi := get_viewport_rect().size / camera.zoom * 0.5 + Vector2.ONE * MARGE_EXPLORATION
+	var centre := camera.get_screen_center_position()
+	_carte_niveau.reveler(Rect2(centre - demi, demi * 2.0))
+	_carte_niveau.appliquer_brouillard()
 
 
 ## Zone que la caméra peut montrer : les tuiles du niveau, plus le drapeau (mât et halo

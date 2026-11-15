@@ -88,6 +88,7 @@ func _dessiner() -> void:
 	_zone.draw_rect(rect.grow(8.0), COULEUR_FOND_CARTE)
 	_zone.draw_rect(rect.grow(8.0), COULEUR_CADRE, false, 2.0)
 	_zone.draw_texture_rect(_carte.texture, rect, false)
+	_zone.draw_texture_rect(_carte.texture_brouillard, rect, false)
 	var pulsation := 0.5 + 0.5 * sin(_temps * 5.0)
 
 	# Zone visible à l'écran.
@@ -99,11 +100,14 @@ func _dessiner() -> void:
 		var b := _vers_carte(centre + demi, rect)
 		_zone.draw_rect(Rect2(a, b - a).abs(), CarteNiveau.COULEUR_VUE, false, 1.5)
 
+	# Brouillard : seuls les ennemis et butins des zones déjà explorées sont montrés.
+	# Le drapeau reste toujours visible : on connaît l'objectif, pas le chemin.
 	for butin in get_tree().get_nodes_in_group(&"butins"):
-		_zone.draw_circle(_vers_carte(butin.global_position, rect), 3.0, CarteNiveau.COULEUR_BUTIN)
+		if _carte.est_explore(butin.global_position):
+			_zone.draw_circle(_vers_carte(butin.global_position, rect), 3.0, CarteNiveau.COULEUR_BUTIN)
 	for noeud in get_tree().get_nodes_in_group(&"ennemis"):
 		var ennemi := noeud as Enemy
-		if ennemi != null and ennemi.vie > 0:
+		if ennemi != null and ennemi.vie > 0 and _carte.est_explore(ennemi.global_position):
 			_zone.draw_circle(_vers_carte(ennemi.global_position, rect), 4.5, CarteNiveau.couleur_ennemi(ennemi))
 
 	# Drapeau : l'objectif, avec un halo pulsant pour qu'il saute aux yeux.
