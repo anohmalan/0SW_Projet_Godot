@@ -1,0 +1,236 @@
+[gd_scene format=3 uid="uid://lrii55565dve"]
+
+[ext_resource type="Script" path="res://scripts/enemy/enemy.gd" id="1_enemy"]
+[ext_resource type="Script" path="res://scripts/player/state_machine.gd" id="2_machine"]
+[ext_resource type="Script" path="res://scripts/enemy/States/enemy_patrol.gd" id="3_patrol"]
+[ext_resource type="Script" path="res://scripts/enemy/States/enemy_chase.gd" id="4_chase"]
+[ext_resource type="Script" path="res://scripts/enemy/States/enemy_attack.gd" id="5_attack"]
+[ext_resource type="Script" path="res://scripts/enemy/States/enemy_hurt.gd" id="6_hurt"]
+[ext_resource type="Script" path="res://scripts/enemy/States/enemy_dead.gd" id="7_dead"]
+[ext_resource type="Texture2D" uid="uid://vomcdggd7dic" path="res://assets/sprites/sprites_enemy/outline/MOVE.png" id="8_move"]
+[ext_resource type="Texture2D" uid="uid://1xsmug3orqli" path="res://assets/sprites/sprites_enemy/outline/ATTACK.png" id="9_attack"]
+[ext_resource type="Texture2D" uid="uid://b2g1qqspe50ox" path="res://assets/sprites/sprites_enemy/outline/HURT.png" id="10_hurt"]
+[ext_resource type="Texture2D" uid="uid://c4ryyvbio5rpu" path="res://assets/sprites/sprites_enemy/outline/DEATH.png" id="11_death"]
+
+[sub_resource type="AtlasTexture" id="move_0"]
+atlas = ExtResource("8_move")
+region = Rect2(0, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="move_1"]
+atlas = ExtResource("8_move")
+region = Rect2(150, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="move_2"]
+atlas = ExtResource("8_move")
+region = Rect2(300, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="move_3"]
+atlas = ExtResource("8_move")
+region = Rect2(450, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="move_4"]
+atlas = ExtResource("8_move")
+region = Rect2(600, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="move_5"]
+atlas = ExtResource("8_move")
+region = Rect2(750, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="attack_0"]
+atlas = ExtResource("9_attack")
+region = Rect2(0, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="attack_1"]
+atlas = ExtResource("9_attack")
+region = Rect2(150, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="attack_2"]
+atlas = ExtResource("9_attack")
+region = Rect2(300, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="attack_3"]
+atlas = ExtResource("9_attack")
+region = Rect2(450, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="attack_4"]
+atlas = ExtResource("9_attack")
+region = Rect2(600, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="attack_5"]
+atlas = ExtResource("9_attack")
+region = Rect2(750, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="hurt_0"]
+atlas = ExtResource("10_hurt")
+region = Rect2(0, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="hurt_1"]
+atlas = ExtResource("10_hurt")
+region = Rect2(150, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="hurt_2"]
+atlas = ExtResource("10_hurt")
+region = Rect2(300, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="hurt_3"]
+atlas = ExtResource("10_hurt")
+region = Rect2(450, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="death_0"]
+atlas = ExtResource("11_death")
+region = Rect2(0, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="death_1"]
+atlas = ExtResource("11_death")
+region = Rect2(150, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="death_2"]
+atlas = ExtResource("11_death")
+region = Rect2(300, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="death_3"]
+atlas = ExtResource("11_death")
+region = Rect2(450, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="death_4"]
+atlas = ExtResource("11_death")
+region = Rect2(600, 0, 150, 150)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_enemy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("move_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("move_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("move_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("move_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("move_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("move_5")
+}],
+"loop": true,
+"name": &"move",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("attack_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("attack_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("attack_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("attack_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("attack_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("attack_5")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("hurt_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("hurt_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("hurt_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("hurt_3")
+}],
+"loop": false,
+"name": &"hurt",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("death_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("death_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("death_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("death_3")
+}, {
+"duration": 2.0,
+"texture": SubResource("death_4")
+}],
+"loop": false,
+"name": &"death",
+"speed": 8.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_corps"]
+radius = 22.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_contact"]
+radius = 26.0
+
+[node name="Enemy" type="CharacterBody2D" unique_id=2012770801 groups=["ennemis"]]
+collision_layer = 4
+motion_mode = 1
+script = ExtResource("1_enemy")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_enemy")
+animation = &"move"
+autoplay = "move"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(2, 4)
+shape = SubResource("CircleShape2D_corps")
+
+[node name="ZoneContact" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ZoneContact"]
+position = Vector2(2, 4)
+shape = SubResource("CircleShape2D_contact")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("2_machine")
+initial_state = NodePath("EnemyPatrol")
+
+[node name="EnemyPatrol" type="Node" parent="StateMachine" node_paths=PackedStringArray("enemy")]
+script = ExtResource("3_patrol")
+enemy = NodePath("../..")
+
+[node name="EnemyChase" type="Node" parent="StateMachine" node_paths=PackedStringArray("enemy")]
+script = ExtResource("4_chase")
+enemy = NodePath("../..")
+
+[node name="EnemyAttack" type="Node" parent="StateMachine" node_paths=PackedStringArray("enemy")]
+script = ExtResource("5_attack")
+enemy = NodePath("../..")
+
+[node name="EnemyHurt" type="Node" parent="StateMachine" node_paths=PackedStringArray("enemy")]
+script = ExtResource("6_hurt")
+enemy = NodePath("../..")
+
+[node name="EnemyDead" type="Node" parent="StateMachine" node_paths=PackedStringArray("enemy")]
+script = ExtResource("7_dead")
+enemy = NodePath("../..")

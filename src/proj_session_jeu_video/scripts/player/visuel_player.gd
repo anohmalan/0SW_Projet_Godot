@@ -7,6 +7,7 @@ const CHEMIN_SCML := "res://assets/sprites/sprites_joueur/Spriter.scml"
 const PREFIXE_LIB_ANIM := "scml/"
 const ORDRE_CATEGORIES := ["Head", "Balaclava", "Mask", "Googles",
 	"Head Gear","Strap", "Shirt", "Jacket", "Pants", "Gun"]
+const SHADER_FLASH := preload("res://shaders/flash_touche.gdshader")
 const IMPORTED_ADAPTER_SCRIPT := preload("res://scripts/player/visuel_player_imported_adapter.gd")
 const CUSTOMIZATION_SCRIPT := preload("res://scripts/player/visuel_player_customization.gd")
 const SOURCES_MINIATURES := {
@@ -30,6 +31,8 @@ var _customisation_differee_en_cours: bool = false
 
 var _imported_adapter = IMPORTED_ADAPTER_SCRIPT.new()
 var _customization = CUSTOMIZATION_SCRIPT.new()
+var _materiau_flash := ShaderMaterial.new()
+var _tween_flash: Tween
 
 @export var entite_joueur: Node2D
 @export var animation_player: AnimationPlayer
@@ -52,8 +55,34 @@ func _ready() -> void:
 		push_error("VisuelPlayer requiert une scène SCML importée valide. Détail: %s" % _imported_adapter.last_error)
 		return
 	_imported_adapter.animation_terminee.connect(_sur_animation_finie_importee)
+	_installer_materiau_flash()
 
 	jouer("Idle")
+
+
+## Un seul matériau sur le Visuel : chaque pièce du squelette Spriter en hérite.
+func _installer_materiau_flash() -> void:
+	_materiau_flash.shader = SHADER_FLASH
+	material = _materiau_flash
+	_heriter_materiau(self)
+
+
+func _heriter_materiau(noeud: Node) -> void:
+	for enfant in noeud.get_children():
+		if enfant is CanvasItem:
+			enfant.use_parent_material = true
+		_heriter_materiau(enfant)
+
+
+## Blanchit le soldat d'un coup, puis revient à la normale en `duree` secondes.
+func flasher(couleur: Color = Color.WHITE, duree: float = 0.18) -> void:
+	if _tween_flash:
+		_tween_flash.kill()
+	_materiau_flash.set_shader_parameter("couleur_flash", couleur)
+	_materiau_flash.set_shader_parameter("intensite", 1.0)
+	_tween_flash = create_tween()
+	_tween_flash.tween_property(_materiau_flash, "shader_parameter/intensite", 0.0, duree) \
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 
 func jouer(nom: String, relancer: bool = false, depart: float = 0.0) -> void:

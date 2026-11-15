@@ -19,6 +19,7 @@ func recevoir_degats(quantite: int, origine_x: float = INF) -> void:
 		return
 	vie = maxi(vie - quantite, 0)
 	_player.vie_changee.emit(vie, vie_max)
+	_player.visuel.flasher()
 	if vie == 0:
 		_player.state_machine.change_state(&"PlayerDead")
 		return

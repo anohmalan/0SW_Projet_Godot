@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://cmmo2ppgt5b04" path="res://scripts/pool_balles.gd" id="3_lhb2u"]
 [ext_resource type="PackedScene" uid="uid://dhl8ra2bf3oj6" path="res://scenes/balle.tscn" id="4_balle"]
 [ext_resource type="Script" uid="uid://b7u2lsnyrbjy8" path="res://scripts/niveau_1/controle_niveau_1.gd" id="5_controle"]
+[ext_resource type="PackedScene" uid="uid://lrii55565dve" path="res://scenes/enemy.tscn" id="6_hnxir"]
 
 [node name="Niveau1" type="Node2D" unique_id=689121013]
 script = ExtResource("5_controle")
@@ -20,3 +21,6 @@ scale = Vector2(0.9, 0.9)
 script = ExtResource("3_lhb2u")
 scene_balle = ExtResource("4_balle")
 metadata/_custom_type_script = "uid://cmmo2ppgt5b04"
+
+[node name="Enemy" parent="." unique_id=2012770801 instance=ExtResource("6_hnxir")]
+position = Vector2(420, 509)
