@@ -44,6 +44,12 @@ signal est_mort
 @export var moment_impact := 0.2
 @export var delai_melee := 0.15
 
+@export_group("Sons")
+## Distance parcourue au sol entre deux bruits de pas (pixels).
+@export var foulee := 75.0
+## En dessous de cette hauteur de chute, l'atterrissage est silencieux.
+@export var hauteur_son_atterrissage := 60.0
+
 @export_group("Visuel")
 @export var echelle_visuel := 0.25
 
@@ -65,6 +71,7 @@ var _y_plus_haut := 0.0
 var _ignorer_chute := true
 ## Dernier endroit où le joueur se tenait sur le décor fixe : il y réapparaît après une mort.
 var derniere_position_sure := Vector2.ZERO
+var _distance_pas := 0.0
 
 @onready var visuel: VisuelPlayer = $Visuel
 @onready var state_machine: StateMachine = $StateMachine
@@ -114,6 +121,7 @@ func _physics_process(delta: float) -> void:
 	var etait_au_sol := is_on_floor()
 	move_and_slide()
 	_suivre_chute(etait_au_sol)
+	_bruits_de_pas(delta)
 	_memoriser_position_sure()
 	state_machine.update(delta)
 	if doit_tirer:
@@ -198,6 +206,18 @@ func _memoriser_position_sure() -> void:
 		derniere_position_sure = global_position
 
 
+## Un pas toutes les « foulee » pixels parcourus en courant au sol.
+func _bruits_de_pas(delta: float) -> void:
+	if not is_on_floor() or not (state_machine.current_state is PlayerRun):
+		# Le premier pas tombe peu après le départ.
+		_distance_pas = foulee * 0.6
+		return
+	_distance_pas += absf(velocity.x) * delta
+	if _distance_pas >= foulee:
+		_distance_pas = 0.0
+		Audio.jouer_variante("pas", 3, Vector2.INF, -10.0)
+
+
 func _suivre_chute(etait_au_sol: bool) -> void:
 	if not is_on_floor():
 		# Au sol, _y_plus_haut suit le joueur : en l'air, il ne garde que le point le plus haut.
@@ -210,7 +230,12 @@ func _suivre_chute(etait_au_sol: bool) -> void:
 
 
 func _atterrir(hauteur: float) -> void:
-	if hauteur < chute_sans_degats or state_machine.current_state is PlayerDead:
+	if state_machine.current_state is PlayerDead:
+		return
+	if hauteur < chute_sans_degats:
+		# Chute sans dégâts : simple bruit d'atterrissage (les dégâts ont leur propre son).
+		if hauteur >= hauteur_son_atterrissage:
+			Audio.jouer("atterrissage", Vector2.INF, -6.0)
 		return
 	if hauteur >= chute_mortelle:
 		mourir()

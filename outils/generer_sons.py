@@ -253,7 +253,38 @@ def effets():
     papier = [x * random.choice((0.2, 1.0, 0.5)) for x in passe_bande(bruit(0.25), 800, 5000)]
     e["carte"] = gain(enveloppe(papier, 0.01, 0.07, 0.05), 0.8)
     e["mort_joueur"] = mort_joueur()
+    e.update(sons_gameplay())
     return e
+
+
+def sons_gameplay():
+    """Sons qui aident à réagir (amorce, charge ennemie), armes, pas et atterrissage.
+    Tirage aléatoire isolé : ajouter ces sons ne modifie pas les autres fichiers."""
+    etat = random.getstate()
+    random.seed(1916)
+    s = {}
+    # Bip électronique de détonateur : joué en boucle, de plus en plus vite, par le kamikaze.
+    s["amorce_kamikaze"] = enveloppe(melanger(sinus(2100, 2100, 0.07, 0.8), sinus(4200, 4200, 0.07, 0.2)), 0.002, 0.03, 0.03)
+    # Charge de l'œil avant le tir : souffle et grave qui montent.
+    s["charge_ennemi"] = melanger(
+        enveloppe(passe_bas_glissant(bruit(0.3), 300, 3500), 0.2, 0.04, 0.05),
+        enveloppe(sinus(70, 260, 0.3, 0.6), 0.15, 0.05, 0.08))
+    # Culasse manœuvrée : glissement métallique puis deux clics.
+    glissement = enveloppe(passe_bande(bruit(0.08), 1500, 5000), 0.01, 0.03)
+    s["changement_arme"] = melanger(gain(glissement, 0.5), decaler(clic_metallique(2200, 0.03), 0.07),
+                                    decaler(clic_metallique(1600, 0.035), 0.15))
+    # Percuteur qui tape dans le vide.
+    s["chargeur_vide"] = clic_metallique(2800, 0.02, 0.8)
+    # Pas de bottes sur sol dur : coup feutré + crissement de graviers, trois variantes.
+    for i in range(1, 4):
+        crissement = enveloppe(passe_bande(bruit(0.07), 1800, 6000), 0.002, 0.02)
+        s[f"pas_{i}"] = gain(melanger(coup_sourd(random.uniform(90, 130), 0.035, random.uniform(500, 800)),
+                                      gain(crissement, random.uniform(0.25, 0.4))), 0.8)
+    s["atterrissage"] = melanger(coup_sourd(85, 0.07, 400), gain(enveloppe(passe_bande(bruit(0.12), 1500, 6000), 0.002, 0.04), 0.4),
+                                 *[decaler(clic_metallique(random.uniform(1500, 2600), 0.02, 0.15), random.uniform(0.01, 0.06))
+                                   for _ in range(3)])
+    random.setstate(etat)
+    return s
 
 
 def mort_joueur():

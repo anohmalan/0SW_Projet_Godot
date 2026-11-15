@@ -79,6 +79,11 @@ func jouer(nom: String, position: Vector2 = Vector2.INF, volume_db: float = 0.0,
 		lecteur_2d.play()
 
 
+## Joue au hasard une des variantes « nom_1 » … « nom_N » (ex. bruits de pas).
+func jouer_variante(nom: String, nombre: int, position: Vector2 = Vector2.INF, volume_db: float = 0.0) -> void:
+	jouer("%s_%d" % [nom, randi_range(1, nombre)], position, volume_db)
+
+
 ## Branche les sons de menu sur un bouton : survol/focus et validation.
 func brancher_bouton(bouton: BaseButton) -> void:
 	bouton.focus_entered.connect(jouer.bind("menu_navigation", Vector2.INF, -6.0, 0.0))
@@ -135,6 +140,12 @@ func _demarrer_piste() -> void:
 	if flux == null:
 		push_warning("Musique introuvable : " + chemin)
 		return
+	# Boucle sans blanc : réglée dans l'import (loop_mode), forcée ici si une piste ne l'a pas.
+	var wav := flux as AudioStreamWAV
+	if wav != null and wav.loop_mode == AudioStreamWAV.LOOP_DISABLED:
+		wav.loop_mode = AudioStreamWAV.LOOP_FORWARD
+		wav.loop_begin = 0
+		wav.loop_end = int(wav.get_length() * wav.mix_rate)
 	_lecteur_musique.stream = flux
 	_lecteur_musique.volume_db = -40.0
 	_lecteur_musique.play()

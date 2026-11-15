@@ -15,6 +15,7 @@ func enter() -> void:
 	enemy.sprite.play(&"attack")
 	# Signal pour le joueur : l'ennemi rougit juste avant que le rayon parte.
 	enemy.flasher(Color(1.0, 0.2, 0.3, 0.6), 0.35)
+	Audio.jouer("charge_ennemi", enemy.global_position, -4.0)
 
 func handle_inputs(_input_event: InputEvent) -> void:
 	pass

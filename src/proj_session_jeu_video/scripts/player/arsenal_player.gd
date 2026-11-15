@@ -52,6 +52,7 @@ func _changer_arme(sens: int) -> void:
 		var i := posmod(index_arme + pas * sens, armes.size())
 		if munitions[i] != 0:
 			_equiper(i)
+			Audio.jouer("changement_arme", Vector2.INF, -4.0)
 			return
 
 
@@ -71,4 +72,5 @@ func tirer() -> void:
 		munitions[index_arme] -= 1
 		_player.munitions_changees.emit(munitions[index_arme])
 		if munitions[index_arme] == 0:
+			Audio.jouer("chargeur_vide")
 			_changer_arme(1)
