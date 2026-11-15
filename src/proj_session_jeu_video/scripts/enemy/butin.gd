@@ -37,6 +37,7 @@ static func type_au_hasard() -> Type:
 
 
 func _ready() -> void:
+	add_to_group(&"butins") # repéré par la mini-carte
 	# Petit saut à l'apparition pour attirer l'œil.
 	velocity = Vector2(randf_range(-60.0, 60.0), -220.0)
 

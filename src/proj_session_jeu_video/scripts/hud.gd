@@ -13,6 +13,7 @@ const COULEUR_TEXTE := Color("#F1F5DF")
 @onready var _texte_vie: Label = %TexteVie
 @onready var _nom_arme: Label = %NomArme
 @onready var _munitions: Label = %Munitions
+@onready var minimap: Minimap = %Minimap
 
 var _style_vie: StyleBoxFlat
 var _vie_precedente := -1

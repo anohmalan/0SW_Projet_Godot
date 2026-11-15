@@ -18,6 +18,7 @@ func _ready() -> void:
 	player.est_mort.connect(_on_player_est_mort)
 	player.camera.limiter(_zone_du_niveau())
 	hud.brancher(player)
+	hud.minimap.configurer(carte, player)
 	for ennemi in conteneur_ennemis.get_children():
 		if ennemi is Enemy:
 			_modeles_ennemis.append(ennemi.duplicate())
