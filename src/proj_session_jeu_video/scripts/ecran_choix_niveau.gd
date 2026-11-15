@@ -1,18 +1,21 @@
 extends Control
 
 ## Écran « Choisir un niveau » : une carte par niveau, avec un aperçu en direct de sa carte.
-## Pour ajouter un niveau, il suffit d'ajouter une entrée dans NIVEAUX.
+## Pour ajouter un niveau, il suffit d'ajouter une entrée dans NIVEAUX. Les niveaux s'ouvrent
+## dans l'ordre (Progression) ; « id » doit correspondre à l'identifiant du contrôleur du niveau.
 
 const SCENE_MENU_PRINCIPAL := "res://scenes/menu_principal.tscn"
 
 const NIVEAUX := [
 	{
+		"id": "niveau_1",
 		"nom": "NIVEAU 1",
 		"sous_titre": "Jungle industrielle néon",
 		"scene": "res://scenes/niveau_1/niveau_1.tscn",
 		"apercu": "res://scenes/niveau_1/world_niveau_1.tscn",
 	},
 	{
+		"id": "niveau_2",
 		"nom": "NIVEAU 2",
 		"sous_titre": "Bientôt disponible",
 		"scene": "",
@@ -35,8 +38,9 @@ var _en_transition := false
 
 func _ready() -> void:
 	var premiere: Button = null
-	for niveau in NIVEAUX:
-		var carte := _creer_carte(niveau)
+	var identifiants: Array = NIVEAUX.map(func(n: Dictionary) -> String: return n["id"])
+	for i in NIVEAUX.size():
+		var carte := _creer_carte(NIVEAUX[i], Progression.est_debloque(i, identifiants))
 		_cartes.add_child(carte)
 		if premiere == null and not carte.disabled:
 			premiere = carte
@@ -77,10 +81,11 @@ func _retour_menu() -> void:
 
 # --- Cartes ------------------------------------------------------------------
 
-func _creer_carte(niveau: Dictionary) -> Button:
-	var disponible: bool = not String(niveau["scene"]).is_empty()
+func _creer_carte(niveau: Dictionary, debloque: bool) -> Button:
+	var existe: bool = not String(niveau["scene"]).is_empty()
+	var disponible := existe and debloque
 	var carte := Button.new()
-	carte.custom_minimum_size = TAILLE_APERCU + Vector2(28, 110)
+	carte.custom_minimum_size = TAILLE_APERCU + Vector2(28, 140)
 	carte.focus_mode = Control.FOCUS_ALL if disponible else Control.FOCUS_NONE
 	carte.disabled = not disponible
 	carte.add_theme_stylebox_override("normal", _style_carte(COULEUR_FOND, COULEUR_BORDURE, false))
@@ -100,9 +105,21 @@ func _creer_carte(niveau: Dictionary) -> Button:
 	contenu.add_child(_creer_apercu(String(niveau["apercu"])))
 	var nom := _etiquette(niveau["nom"], 24, COULEUR_ACCENT if disponible else Color(0.45, 0.6, 0.56))
 	contenu.add_child(nom)
-	var sous_titre := _etiquette(niveau["sous_titre"], 17, COULEUR_TEXTE if disponible else Color(0.55, 0.62, 0.6))
+	var texte_sous_titre: String = niveau["sous_titre"] if debloque or not existe else "Termine le niveau précédent"
+	var sous_titre := _etiquette(texte_sous_titre, 17, COULEUR_TEXTE if disponible else Color(0.55, 0.62, 0.6))
 	contenu.add_child(sous_titre)
+	contenu.add_child(_etiquette(_texte_progression(String(niveau["id"])), 15, COULEUR_ACCENT if disponible else Color(0.45, 0.6, 0.56)))
 	return carte
+
+
+## Ligne de progression sous le nom : « TERMINÉ · Record 1:23 · 0 mort », ou vide.
+func _texte_progression(identifiant: String) -> String:
+	if not Progression.est_termine(identifiant):
+		return " "
+	var records: Dictionary = Progression.records(identifiant)
+	var morts := int(records.get("moins_de_morts", 0))
+	return "TERMINÉ · Record %s · %d mort%s" % [
+		Progression.formater_temps(float(records.get("meilleur_temps", 0.0))), morts, "s" if morts > 1 else ""]
 
 
 ## Aperçu en direct : la scène du monde rendue dans un SubViewport, cadrée sur ses tuiles.

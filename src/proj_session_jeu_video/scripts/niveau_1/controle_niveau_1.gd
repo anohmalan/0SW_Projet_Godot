@@ -1,5 +1,7 @@
 extends Node2D
 
+## Identifiant du niveau dans la progression sauvegardée (doit correspondre à l'écran de choix).
+@export var identifiant := "niveau_1"
 ## Cartes masquées tant que le joueur n'a pas vu les zones (mini-map et grande carte).
 @export var brouillard_de_guerre := true
 ## Intervalle entre deux mises à jour des zones explorées, en secondes.
@@ -95,7 +97,8 @@ func _on_tir_ennemi(position_tir: Vector2, direction: Vector2, arme: Arme) -> vo
 
 
 func _on_drapeau_atteint() -> void:
-	ecran_fin.afficher(_temps_niveau, _ennemis_vaincus, _morts, true)
+	var records: Dictionary = Progression.enregistrer_victoire(identifiant, _temps_niveau, _morts, _ennemis_vaincus)
+	ecran_fin.afficher(_temps_niveau, _ennemis_vaincus, _morts, true, records)
 
 
 ## Chaque mort coûte un cœur. S'il en reste, le joueur réapparaît là où il se tenait en
