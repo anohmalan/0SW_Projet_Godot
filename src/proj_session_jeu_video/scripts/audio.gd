@@ -5,16 +5,21 @@ extends Node
 ##   Les fichiers sont lus dans assets/audio/effets/<nom>.wav.
 ## - Musique : Audio.musique("niveau_1") lit assets/audio/musique/<nom>.wav en boucle, avec
 ##   un fondu enchaîné ; relancer la même piste ne la redémarre pas.
+## - Ambiance : Audio.ambiance("jungle_insectes") lit assets/audio/ambiance/<nom>.wav en boucle,
+##   sous la musique et sur le bus Effets.
 ## Tourne pendant la pause (process_mode = Always) pour les sons des menus.
 
 const DOSSIER_EFFETS := "res://assets/audio/effets/"
 const DOSSIER_MUSIQUE := "res://assets/audio/musique/"
+const DOSSIER_AMBIANCE := "res://assets/audio/ambiance/"
 const BUS_EFFETS := &"Effets"
 const BUS_MUSIQUE := &"Musique"
 const TAILLE_POOL := 12
 const TAILLE_POOL_2D := 12
 const DUREE_FONDU := 0.8
 const ATTENUATION_PAUSE_DB := -10.0
+## Niveau de l'ambiance par rapport aux effets : un fond discret.
+const VOLUME_AMBIANCE_DB := -14.0
 
 ## Variation aléatoire de hauteur par défaut, pour que les sons répétés ne soient pas identiques.
 @export var variation_hauteur := 0.06
@@ -28,6 +33,11 @@ var _suivant_2d := 0
 var _lecteur_musique: AudioStreamPlayer
 var _piste := ""
 var _tween_musique: Tween
+
+var _lecteur_ambiance: AudioStreamPlayer
+var _ambiance := ""
+var _tween_ambiance: Tween
+var _attenue := false
 
 
 func _ready() -> void:
@@ -49,6 +59,9 @@ func _ready() -> void:
 	_lecteur_musique.bus = BUS_MUSIQUE
 	_lecteur_musique.finished.connect(_boucler_musique)
 	add_child(_lecteur_musique)
+	_lecteur_ambiance = AudioStreamPlayer.new()
+	_lecteur_ambiance.bus = BUS_EFFETS
+	add_child(_lecteur_ambiance)
 
 
 # --- Effets ------------------------------------------------------------------
@@ -126,6 +139,9 @@ func arreter_musique() -> void:
 
 ## Baisse la musique pendant la pause (ou un menu), puis la remet à son niveau.
 func attenuer_musique(actif: bool) -> void:
+	_attenue = actif
+	if _lecteur_ambiance.playing:
+		_lecteur_ambiance.volume_db = _volume_ambiance()
 	if _tween_musique and _tween_musique.is_running():
 		return
 	_lecteur_musique.volume_db = ATTENUATION_PAUSE_DB if actif else 0.0
@@ -140,12 +156,7 @@ func _demarrer_piste() -> void:
 	if flux == null:
 		push_warning("Musique introuvable : " + chemin)
 		return
-	# Boucle sans blanc : réglée dans l'import (loop_mode), forcée ici si une piste ne l'a pas.
-	var wav := flux as AudioStreamWAV
-	if wav != null and wav.loop_mode == AudioStreamWAV.LOOP_DISABLED:
-		wav.loop_mode = AudioStreamWAV.LOOP_FORWARD
-		wav.loop_begin = 0
-		wav.loop_end = int(wav.get_length() * wav.mix_rate)
+	_forcer_boucle(flux)
 	_lecteur_musique.stream = flux
 	_lecteur_musique.volume_db = -40.0
 	_lecteur_musique.play()
@@ -155,3 +166,48 @@ func _demarrer_piste() -> void:
 func _boucler_musique() -> void:
 	if not _piste.is_empty():
 		_lecteur_musique.play()
+
+
+# --- Ambiance ----------------------------------------------------------------
+
+## Lance une ambiance en boucle (fondu d'entrée). Chaîne vide : l'arrête en fondu.
+func ambiance(nom: String) -> void:
+	if nom == _ambiance and _lecteur_ambiance.playing:
+		return
+	_ambiance = nom
+	# Un fondu en cours (ex. arrêt par le niveau qu'on recharge) ne doit pas couper la nouvelle piste.
+	if _tween_ambiance:
+		_tween_ambiance.kill()
+	_tween_ambiance = create_tween()
+	if nom.is_empty():
+		_tween_ambiance.tween_property(_lecteur_ambiance, "volume_db", -40.0, DUREE_FONDU)
+		_tween_ambiance.tween_callback(_lecteur_ambiance.stop)
+		return
+	var chemin := DOSSIER_AMBIANCE + nom + ".wav"
+	var flux := load(chemin) as AudioStream if ResourceLoader.exists(chemin) else null
+	if flux == null:
+		push_warning("Ambiance introuvable : " + chemin)
+		return
+	_forcer_boucle(flux)
+	_lecteur_ambiance.stream = flux
+	_lecteur_ambiance.volume_db = -40.0
+	_lecteur_ambiance.play()
+	_tween_ambiance.tween_property(_lecteur_ambiance, "volume_db", _volume_ambiance(), DUREE_FONDU * 2.0)
+
+
+func arreter_ambiance() -> void:
+	ambiance("")
+
+
+func _volume_ambiance() -> float:
+	return VOLUME_AMBIANCE_DB + (ATTENUATION_PAUSE_DB if _attenue else 0.0)
+
+
+## Boucle sans blanc : réglée dans l'import (loop_mode) ; forcée ici si un .wav ne l'a pas.
+static func _forcer_boucle(flux: AudioStream) -> void:
+	var wav := flux as AudioStreamWAV
+	if wav != null and wav.loop_mode == AudioStreamWAV.LOOP_DISABLED:
+		wav.loop_mode = AudioStreamWAV.LOOP_FORWARD
+		wav.loop_begin = 0
+		wav.loop_end = int(wav.get_length() * wav.mix_rate)
+

@@ -4,6 +4,8 @@ extends Node2D
 @export var identifiant := "niveau_1"
 ## Piste de assets/audio/musique jouée pendant le niveau.
 @export var piste_musique := "niveau_1"
+## Ambiance de assets/audio/ambiance jouée sous la musique (vide : aucune).
+@export var piste_ambiance := "jungle_insectes"
 ## Cartes masquées tant que le joueur n'a pas vu les zones (mini-map et grande carte).
 @export var brouillard_de_guerre := true
 ## Intervalle entre deux mises à jour des zones explorées, en secondes.
@@ -32,6 +34,7 @@ var _attente_exploration := 0.0
 
 func _ready() -> void:
 	Audio.musique(piste_musique)
+	Audio.ambiance(piste_ambiance)
 	player.tir_demande.connect(_on_tir_demande)
 	player.est_mort.connect(_on_player_est_mort)
 	player.camera.limiter(_zone_camera())
@@ -50,6 +53,11 @@ func _ready() -> void:
 	for ennemi in conteneur_ennemis.get_children():
 		if ennemi is Enemy:
 			_brancher_ennemi(ennemi)
+
+
+func _exit_tree() -> void:
+	# L'ambiance appartient au niveau : elle s'éteint quand on le quitte.
+	Audio.arreter_ambiance()
 
 
 func _process(delta: float) -> void:

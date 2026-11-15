@@ -156,11 +156,11 @@ def reverb(son, piece=1.0, amortissement=0.4, humide=0.3, queue=1.0):
     return [x * (1 - humide) + w * humide for x, w in zip(entree, sortie)]
 
 
-def ecrire(chemin, son, crete=0.9):
+def ecrire(chemin, son, crete=0.9, fondu_fin=True):
     chemin.parent.mkdir(parents=True, exist_ok=True)
     son = normaliser(son, crete)
-    # Petit fondu de sortie pour éviter un clic final.
-    f = min(len(son), n_ech(0.01))
+    # Petit fondu de sortie pour éviter un clic final (sauf pour les boucles, déjà raccordées).
+    f = min(len(son), n_ech(0.01)) if fondu_fin else 0
     for i in range(f):
         son[-1 - i] *= i / f
     with wave.open(str(chemin), "wb") as w:
@@ -388,6 +388,56 @@ def musique_action(tempo, mesures, accords, intensite=1.0, avec_percussions=True
     return reverb(sortie, piece=1.5, amortissement=0.45, humide=0.22, queue=0.0)
 
 
+def ambiance_insectes(duree=20.0, fondu=1.5):
+    """Ambiance de jungle : cigales (bruit aigu pulsé), grillons (salves de chants),
+    stridulations isolées. Boucle sans couture : la fin est fondue dans le début.
+    Tirage aléatoire isolé : n'affecte pas les autres fichiers."""
+    etat = random.getstate()
+    random.seed(1967)
+    total = n_ech(duree + fondu)
+    son = [0.0] * total
+
+    def poser(s, debut):
+        i0 = n_ech(debut)
+        for i, x in enumerate(s):
+            if 0 <= i0 + i < total:
+                son[i0 + i] += x
+
+    # Nappe de cigales : bruit filtré très aigu, modulé par une pulsation rapide et une houle lente.
+    nappe = passe_bande(bruit(duree + fondu), 4200, 7500)
+    for i in range(total):
+        t = i / FREQ
+        pulsation = 0.55 + 0.45 * math.sin(2 * math.pi * 38 * t)
+        houle = 0.5 + 0.5 * math.sin(2 * math.pi * t / 7.3) * math.sin(2 * math.pi * t / 3.1 + 1.0)
+        son[i] = nappe[i] * pulsation * (0.25 + 0.75 * houle) * 0.5
+
+    # Grillons : salves de « cri-cri » (sinus aigus hachés), à des hauteurs et positions variées.
+    t = 0.3
+    while t < duree + fondu:
+        freq = random.uniform(4300, 5200)
+        nb, ecart = random.randint(3, 6), random.uniform(0.05, 0.08)
+        for k in range(nb):
+            cri = enveloppe(sinus(freq, freq * 0.98, 0.035, random.uniform(0.12, 0.25)), 0.003, 0.012)
+            poser(cri, t + k * ecart)
+        t += random.uniform(0.5, 1.6)
+
+    # Quelques stridulations plus graves et lointaines.
+    for _ in range(int(duree / 2.5)):
+        debut = random.uniform(0, duree)
+        strid = enveloppe([x * (0.5 + 0.5 * math.sin(2 * math.pi * 90 * i / FREQ)) for i, x in
+                           enumerate(passe_bande(bruit(0.6), 2500, 4500))], 0.1, 0.2, 0.2)
+        poser(gain(strid, 0.25), debut)
+
+    # Raccord : les dernières secondes sont fondues dans les premières.
+    n, f = n_ech(duree), n_ech(fondu)
+    boucle = son[:n]
+    for i in range(f):
+        a = i / f
+        boucle[i] = boucle[i] * a + son[n + i] * (1 - a)
+    random.setstate(etat)
+    return boucle
+
+
 def musiques():
     m = {}
     # Niveau : action tendue, ré mineur (Rém - Si♭ - Fa - Do).
@@ -404,3 +454,5 @@ if __name__ == "__main__":
     print("Musiques :")
     for nom, son in musiques().items():
         ecrire(RACINE / "musique" / f"{nom}.wav", son, crete=0.8)
+    print("Ambiances :")
+    ecrire(RACINE / "ambiance" / "jungle_insectes.wav", ambiance_insectes(), crete=0.6, fondu_fin=False)
