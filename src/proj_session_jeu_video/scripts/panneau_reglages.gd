@@ -21,6 +21,9 @@ var _bouton_retour: Button
 
 ## Touche en cours de capture : { action, peripherique, bouton } ou vide.
 var _capture := {}
+## Heure (ms) du dernier son d'aperçu, pour ne pas en jouer un à chaque cran du curseur.
+var _dernier_apercu := 0
+const INTERVALLE_APERCU_MS := 120
 
 
 func _ready() -> void:
@@ -91,6 +94,7 @@ func _section_son_affichage() -> Control:
 	var valeur_general := _etiquette("100 %")
 	_volume_general.value_changed.connect(func(v: float) -> void:
 		Parametres.definir_volume_general(v)
+		_apercu_sonore()
 		valeur_general.text = "%d %%" % v)
 	_volume_general.set_meta("etiquette", valeur_general)
 	_ajouter_ligne(grille, "Volume général", _volume_general, valeur_general)
@@ -107,6 +111,7 @@ func _section_son_affichage() -> Control:
 	var valeur_effets := _etiquette("100 %")
 	_volume_effets.value_changed.connect(func(v: float) -> void:
 		Parametres.definir_volume_effets(v)
+		_apercu_sonore()
 		valeur_effets.text = "%d %%" % v)
 	_volume_effets.set_meta("etiquette", valeur_effets)
 	_ajouter_ligne(grille, "Effets sonores", _volume_effets, valeur_effets)
@@ -196,6 +201,16 @@ func _input(event: InputEvent) -> void:
 	_capture = {}
 	Parametres.assigner(action, event)
 	bouton.grab_focus()
+
+
+## Joue un son d'exemple au volume choisi pendant qu'on bouge un curseur (limité en fréquence).
+## La musique, elle, s'entend déjà en continu.
+func _apercu_sonore() -> void:
+	var maintenant := Time.get_ticks_msec()
+	if maintenant - _dernier_apercu < INTERVALLE_APERCU_MS:
+		return
+	_dernier_apercu = maintenant
+	Audio.jouer("tir_fusil", Vector2.INF, -4.0)
 
 
 func _rafraichir_touches() -> void:

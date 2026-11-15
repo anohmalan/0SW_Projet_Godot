@@ -175,6 +175,7 @@ func _on_retour_custom_pressed() -> void:
 
 func _ajouter_categorie(categorie: String) -> void:
 	var bouton := Button.new()
+	Audio.brancher_bouton(bouton)
 	bouton.focus_mode = Control.FOCUS_ALL
 	bouton.text = CATEGORIES[categorie]
 	bouton.custom_minimum_size = Vector2(190, 48)
@@ -230,6 +231,7 @@ func _style_categorie(
 
 func _ajouter_choix(carte: String, texte: String, groupe: ButtonGroup) -> void:
 	var bouton := Button.new()
+	Audio.brancher_bouton(bouton)
 	bouton.focus_mode = Control.FOCUS_ALL
 	bouton.custom_minimum_size = Vector2(106, 128)
 	bouton.toggle_mode = true
@@ -307,6 +309,7 @@ func _style_carte(
 	return style
 
 func _styliser_action(bouton: Button, principale: bool) -> void:
+	Audio.brancher_bouton(bouton)
 	bouton.focus_mode = Control.FOCUS_ALL
 	bouton.custom_minimum_size = Vector2(180, 52)
 	bouton.add_theme_font_size_override("font_size", 20)
