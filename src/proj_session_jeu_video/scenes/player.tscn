@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://ckhtrmccg5wo1" path="res://scripts/player/States/player_dead.gd" id="10_dead"]
 [ext_resource type="Script" uid="uid://btr55misobym1" path="res://scripts/player/arsenal_player.gd" id="11_arsenal"]
 [ext_resource type="Script" uid="uid://cthltb3whxbyk" path="res://scripts/player/vie_player.gd" id="12_vie"]
+[ext_resource type="Script" path="res://scripts/player/camera_player.gd" id="13_camera"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xjhyt"]
 radius = 14.0
@@ -29,6 +30,7 @@ shape = SubResource("CapsuleShape2D_xjhyt")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1545197382]
 position = Vector2(431, -78)
+script = ExtResource("13_camera")
 
 [node name="StateMachine" type="Node" parent="." unique_id=1363263861 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("3_machine")

@@ -20,12 +20,10 @@ func physics_update(delta: float) -> void:
 func update(_delta: float) -> void:
 	if temps_restant > 0.0:
 		return
-	if not player.is_on_floor():
-		Transitioned.emit(self, &"PlayerJump" if player.velocity.y < 0.0 else &"PlayerFall")
-	elif not is_zero_approx(player.velocity.x):
-		Transitioned.emit(self, "PlayerRun")
+	if player.is_on_floor():
+		Transitioned.emit(self, player.etat_au_sol())
 	else:
-		Transitioned.emit(self, &"PlayerFire" if player.arsenal.temps_depuis_tir < 0.25 else &"PlayerIdle")
+		Transitioned.emit(self, player.etat_en_l_air())
 
 func exit() -> void:
 	pass

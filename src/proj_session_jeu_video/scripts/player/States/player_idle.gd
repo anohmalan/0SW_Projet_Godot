@@ -4,27 +4,25 @@ extends BaseState
 @export var player: Player
 
 func enter() -> void:
+	# Premier enter() appelé par la StateMachine avant le _ready() du joueur.
 	if player.is_node_ready():
 		player.visuel.jouer(player.nom_animation_mouvement("Idle"))
 
 func handle_inputs(_input_event: InputEvent) -> void:
-	if not player.is_on_floor():
-		return
-	if _input_event.is_action_pressed("saut"):
-		Transitioned.emit(self, "PlayerJump")
-	elif _input_event.is_action_pressed("tir"):
-		Transitioned.emit(self, "PlayerFire")
+	pass
 
 func update(_delta: float) -> void:
-	player.visuel.jouer(player.nom_animation_mouvement("Idle"))
+	if not player.au_sol_ou_presque():
+		Transitioned.emit(self, player.etat_en_l_air())
+	elif player.etat_au_sol() != &"PlayerIdle":
+		Transitioned.emit(self, player.etat_au_sol())
+	else:
+		player.visuel.jouer(player.nom_animation_mouvement("Idle"))
 
-func physics_update(_delta: float) -> void:
-	var axe := Input.get_axis("gauche", "droite")
-	player.velocity.x = axe * player.vitesse
-	if axe != 0.0:
-		Transitioned.emit(self, "PlayerRun")
-	if Input.is_action_just_pressed("saut") and player.is_on_floor():
-		Transitioned.emit(self, "PlayerJump")
+func physics_update(delta: float) -> void:
+	player.deplacer_horizontalement(delta)
+	if player.essayer_de_sauter():
+		Transitioned.emit(self, &"PlayerJump")
 
 func exit() -> void:
 	pass
