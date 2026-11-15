@@ -40,6 +40,7 @@ const NOMS_AXES_MANETTE := {
 
 var volume_general := 100.0
 var volume_musique := 100.0
+var volume_effets := 100.0
 var sourdine := false
 var plein_ecran := false
 
@@ -69,6 +70,12 @@ func definir_volume_musique(valeur: float) -> void:
 	enregistrer()
 
 
+func definir_volume_effets(valeur: float) -> void:
+	volume_effets = clampf(valeur, 0.0, 100.0)
+	appliquer_audio()
+	enregistrer()
+
+
 func definir_sourdine(actif: bool) -> void:
 	sourdine = actif
 	appliquer_audio()
@@ -84,6 +91,7 @@ func definir_plein_ecran(actif: bool) -> void:
 func appliquer_audio() -> void:
 	_regler_bus(&"Master", volume_general)
 	_regler_bus(&"Musique", volume_musique)
+	_regler_bus(&"Effets", volume_effets)
 	var master := AudioServer.get_bus_index(&"Master")
 	if master >= 0:
 		AudioServer.set_bus_mute(master, sourdine)
@@ -235,6 +243,7 @@ func enregistrer() -> void:
 	var fichier := ConfigFile.new()
 	fichier.set_value("son", "volume_general", volume_general)
 	fichier.set_value("son", "volume_musique", volume_musique)
+	fichier.set_value("son", "volume_effets", volume_effets)
 	fichier.set_value("son", "sourdine", sourdine)
 	fichier.set_value("affichage", "plein_ecran", plein_ecran)
 	for action in ACTIONS_MODIFIABLES:
@@ -259,6 +268,7 @@ func _charger() -> void:
 		return
 	volume_general = float(fichier.get_value("son", "volume_general", volume_general))
 	volume_musique = float(fichier.get_value("son", "volume_musique", volume_musique))
+	volume_effets = float(fichier.get_value("son", "volume_effets", volume_effets))
 	sourdine = bool(fichier.get_value("son", "sourdine", sourdine))
 	plein_ecran = bool(fichier.get_value("affichage", "plein_ecran", plein_ecran))
 	for action in ACTIONS_MODIFIABLES:

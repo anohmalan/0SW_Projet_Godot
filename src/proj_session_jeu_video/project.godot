@@ -20,6 +20,7 @@ config/icon="res://assets/icon.svg"
 ApparencePlayer="*uid://c1vvgox4rr12l"
 Parametres="*res://scripts/parametres.gd"
 Progression="*res://scripts/progression.gd"
+Audio="*res://scripts/audio.gd"
 
 [editor_plugins]
 

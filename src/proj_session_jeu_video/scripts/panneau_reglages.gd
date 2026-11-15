@@ -15,6 +15,7 @@ var _plein_ecran: CheckButton
 var _sourdine: CheckButton
 var _volume_general: HSlider
 var _volume_musique: HSlider
+var _volume_effets: HSlider
 var _boutons_touches := {} # action -> { Peripherique: Button }
 var _bouton_retour: Button
 
@@ -60,6 +61,7 @@ func rafraichir() -> void:
 	_sourdine.set_pressed_no_signal(Parametres.sourdine)
 	_volume_general.set_value_no_signal(Parametres.volume_general)
 	_volume_musique.set_value_no_signal(Parametres.volume_musique)
+	_volume_effets.set_value_no_signal(Parametres.volume_effets)
 	_mettre_a_jour_etiquettes()
 	_rafraichir_touches()
 
@@ -81,6 +83,7 @@ func _section_son_affichage() -> Control:
 	grille.add_theme_constant_override("v_separation", 10)
 
 	_plein_ecran = CheckButton.new()
+	Audio.brancher_bouton(_plein_ecran)
 	_plein_ecran.toggled.connect(Parametres.definir_plein_ecran)
 	_ajouter_ligne(grille, "Plein écran", _plein_ecran, null)
 
@@ -100,7 +103,16 @@ func _section_son_affichage() -> Control:
 	_volume_musique.set_meta("etiquette", valeur_musique)
 	_ajouter_ligne(grille, "Musique", _volume_musique, valeur_musique)
 
+	_volume_effets = _curseur()
+	var valeur_effets := _etiquette("100 %")
+	_volume_effets.value_changed.connect(func(v: float) -> void:
+		Parametres.definir_volume_effets(v)
+		valeur_effets.text = "%d %%" % v)
+	_volume_effets.set_meta("etiquette", valeur_effets)
+	_ajouter_ligne(grille, "Effets sonores", _volume_effets, valeur_effets)
+
 	_sourdine = CheckButton.new()
+	Audio.brancher_bouton(_sourdine)
 	_sourdine.toggled.connect(Parametres.definir_sourdine)
 	_ajouter_ligne(grille, "Sourdine", _sourdine, null)
 	return grille
@@ -195,7 +207,7 @@ func _rafraichir_touches() -> void:
 
 
 func _mettre_a_jour_etiquettes() -> void:
-	for curseur in [_volume_general, _volume_musique]:
+	for curseur in [_volume_general, _volume_musique, _volume_effets]:
 		var etiquette: Label = curseur.get_meta("etiquette")
 		etiquette.text = "%d %%" % curseur.value
 
@@ -232,6 +244,7 @@ func _curseur() -> HSlider:
 
 func _bouton(texte: String) -> Button:
 	var bouton := Button.new()
+	Audio.brancher_bouton(bouton)
 	bouton.text = texte
 	bouton.focus_mode = Control.FOCUS_ALL
 	bouton.add_theme_font_size_override("font_size", 17)
