@@ -21049,6 +21049,7 @@ sources/2 = SubResource("TileSetAtlasSource_kb5tl")
 sources/5 = SubResource("TileSetAtlasSource_peiju")
 
 [node name="WorldNiveau1" type="Node2D" unique_id=696970129]
+texture_filter = 1
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1821616463]
 position = Vector2(-5, 8)

@@ -6,6 +6,9 @@ extends Node2D
 @export var piste_musique := "niveau_1"
 ## Ambiance de assets/audio/ambiance jouée sous la musique (vide : aucune).
 @export var piste_ambiance := "jungle_insectes"
+## Ajuste le zoom pour qu'un pixel du tileset fasse un nombre entier de pixels à l'écran
+## (pixel art net, sans pixels de tailles irrégulières).
+@export var pixels_nets := true
 ## Cartes masquées tant que le joueur n'a pas vu les zones (mini-map et grande carte).
 @export var brouillard_de_guerre := true
 ## Intervalle entre deux mises à jour des zones explorées, en secondes.
@@ -38,6 +41,8 @@ func _ready() -> void:
 	player.tir_demande.connect(_on_tir_demande)
 	player.est_mort.connect(_on_player_est_mort)
 	player.camera.limiter(_zone_camera())
+	if pixels_nets:
+		_ajuster_zoom_pixels_nets()
 	hud.brancher(player)
 	# Une seule image du niveau, partagée par la mini-carte et la grande carte.
 	_carte_niveau = CarteNiveau.new(carte)
@@ -77,6 +82,16 @@ func _explorer() -> void:
 	var centre := camera.get_screen_center_position()
 	_carte_niveau.reveler(Rect2(centre - demi, demi * 2.0))
 	_carte_niveau.appliquer_brouillard()
+
+
+## Le monde est agrandi (ex. ×1,1) : on compense par le zoom de la caméra pour obtenir un
+## rapport entier entre pixels du tileset et pixels de l'écran. Le placement ne change pas.
+func _ajuster_zoom_pixels_nets() -> void:
+	var echelle_monde := carte.get_global_transform().get_scale().x
+	if echelle_monde <= 0.0:
+		return
+	var rapport_entier := maxf(1.0, roundf(echelle_monde))
+	player.camera.zoom = Vector2.ONE * (rapport_entier / echelle_monde)
 
 
 ## Zone que la caméra peut montrer : les tuiles du niveau, plus le drapeau (mât et halo
