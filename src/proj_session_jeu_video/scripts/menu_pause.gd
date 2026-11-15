@@ -22,22 +22,16 @@ func _ready() -> void:
 	_panneau_reglages.fermer_demande.connect(_fermer_reglages)
 
 	var boutons: Array[Button] = [_reprendre, _recommencer, _reglages, _menu_principal]
-	for i in boutons.size():
-		var bouton := boutons[i]
-		_styliser_bouton(bouton)
-		# Navigation en boucle, de haut en bas, au clavier comme à la manette.
-		var precedent := boutons[posmod(i - 1, boutons.size())]
-		var suivant := boutons[(i + 1) % boutons.size()]
-		bouton.focus_neighbor_top = bouton.get_path_to(precedent)
-		bouton.focus_neighbor_bottom = bouton.get_path_to(suivant)
-		bouton.focus_previous = bouton.get_path_to(precedent)
-		bouton.focus_next = bouton.get_path_to(suivant)
-		bouton.focus_neighbor_left = bouton.get_path()
-		bouton.focus_neighbor_right = bouton.get_path()
+	for bouton in boutons:
+		StyleMenu.styliser_bouton(bouton)
+	StyleMenu.chainer_focus_vertical(boutons)
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_echo():
+		return
+	# Jeu déjà mis en pause par un autre écran (ex. victoire) : la pause ne s'en mêle pas.
+	if get_tree().paused and not visible:
 		return
 	var touche := event as InputEventKey
 	var echap: bool = touche != null and touche.pressed and touche.physical_keycode == KEY_ESCAPE
@@ -90,39 +84,3 @@ func _retour_menu_principal() -> void:
 	get_tree().paused = false
 	get_tree().change_scene_to_file(SCENE_MENU_PRINCIPAL)
 
-
-# Même style que les boutons du menu principal.
-func _styliser_bouton(bouton: Button) -> void:
-	bouton.focus_mode = Control.FOCUS_ALL
-	bouton.custom_minimum_size = Vector2(260, 0)
-	bouton.add_theme_font_size_override("font_size", 22)
-	bouton.add_theme_color_override("font_color", Color("#F1F5DF"))
-	bouton.add_theme_color_override("font_hover_color", Color.WHITE)
-	bouton.add_theme_color_override("font_focus_color", Color.WHITE)
-	bouton.add_theme_color_override("font_pressed_color", Color.WHITE)
-	bouton.add_theme_color_override("font_outline_color", Color("#073A32"))
-	bouton.add_theme_constant_override("outline_size", 2)
-	var bordure := Color("#48A991")
-	bouton.add_theme_stylebox_override("normal", _style(Color("#073A35"), bordure, false))
-	bouton.add_theme_stylebox_override("hover", _style(Color("#10574B"), bordure, true))
-	bouton.add_theme_stylebox_override("pressed", _style(Color("#0B4037"), bordure, false))
-	bouton.add_theme_stylebox_override("focus", _style(Color("#00D995"), Color.WHITE, true))
-
-
-func _style(fond: Color, bordure: Color, illumine: bool) -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.bg_color = fond
-	style.border_color = bordure
-	style.set_border_width_all(2)
-	style.corner_radius_top_left = 16
-	style.corner_radius_top_right = 8
-	style.corner_radius_bottom_right = 16
-	style.corner_radius_bottom_left = 8
-	style.content_margin_left = 22
-	style.content_margin_right = 22
-	style.content_margin_top = 14
-	style.content_margin_bottom = 14
-	if illumine:
-		style.shadow_color = Color(0.0, 1.0, 0.62, 0.72)
-		style.shadow_size = 20
-	return style

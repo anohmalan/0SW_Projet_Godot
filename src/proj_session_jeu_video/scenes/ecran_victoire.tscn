@@ -1,0 +1,86 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ecran_victoire.gd" id="1_victoire"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_panneau"]
+content_margin_left = 40.0
+content_margin_top = 30.0
+content_margin_right = 40.0
+content_margin_bottom = 34.0
+bg_color = Color(0.027, 0.227, 0.208, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.247, 0.878, 1, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 12
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 12
+shadow_color = Color(0.247, 0.878, 1, 0.35)
+shadow_size = 24
+
+[node name="EcranVictoire" type="CanvasLayer"]
+process_mode = 3
+layer = 20
+script = ExtResource("1_victoire")
+
+[node name="Fond" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.05, 0.04, 0.7)
+
+[node name="Centre" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panneau" type="PanelContainer" parent="Centre"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_panneau")
+
+[node name="Colonne" type="VBoxContainer" parent="Centre/Panneau"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Titre" type="Label" parent="Centre/Panneau/Colonne"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.247, 0.878, 1, 1)
+theme_override_colors/font_outline_color = Color(0.027, 0.227, 0.196, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 40
+text = "NIVEAU TERMINÉ"
+horizontal_alignment = 1
+
+[node name="Statistiques" type="Label" parent="Centre/Panneau/Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.945, 0.961, 0.875, 1)
+theme_override_colors/font_outline_color = Color(0.027, 0.227, 0.196, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+
+[node name="Espace" type="Control" parent="Centre/Panneau/Colonne"]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+
+[node name="Rejouer" type="Button" parent="Centre/Panneau/Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Rejouer"
+
+[node name="Niveaux" type="Button" parent="Centre/Panneau/Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Choisir un niveau"
+
+[node name="MenuPrincipal" type="Button" parent="Centre/Panneau/Colonne"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Menu principal"

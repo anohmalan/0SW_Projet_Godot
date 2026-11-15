@@ -14,6 +14,7 @@ const COULEUR_DECOR := Color(0.1, 0.32, 0.28, 0.55)
 const COULEUR_JOUEUR := Color("#00FFA8")
 const COULEUR_BUTIN := Color("#FFE15A")
 const COULEUR_VUE := Color(1.0, 1.0, 1.0, 0.4)
+const COULEUR_DRAPEAU := Drapeau.COULEUR
 const COULEURS_ENNEMIS := {
 	Enemy.Comportement.TIREUR: Color("#FF3355"),
 	Enemy.Comportement.KAMIKAZE: Color("#FF8A2A"),
@@ -106,6 +107,9 @@ func _draw() -> void:
 		_dessiner_joueur()
 	# L'anneau est tracé juste à l'intérieur du disque pour ne pas être coupé par le masque.
 	draw_arc(_centre(), _rayon() - epaisseur_anneau * 0.5, 0.0, TAU, 64, COULEUR_ANNEAU, epaisseur_anneau, true)
+	if _texture != null and is_instance_valid(_carte) and is_instance_valid(_player):
+		# Par-dessus l'anneau : la flèche du drapeau hors champ s'y pose.
+		_dessiner_drapeau(_en_cases(_point_joueur()))
 
 
 func _point_joueur() -> Vector2:
@@ -121,6 +125,36 @@ func _dessiner_marqueurs(origine: Vector2) -> void:
 			continue
 		var couleur: Color = COULEURS_ENNEMIS.get(ennemi.comportement, Color.RED)
 		draw_circle(_vers_minimap(ennemi.global_position, origine), 3.0, couleur)
+
+
+## Objectif du niveau : icône si le drapeau est dans le disque, sinon flèche pulsante
+## sur l'anneau, pointée dans sa direction.
+func _dessiner_drapeau(origine: Vector2) -> void:
+	var drapeau := get_tree().get_first_node_in_group(&"drapeau") as Node2D
+	if drapeau == null:
+		return
+	var position_carte := _vers_minimap(drapeau.global_position, origine)
+	var ecart := position_carte - _centre()
+	var limite := _rayon() - epaisseur_anneau - 8.0
+	if ecart.length() <= limite:
+		_icone_drapeau(position_carte)
+		return
+	var sens := ecart.normalized()
+	var pointe := _centre() + sens * (_rayon() - 2.0)
+	var pulsation := 0.6 + 0.4 * sin(Time.get_ticks_msec() / 160.0)
+	var couleur := COULEUR_DRAPEAU
+	couleur.a = pulsation
+	var cote := sens.orthogonal() * 6.0
+	var fleche := PackedVector2Array([pointe, pointe - sens * 11.0 + cote, pointe - sens * 11.0 - cote])
+	draw_colored_polygon(fleche, couleur)
+	draw_polyline(fleche + PackedVector2Array([fleche[0]]), Color(1, 1, 1, pulsation), 1.0)
+
+
+func _icone_drapeau(pied: Vector2) -> void:
+	var sommet := pied + Vector2(0, -12)
+	draw_line(pied, sommet, Color(0.9, 0.95, 0.95), 1.5)
+	draw_colored_polygon(PackedVector2Array([sommet, sommet + Vector2(8, 3), sommet + Vector2(0, 6)]), COULEUR_DRAPEAU)
+	draw_circle(pied, 1.5, Color.WHITE)
 
 
 func _dessiner_joueur() -> void:
