@@ -43,6 +43,8 @@ var volume_musique := 100.0
 var volume_effets := 100.0
 var sourdine := false
 var plein_ecran := false
+## Sortie audio choisie (AudioServer.get_output_device_list) ; « Default » suit Windows.
+var sortie_audio := "Default"
 
 var _touches_defaut := {}
 
@@ -54,6 +56,10 @@ func _ready() -> void:
 	_charger()
 	appliquer_audio()
 	appliquer_affichage()
+	# Brancher une manette (ex. DualSense en USB) ajoute une carte son que Windows peut choisir
+	# par défaut : on réimpose alors la sortie choisie par le joueur.
+	Input.joy_connection_changed.connect(func(_appareil: int, _connecte: bool) -> void:
+		appliquer_sortie_audio.call_deferred())
 
 
 # --- Son et affichage --------------------------------------------------------
@@ -82,6 +88,19 @@ func definir_sourdine(actif: bool) -> void:
 	enregistrer()
 
 
+func definir_sortie_audio(nom: String) -> void:
+	sortie_audio = nom
+	appliquer_sortie_audio()
+	enregistrer()
+
+
+## Applique la sortie choisie si elle existe encore ; sinon, revient à celle de Windows.
+func appliquer_sortie_audio() -> void:
+	var cible := sortie_audio if sortie_audio in AudioServer.get_output_device_list() else "Default"
+	if AudioServer.output_device != cible:
+		AudioServer.output_device = cible
+
+
 func definir_plein_ecran(actif: bool) -> void:
 	plein_ecran = actif
 	appliquer_affichage()
@@ -95,6 +114,7 @@ func appliquer_audio() -> void:
 	var master := AudioServer.get_bus_index(&"Master")
 	if master >= 0:
 		AudioServer.set_bus_mute(master, sourdine)
+	appliquer_sortie_audio()
 
 
 func appliquer_affichage() -> void:
@@ -246,6 +266,7 @@ func enregistrer() -> void:
 	fichier.set_value("son", "volume_effets", volume_effets)
 	fichier.set_value("son", "sourdine", sourdine)
 	fichier.set_value("affichage", "plein_ecran", plein_ecran)
+	fichier.set_value("son", "sortie_audio", sortie_audio)
 	for action in ACTIONS_MODIFIABLES:
 		var liste: Array = []
 		for evenement in InputMap.action_get_events(action):
@@ -271,6 +292,7 @@ func _charger() -> void:
 	volume_effets = float(fichier.get_value("son", "volume_effets", volume_effets))
 	sourdine = bool(fichier.get_value("son", "sourdine", sourdine))
 	plein_ecran = bool(fichier.get_value("affichage", "plein_ecran", plein_ecran))
+	sortie_audio = String(fichier.get_value("son", "sortie_audio", sortie_audio))
 	for action in ACTIONS_MODIFIABLES:
 		# Action ajoutée après la sauvegarde (ex. « carte ») : on garde ses touches par défaut.
 		# get_value(..., null) ne compte pas comme une valeur par défaut : il faut tester la clé.

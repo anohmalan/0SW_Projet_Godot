@@ -13,6 +13,7 @@ const COULEUR_BORDURE := Color("#48A991")
 
 var _plein_ecran: CheckButton
 var _sourdine: CheckButton
+var _sortie_audio: OptionButton
 var _volume_general: HSlider
 var _volume_musique: HSlider
 var _volume_effets: HSlider
@@ -62,6 +63,7 @@ func rafraichir() -> void:
 	_annuler_capture()
 	_plein_ecran.set_pressed_no_signal(Parametres.plein_ecran)
 	_sourdine.set_pressed_no_signal(Parametres.sourdine)
+	_remplir_sorties_audio()
 	_volume_general.set_value_no_signal(Parametres.volume_general)
 	_volume_musique.set_value_no_signal(Parametres.volume_musique)
 	_volume_effets.set_value_no_signal(Parametres.volume_effets)
@@ -120,7 +122,30 @@ func _section_son_affichage() -> Control:
 	Audio.brancher_bouton(_sourdine)
 	_sourdine.toggled.connect(Parametres.definir_sourdine)
 	_ajouter_ligne(grille, "Sourdine", _sourdine, null)
+
+	_sortie_audio = OptionButton.new()
+	_sortie_audio.clip_text = true
+	_sortie_audio.custom_minimum_size.x = 240
+	Audio.brancher_bouton(_sortie_audio)
+	_sortie_audio.item_selected.connect(func(index: int) -> void:
+		Parametres.definir_sortie_audio(_sortie_audio.get_item_metadata(index)))
+	_ajouter_ligne(grille, "Sortie audio", _sortie_audio, null)
 	return grille
+
+
+## Liste les sorties audio disponibles (relue à chaque ouverture : une manette a pu être branchée).
+func _remplir_sorties_audio() -> void:
+	_sortie_audio.clear()
+	var choisie := 0
+	for nom in AudioServer.get_output_device_list():
+		var libelle := "Celle de Windows" if nom == "Default" else nom
+		_sortie_audio.add_item(libelle)
+		_sortie_audio.set_item_metadata(_sortie_audio.item_count - 1, nom)
+		if nom == Parametres.sortie_audio:
+			choisie = _sortie_audio.item_count - 1
+	if _sortie_audio.item_count > 0:
+		_sortie_audio.select(choisie)
+	_sortie_audio.tooltip_text = _sortie_audio.get_item_text(choisie) if _sortie_audio.item_count > 0 else ""
 
 
 func _section_touches() -> Control:
